@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#115e59">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="LabLens">
+<meta name="author" content="BHIS (Body Health Integrated Systems)">
+<meta name="description" content="LabLens by BHIS explains medical laboratory results in plain language, suggests possible conditions and which specialist to see. Works fully offline. Not a diagnosis.">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-192.png">
+<title>LabLens by BHIS: Lab Result Guide (works offline)</title>
+<style>
+:root{--bg:#f4f7f7;--card:#fff;--ink:#14282b;--mute:#58706f;--line:#dbe5e4;--acc:#0f766e;--acc2:#115e59;--accbg:#e1f4f1;--ok:#15803d;--okbg:#e3f6e8;--warn:#b45309;--warnbg:#fff1d6;--orange:#c2410c;--orangebg:#ffe7d6;--bad:#b91c1c;--badbg:#fde4e4;--info:#1d4ed8;--infobg:#e4edff;--r:14px;--sh:0 1px 2px rgba(10,40,40,.06),0 4px 14px rgba(10,40,40,.05)}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1718;--card:#142224;--ink:#e6f0ef;--mute:#9bb3b1;--line:#27403f;--acc:#2dd4bf;--acc2:#5eead4;--accbg:#12403d;--ok:#4ade80;--okbg:#12361f;--warn:#fbbf24;--warnbg:#3b2d0c;--orange:#fb923c;--orangebg:#3d2410;--bad:#f87171;--badbg:#431616;--info:#93b4ff;--infobg:#172a55;--sh:none}}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;padding-bottom:96px}
+.wrap{max-width:860px;margin:0 auto;padding:0 14px}
+.top{background:var(--acc2);color:#fff;position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top)}
+@media (prefers-color-scheme:dark){.top{background:#0b2b29}}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:10px;padding-bottom:10px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}.logo{background:#fff;border-radius:10px;padding:3px 4px;height:46px;width:auto;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.brand h1{margin:0;font-size:19px;line-height:1.1}.brand p{margin:0;font-size:12px;opacity:.9;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.top-actions{display:flex;gap:6px;flex-wrap:nowrap;justify-content:flex-end;flex-shrink:0}
+button{font:inherit;cursor:pointer}
+.ghost{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:5px 11px;font-size:13px;min-height:34px}
+.ghost:hover{background:rgba(255,255,255,.24)}
+.pill{display:inline-block;font-size:11px;background:rgba(255,255,255,.18);color:#fff;border-radius:999px;padding:1px 7px}
+main{padding-top:14px}
+h2{font-size:19px;margin:26px 0 10px}h3{margin:0 0 6px;font-size:17px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:14px;margin:12px 0}
+.lead{color:var(--mute);margin:6px 0 0}
+.profile{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.profile label.f{display:block;font-weight:600;font-size:14px;margin-bottom:4px}
+input[type=text],input[type=search],input:not([type]),select,textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 11px;min-height:44px;width:100%}
+input:focus,select:focus,button:focus-visible,summary:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
+.seg{display:flex;gap:8px}.seg label{flex:1;position:relative}.seg input{position:absolute;opacity:0;inset:0}
+.seg span{display:block;text-align:center;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);min-height:44px}
+.seg input:checked+span{background:var(--accbg);border-color:var(--acc);color:var(--acc2);font-weight:700}
+.seg input:focus-visible+span{outline:2px solid var(--acc)}
+.preg{grid-column:1/-1}
+.err{color:var(--bad);font-weight:600;margin:8px 0 0}
+.search{position:sticky;top:var(--hh,58px);z-index:10;background:var(--bg);padding:8px 0}
+details.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin:10px 0;box-shadow:var(--sh);overflow:hidden}
+details.panel>summary{list-style:none;display:flex;align-items:center;gap:10px;padding:14px;cursor:pointer;font-weight:700;min-height:52px}
+details.panel>summary::-webkit-details-marker{display:none}
+details.panel>summary::after{content:"";width:9px;height:9px;border-right:2.5px solid var(--mute);border-bottom:2.5px solid var(--mute);transform:rotate(-45deg);margin-left:auto;margin-right:4px;transition:transform .15s}
+details.panel[open]>summary::after{transform:rotate(45deg)}
+.pi{font-size:20px}.pn{flex:1}
+.badge{background:var(--acc);color:#fff;border-radius:999px;font-size:12px;padding:1px 9px;font-weight:700}
+.pnote{margin:0;padding:0 14px 8px;color:var(--mute);font-size:14px}
+.rows{border-top:1px solid var(--line)}
+.row{padding:11px 14px;border-bottom:1px solid var(--line)}.row:last-child{border-bottom:0}
+.row.hide{display:none}
+.lab label{font-weight:600;display:block}.lab small{display:block;color:var(--mute);font-size:13px;line-height:1.3}
+.lab .hint{color:var(--info)}
+.ctl{display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap}
+.ctl .val{flex:1 1 110px;min-width:90px}.ctl select{flex:1 1 130px;min-width:110px}
+.ctl select.q{flex:1 1 100%}
+.unit-s{color:var(--mute);font-size:14px;min-width:60px}
+.rng{background:transparent;color:var(--mute);border:1px solid var(--line);border-radius:10px;min-width:44px;min-height:44px;font-size:18px}
+.rng.on{background:var(--accbg);color:var(--acc2);border-color:var(--acc)}
+.custom{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:14px;color:var(--mute);flex-wrap:wrap}
+.custom input{width:90px}
+.custom[hidden]{display:none}
+.chip{font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.chip:empty{display:none}
+.c-N{background:var(--okbg);color:var(--ok)}.c-L,.c-H,.c-A{background:var(--warnbg);color:var(--warn)}.c-X{background:var(--badbg);color:var(--bad)}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));z-index:30;box-shadow:0 -4px 14px rgba(0,0,0,.08)}
+.bar .wrap{display:flex;gap:10px;padding:0}
+.btn{border:0;border-radius:12px;padding:13px 18px;font-weight:700;min-height:48px}
+.btn.p{background:var(--acc);color:#fff;flex:1}.btn.p:disabled{opacity:.5}
+@media (prefers-color-scheme:dark){.btn.p{color:#032;}}
+.btn.s{background:var(--bg);color:var(--ink);border:1px solid var(--line)}
+.btn.d{background:var(--badbg);color:var(--bad)}
+.urg{border-radius:var(--r);padding:14px 16px;border:2px solid;margin:8px 0}
+.urg .uh{font-size:19px;font-weight:800;margin:0}.urg p{margin:4px 0 0}
+.u0{background:var(--okbg);border-color:var(--ok)}.u1{background:var(--infobg);border-color:var(--info)}.u2{background:var(--orangebg);border-color:var(--orange)}.u3{background:var(--badbg);border-color:var(--bad)}
+.u0 .uh{color:var(--ok)}.u1 .uh{color:var(--info)}.u2 .uh{color:var(--orange)}.u3 .uh{color:var(--bad)}
+.alert{background:var(--badbg);border:1px solid var(--bad);border-radius:var(--r);padding:12px 14px;margin:10px 0}
+.alert ul{margin:6px 0 0;padding-left:20px}
+.warn{background:var(--warnbg);border:1px solid var(--warn);border-radius:var(--r);padding:10px 14px;margin:10px 0;font-size:15px}
+.stat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}.stat div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px}.stat b{display:block;font-size:22px;line-height:1.2}.stat span{color:var(--mute);font-size:12.5px;line-height:1.2;display:block}
+.cond{border-left:6px solid var(--line)}.cond.c3{border-left-color:var(--bad)}.cond.c2{border-left-color:var(--orange)}.cond.c1{border-left-color:var(--info)}.cond.c0{border-left-color:var(--ok)}
+.cond .meta{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 8px}
+.tag{font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;background:var(--bg);border:1px solid var(--line);color:var(--mute)}
+.tag.s3{background:var(--accbg);color:var(--acc2);border-color:var(--acc)}
+.cond h4{margin:10px 0 3px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--mute)}
+.cond p,.cond ul{margin:0}.cond ul{padding-left:20px}
+.note{background:var(--infobg);color:var(--ink);border-radius:10px;padding:8px 10px;margin-top:8px;font-size:15px}
+.specs{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.spec{background:var(--accbg);color:var(--acc2);border-radius:999px;padding:3px 10px;font-size:13px;font-weight:600}
+.drs .card h3{margin:0}.drs .card p{margin:2px 0 0;color:var(--mute);font-size:15px}.drs .card small{display:block;margin-top:6px}
+.res-panel{margin:14px 0 4px;font-weight:800;color:var(--acc2);font-size:15px}
+.res{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.res:last-child{border-bottom:0}
+.res .n{font-weight:600}.res .v{font-weight:800;text-align:right}.res .r{color:var(--mute);font-size:13px}.res .f{text-align:right}
+.res .m{grid-column:1/-1;font-size:14px;color:var(--ink);opacity:.9}
+.normals{display:flex;flex-wrap:wrap;gap:6px}
+.normals .tag{background:var(--okbg);color:var(--ok);border-color:transparent}
+.disc{background:var(--warnbg);border:1px solid var(--warn);border-radius:var(--r);padding:12px 14px;margin:18px 0;font-size:15px}
+.emerg{background:var(--badbg);border:1px solid var(--bad);border-radius:var(--r);padding:12px 14px;margin:12px 0;font-size:15px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.actions .btn{flex:1 1 140px}
+.savebox{display:flex;gap:8px;flex-wrap:wrap}.savebox input{flex:1 1 200px}
+.saved-item{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.saved-item .t{flex:1 1 180px}.saved-item small{color:var(--mute);display:block}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;display:flex;align-items:flex-end;justify-content:center;padding:0}
+.modal[hidden]{display:none}
+.modal .box{background:var(--card);max-width:560px;width:100%;border-radius:20px 20px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));max-height:92vh;overflow:auto}
+@media (min-width:640px){.modal{align-items:center;padding:20px}.modal .box{border-radius:20px}}
+.back{background:none;border:0;color:var(--acc2);font-weight:700;padding:8px 0;min-height:44px}
+[hidden]{display:none!important}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#111;color:#fff;border-radius:999px;padding:9px 16px;font-size:14px;z-index:200;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.on{opacity:1}
+@media (max-width:420px){.profile{grid-template-columns:1fr}}
+@media print{
+  body{background:#fff;color:#000;padding:0;font-size:12px}
+  .bar,.actions,.savebox,.back,.toast,#view-input,#view-saved,#view-about,.modal,.noprint{display:none!important}
+  .card,.urg,.alert,.warn,.disc{box-shadow:none;break-inside:avoid}
+  :root{--bg:#fff;--card:#fff;--ink:#000;--mute:#333;--line:#bbb}
+  .wrap{max-width:none}
+  .printhead{display:block!important}
+}
+.printhead{display:none;margin-bottom:8px}
+
+.foot{display:flex;align-items:center;gap:10px;color:var(--mute);font-size:13px;margin:28px 0 8px;padding-top:14px;border-top:1px solid var(--line)}
+.aboutlogo{display:block;width:min(320px,80%);margin:4px auto 10px;background:#fff;border-radius:18px;padding:8px}
+
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="brand"><img class="logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjMwMCAxMDAgNDAwIDQ0MCIgd2lkdGg9IjQwMCIgaGVpZ2h0PSI0NDAiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iQkhJUyBlbWJsZW0iPgogIDxkZWZzPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJndGUiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNiNmZmZjIiLz48c3RvcCBvZmZzZXQ9Ii41NSIgc3RvcC1jb2xvcj0iIzRmZTBjYiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzE5YjNhMyIvPjwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImdsZSIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzE0OTQ4YSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzBhNGY0YiIvPjwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImdyZSIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzBmNzY2ZSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzA2MmYyZCIvPjwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9Imd3ZSIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2NkZWVlYSIvPjwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9Imdsb3NzZSIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZiIgc3RvcC1vcGFjaXR5PSIuNTUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmZmYiIHN0b3Atb3BhY2l0eT0iMCIvPjwvbGluZWFyR3JhZGllbnQ+CiAgICA8ZmlsdGVyIGlkPSJibHVyZSIgeD0iLTUwJSIgeT0iLTMwMCUiIHdpZHRoPSIyMDAlIiBoZWlnaHQ9IjcwMCUiPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjE0Ii8+PC9maWx0ZXI+CiAgICA8ZmlsdGVyIGlkPSJzb2Z0ZSIgeD0iLTIwJSIgeT0iLTIwJSIgd2lkdGg9IjE0MCUiIGhlaWdodD0iMTQwJSI+PGZlRHJvcFNoYWRvdyBkeD0iMiIgZHk9IjQiIHN0ZERldmlhdGlvbj0iMyIgZmxvb2QtY29sb3I9IiMwNDMwMmQiIGZsb29kLW9wYWNpdHk9Ii40NSIvPjwvZmlsdGVyPgogIDwvZGVmcz4KICA8ZWxsaXBzZSBjeD0iNTAwIiBjeT0iNDg0IiByeD0iMTU4IiByeT0iMjYiIGZpbGw9IiMwMjMxMmUiIG9wYWNpdHk9Ii4zNSIgZmlsdGVyPSJ1cmwoI2JsdXJlKSIvPgogIDxnIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMyI+CiAgICA8cG9seWdvbiBwb2ludHM9IjM3MC4xLDIyNS4wIDUwMC4wLDMwMC4wIDUwMC4wLDQ1MC4wIDM3MC4xLDM3NS4wIiBmaWxsPSJ1cmwoI2dsZSkiIHN0cm9rZT0idXJsKCNnbGUpIi8+CiAgICA8cG9seWdvbiBwb2ludHM9IjUwMC4wLDMwMC4wIDYyOS45LDIyNS4wIDYyOS45LDM3NS4wIDUwMC4wLDQ1MC4wIiBmaWxsPSJ1cmwoI2dyZSkiIHN0cm9rZT0idXJsKCNncmUpIi8+CiAgICA8cG9seWdvbiBwb2ludHM9IjUwMC4wLDE1MC4wIDYyOS45LDIyNS4wIDUwMC4wLDMwMC4wIDM3MC4xLDIyNS4wIiBmaWxsPSJ1cmwoI2d0ZSkiIHN0cm9rZT0idXJsKCNndGUpIi8+CiAgPC9nPgogIDxwb2x5Z29uIHBvaW50cz0iNTAwLjAsMTUwLjAgNjI5LjksMjI1LjAgNTAwLjAsMzAwLjAgMzcwLjEsMjI1LjAiIGZpbGw9InVybCgjZ2xvc3NlKSIgb3BhY2l0eT0iLjYiLz4KICA8IS0tIHRvcDogbWVkaWNhbCBjcm9zcyAtLT4KICA8ZyB0cmFuc2Zvcm09Im1hdHJpeCgxMjkuOTA0IC03NS4wMDAgMTI5LjkwNCA3NS4wMDAgMzcwLjEgMjI1LjApIiBmaWx0ZXI9InVybCgjc29mdGUpIj48cGF0aCBmaWxsPSJ1cmwoI2d3ZSkiIGQ9Ik0uMzggLjE2aC4yNHYuMjJoLjIydi4yNGgtLjIydi4yMmgtLjI0di0uMjJoLS4yMnYtLjI0aC4yMnoiLz48L2c+CiAgPCEtLSBsZWZ0OiBwdWxzZSBsaW5lIC0tPgogIDxnIHRyYW5zZm9ybT0ibWF0cml4KDEyOS45MDQgNzUuMDAwIDAuMDAwIDE1MC4wMDAgMzcwLjEgMjI1LjApIj48cG9seWxpbmUgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9Ii4wNTUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgcG9pbnRzPSIuMSwuNSAuMywuNSAuNCwuMyAuNTMsLjc0IC42NCwuNDIgLjcyLC41IC45LC41IiBmaWx0ZXI9InVybCgjc29mdGUpIi8+PC9nPgogIDwhLS0gcmlnaHQ6IGhlYXJ0IC0tPgogIDxnIHRyYW5zZm9ybT0ibWF0cml4KDEyOS45MDQgLTc1LjAwMCAwLjAwMCAxNTAuMDAwIDUwMC4wIDMwMC4wKSI+PHBhdGggZmlsbD0idXJsKCNnd2UpIiBvcGFjaXR5PSIuOTUiIGZpbHRlcj0idXJsKCNzb2Z0ZSkiIGQ9Ik0uNSAuNzdDLjE0IC41NSAuMTcgLjI0IC4zNCAuMjRDLjQ0IC4yNCAuNSAuMzEgLjUgLjM3Qy41IC4zMSAuNTYgLjI0IC42NiAuMjRDLjgzIC4yNCAuODYgLjU1IC41IC43N1oiLz48L2c+CiAgPCEtLSBiZXZlbCBlZGdlcyAtLT4KICA8ZyBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiPgogICAgPHBvbHlsaW5lIHBvaW50cz0iMzcwLjEsMjI1LjAgNTAwLjAsMTUwLjAgNjI5LjksMjI1LjAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI0IiBvcGFjaXR5PSIuODUiLz4KICAgIDxwb2x5bGluZSBwb2ludHM9IjM3MC4xLDIyNS4wIDUwMC4wLDMwMC4wIDYyOS45LDIyNS4wIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iLjM1Ii8+CiAgICA8bGluZSB4MT0iNTAwIiB5MT0iMzAwIiB4Mj0iNTAwIiB5Mj0iNDUwIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iLjI1Ii8+CiAgICA8cG9seWxpbmUgcG9pbnRzPSIzNzAuMSwyMjUuMCAzNzAuMSwzNzUuMCA1MDAuMCw0NTAuMCA2MjkuOSwzNzUuMCA2MjkuOSwyMjUuMCIgc3Ryb2tlPSIjMDIyMDFlIiBzdHJva2Utd2lkdGg9IjMiIG9wYWNpdHk9Ii4yNSIvPgogIDwvZz4KPC9zdmc+" alt="BHIS logo" width="44" height="48"><div><h1>LabLens</h1><p>by BHIS <span class="pill" id="offlinePill" hidden>✓ works offline</span></p></div></div>
+  <div class="top-actions"><button class="ghost" id="btnInstall" hidden>Install</button><button class="ghost" id="btnSaved">Saved</button><button class="ghost" id="btnAbout">About</button></div>
+</div></header>
+
+<main class="wrap">
+  <!-- INPUT -->
+  <section id="view-input">
+    <div class="card">
+      <h3>1. About you</h3>
+      <p class="lead">Normal ranges depend on age and sex. Nothing you enter leaves this device.</p>
+      <div class="profile" style="margin-top:12px">
+        <div><label class="f" for="age">Age (years)</label><input id="age" inputmode="numeric" autocomplete="off" placeholder="e.g. 34"></div>
+        <div><span class="f" style="display:block;font-weight:600;font-size:14px;margin-bottom:4px">Sex</span>
+          <div class="seg" role="radiogroup" aria-label="Sex"><label><input type="radio" name="sex" value="F"><span>Female</span></label><label><input type="radio" name="sex" value="M"><span>Male</span></label></div></div>
+        <div class="preg" id="pregBox" hidden><span class="f" style="display:block;font-weight:600;font-size:14px;margin-bottom:4px">Are you pregnant?</span>
+          <div class="seg" role="radiogroup" aria-label="Pregnant"><label><input type="radio" name="preg" value="No"><span>No / not sure</span></label><label><input type="radio" name="preg" value="Yes"><span>Yes</span></label></div></div>
+      </div>
+      <p class="err" id="profErr" hidden></p>
+    </div>
+
+    <div class="card" style="margin-bottom:0">
+      <h3>2. Enter your results</h3>
+      <p class="lead">Open a section, then type only the tests on your report. Unit shown differs from your report? Change it with the unit box. If your lab prints its own normal range, tap <b>⋯</b> and enter it.</p>
+    </div>
+    <div class="search"><input type="search" id="search" placeholder="Search a test (e.g. creatinine, TSH, malaria)" autocomplete="off" aria-label="Search tests"></div>
+    <div id="panels"></div>
+    <p class="lead" id="noMatch" hidden>No test matches your search.</p>
+  </section>
+
+  <!-- RESULT -->
+  <section id="view-result" hidden></section>
+
+  <!-- SAVED -->
+  <section id="view-saved" hidden></section>
+
+  <!-- ABOUT -->
+  <section id="view-about" hidden></section>
+  <footer class="foot"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjMwMCAxMDAgNDAwIDQ0MCIgd2lkdGg9IjQwMCIgaGVpZ2h0PSI0NDAiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iQkhJUyBlbWJsZW0iPgogIDxkZWZzPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJndGUiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNiNmZmZjIiLz48c3RvcCBvZmZzZXQ9Ii41NSIgc3RvcC1jb2xvcj0iIzRmZTBjYiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzE5YjNhMyIvPjwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImdsZSIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzE0OTQ4YSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzBhNGY0YiIvPjwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImdyZSIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzBmNzY2ZSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzA2MmYyZCIvPjwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9Imd3ZSIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2NkZWVlYSIvPjwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9Imdsb3NzZSIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZiIgc3RvcC1vcGFjaXR5PSIuNTUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmZmYiIHN0b3Atb3BhY2l0eT0iMCIvPjwvbGluZWFyR3JhZGllbnQ+CiAgICA8ZmlsdGVyIGlkPSJibHVyZSIgeD0iLTUwJSIgeT0iLTMwMCUiIHdpZHRoPSIyMDAlIiBoZWlnaHQ9IjcwMCUiPjxmZUdhdXNzaWFuQmx1ciBzdGREZXZpYXRpb249IjE0Ii8+PC9maWx0ZXI+CiAgICA8ZmlsdGVyIGlkPSJzb2Z0ZSIgeD0iLTIwJSIgeT0iLTIwJSIgd2lkdGg9IjE0MCUiIGhlaWdodD0iMTQwJSI+PGZlRHJvcFNoYWRvdyBkeD0iMiIgZHk9IjQiIHN0ZERldmlhdGlvbj0iMyIgZmxvb2QtY29sb3I9IiMwNDMwMmQiIGZsb29kLW9wYWNpdHk9Ii40NSIvPjwvZmlsdGVyPgogIDwvZGVmcz4KICA8ZWxsaXBzZSBjeD0iNTAwIiBjeT0iNDg0IiByeD0iMTU4IiByeT0iMjYiIGZpbGw9IiMwMjMxMmUiIG9wYWNpdHk9Ii4zNSIgZmlsdGVyPSJ1cmwoI2JsdXJlKSIvPgogIDxnIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMyI+CiAgICA8cG9seWdvbiBwb2ludHM9IjM3MC4xLDIyNS4wIDUwMC4wLDMwMC4wIDUwMC4wLDQ1MC4wIDM3MC4xLDM3NS4wIiBmaWxsPSJ1cmwoI2dsZSkiIHN0cm9rZT0idXJsKCNnbGUpIi8+CiAgICA8cG9seWdvbiBwb2ludHM9IjUwMC4wLDMwMC4wIDYyOS45LDIyNS4wIDYyOS45LDM3NS4wIDUwMC4wLDQ1MC4wIiBmaWxsPSJ1cmwoI2dyZSkiIHN0cm9rZT0idXJsKCNncmUpIi8+CiAgICA8cG9seWdvbiBwb2ludHM9IjUwMC4wLDE1MC4wIDYyOS45LDIyNS4wIDUwMC4wLDMwMC4wIDM3MC4xLDIyNS4wIiBmaWxsPSJ1cmwoI2d0ZSkiIHN0cm9rZT0idXJsKCNndGUpIi8+CiAgPC9nPgogIDxwb2x5Z29uIHBvaW50cz0iNTAwLjAsMTUwLjAgNjI5LjksMjI1LjAgNTAwLjAsMzAwLjAgMzcwLjEsMjI1LjAiIGZpbGw9InVybCgjZ2xvc3NlKSIgb3BhY2l0eT0iLjYiLz4KICA8IS0tIHRvcDogbWVkaWNhbCBjcm9zcyAtLT4KICA8ZyB0cmFuc2Zvcm09Im1hdHJpeCgxMjkuOTA0IC03NS4wMDAgMTI5LjkwNCA3NS4wMDAgMzcwLjEgMjI1LjApIiBmaWx0ZXI9InVybCgjc29mdGUpIj48cGF0aCBmaWxsPSJ1cmwoI2d3ZSkiIGQ9Ik0uMzggLjE2aC4yNHYuMjJoLjIydi4yNGgtLjIydi4yMmgtLjI0di0uMjJoLS4yMnYtLjI0aC4yMnoiLz48L2c+CiAgPCEtLSBsZWZ0OiBwdWxzZSBsaW5lIC0tPgogIDxnIHRyYW5zZm9ybT0ibWF0cml4KDEyOS45MDQgNzUuMDAwIDAuMDAwIDE1MC4wMDAgMzcwLjEgMjI1LjApIj48cG9seWxpbmUgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9Ii4wNTUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgcG9pbnRzPSIuMSwuNSAuMywuNSAuNCwuMyAuNTMsLjc0IC42NCwuNDIgLjcyLC41IC45LC41IiBmaWx0ZXI9InVybCgjc29mdGUpIi8+PC9nPgogIDwhLS0gcmlnaHQ6IGhlYXJ0IC0tPgogIDxnIHRyYW5zZm9ybT0ibWF0cml4KDEyOS45MDQgLTc1LjAwMCAwLjAwMCAxNTAuMDAwIDUwMC4wIDMwMC4wKSI+PHBhdGggZmlsbD0idXJsKCNnd2UpIiBvcGFjaXR5PSIuOTUiIGZpbHRlcj0idXJsKCNzb2Z0ZSkiIGQ9Ik0uNSAuNzdDLjE0IC41NSAuMTcgLjI0IC4zNCAuMjRDLjQ0IC4yNCAuNSAuMzEgLjUgLjM3Qy41IC4zMSAuNTYgLjI0IC42NiAuMjRDLjgzIC4yNCAuODYgLjU1IC41IC43N1oiLz48L2c+CiAgPCEtLSBiZXZlbCBlZGdlcyAtLT4KICA8ZyBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiPgogICAgPHBvbHlsaW5lIHBvaW50cz0iMzcwLjEsMjI1LjAgNTAwLjAsMTUwLjAgNjI5LjksMjI1LjAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI0IiBvcGFjaXR5PSIuODUiLz4KICAgIDxwb2x5bGluZSBwb2ludHM9IjM3MC4xLDIyNS4wIDUwMC4wLDMwMC4wIDYyOS45LDIyNS4wIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iLjM1Ii8+CiAgICA8bGluZSB4MT0iNTAwIiB5MT0iMzAwIiB4Mj0iNTAwIiB5Mj0iNDUwIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iLjI1Ii8+CiAgICA8cG9seWxpbmUgcG9pbnRzPSIzNzAuMSwyMjUuMCAzNzAuMSwzNzUuMCA1MDAuMCw0NTAuMCA2MjkuOSwzNzUuMCA2MjkuOSwyMjUuMCIgc3Ryb2tlPSIjMDIyMDFlIiBzdHJva2Utd2lkdGg9IjMiIG9wYWNpdHk9Ii4yNSIvPgogIDwvZz4KPC9zdmc+" alt="" width="26" height="29"><span>LabLens is created and owned by <b>BHIS</b> (Body Health Integrated Systems). © 2026 BHIS. All rights reserved.</span></footer>
+</main>
+
+<div class="bar" id="bar"><div class="wrap">
+  <button class="btn s" id="btnClear" title="Clear everything">Clear</button>
+  <button class="btn p" id="btnGo">Interpret results</button>
+</div></div>
+
+<div class="modal" id="ack" hidden><div class="box" role="dialog" aria-modal="true" aria-labelledby="ackT">
+  <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAwIDEwMDAiIHdpZHRoPSIxMDAwIiBoZWlnaHQ9IjEwMDAiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iQkhJUzogQm9keSBIZWFsdGggSW50ZWdyYXRlZCBTeXN0ZW1zIj4KCiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9Imd0IiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYjZmZmYyIi8+PHN0b3Agb2Zmc2V0PSIuNTUiIHN0b3AtY29sb3I9IiM0ZmUwY2IiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMxOWIzYTMiLz48L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnbCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzE0OTQ4YSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzBhNGY0YiIvPjwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImdyIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMGY3NjZlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMDYyZjJkIi8+PC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ3ciIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZmZmZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNjZGVlZWEiLz48L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnbG9zcyIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZiIgc3RvcC1vcGFjaXR5PSIuNTUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmZmYiIHN0b3Atb3BhY2l0eT0iMCIvPjwvbGluZWFyR3JhZGllbnQ+CiAgICA8ZmlsdGVyIGlkPSJibHVyIiB4PSItNTAlIiB5PSItMzAwJSIgd2lkdGg9IjIwMCUiIGhlaWdodD0iNzAwJSI+PGZlR2F1c3NpYW5CbHVyIHN0ZERldmlhdGlvbj0iMTQiLz48L2ZpbHRlcj4KICAgIDxmaWx0ZXIgaWQ9InNvZnQiIHg9Ii0yMCUiIHk9Ii0yMCUiIHdpZHRoPSIxNDAlIiBoZWlnaHQ9IjE0MCUiPjxmZURyb3BTaGFkb3cgZHg9IjIiIGR5PSI0IiBzdGREZXZpYXRpb249IjMiIGZsb29kLWNvbG9yPSIjMDQzMDJkIiBmbG9vZC1vcGFjaXR5PSIuNDUiLz48L2ZpbHRlcj4KICA8L2RlZnM+CiAgPGVsbGlwc2UgY3g9IjUwMCIgY3k9IjQ4NCIgcng9IjE1OCIgcnk9IjI2IiBmaWxsPSIjMDIzMTJlIiBvcGFjaXR5PSIuMzUiIGZpbHRlcj0idXJsKCNibHVyKSIvPgogIDxnIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMyI+CiAgICA8cG9seWdvbiBwb2ludHM9IjM3MC4xLDIyNS4wIDUwMC4wLDMwMC4wIDUwMC4wLDQ1MC4wIDM3MC4xLDM3NS4wIiBmaWxsPSJ1cmwoI2dsKSIgc3Ryb2tlPSJ1cmwoI2dsKSIvPgogICAgPHBvbHlnb24gcG9pbnRzPSI1MDAuMCwzMDAuMCA2MjkuOSwyMjUuMCA2MjkuOSwzNzUuMCA1MDAuMCw0NTAuMCIgZmlsbD0idXJsKCNncikiIHN0cm9rZT0idXJsKCNncikiLz4KICAgIDxwb2x5Z29uIHBvaW50cz0iNTAwLjAsMTUwLjAgNjI5LjksMjI1LjAgNTAwLjAsMzAwLjAgMzcwLjEsMjI1LjAiIGZpbGw9InVybCgjZ3QpIiBzdHJva2U9InVybCgjZ3QpIi8+CiAgPC9nPgogIDxwb2x5Z29uIHBvaW50cz0iNTAwLjAsMTUwLjAgNjI5LjksMjI1LjAgNTAwLjAsMzAwLjAgMzcwLjEsMjI1LjAiIGZpbGw9InVybCgjZ2xvc3MpIiBvcGFjaXR5PSIuNiIvPgogIDwhLS0gdG9wOiBtZWRpY2FsIGNyb3NzIC0tPgogIDxnIHRyYW5zZm9ybT0ibWF0cml4KDEyOS45MDQgLTc1LjAwMCAxMjkuOTA0IDc1LjAwMCAzNzAuMSAyMjUuMCkiIGZpbHRlcj0idXJsKCNzb2Z0KSI+PHBhdGggZmlsbD0idXJsKCNndykiIGQ9Ik0uMzggLjE2aC4yNHYuMjJoLjIydi4yNGgtLjIydi4yMmgtLjI0di0uMjJoLS4yMnYtLjI0aC4yMnoiLz48L2c+CiAgPCEtLSBsZWZ0OiBwdWxzZSBsaW5lIC0tPgogIDxnIHRyYW5zZm9ybT0ibWF0cml4KDEyOS45MDQgNzUuMDAwIDAuMDAwIDE1MC4wMDAgMzcwLjEgMjI1LjApIj48cG9seWxpbmUgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9Ii4wNTUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgcG9pbnRzPSIuMSwuNSAuMywuNSAuNCwuMyAuNTMsLjc0IC42NCwuNDIgLjcyLC41IC45LC41IiBmaWx0ZXI9InVybCgjc29mdCkiLz48L2c+CiAgPCEtLSByaWdodDogaGVhcnQgLS0+CiAgPGcgdHJhbnNmb3JtPSJtYXRyaXgoMTI5LjkwNCAtNzUuMDAwIDAuMDAwIDE1MC4wMDAgNTAwLjAgMzAwLjApIj48cGF0aCBmaWxsPSJ1cmwoI2d3KSIgb3BhY2l0eT0iLjk1IiBmaWx0ZXI9InVybCgjc29mdCkiIGQ9Ik0uNSAuNzdDLjE0IC41NSAuMTcgLjI0IC4zNCAuMjRDLjQ0IC4yNCAuNSAuMzEgLjUgLjM3Qy41IC4zMSAuNTYgLjI0IC42NiAuMjRDLjgzIC4yNCAuODYgLjU1IC41IC43N1oiLz48L2c+CiAgPCEtLSBiZXZlbCBlZGdlcyAtLT4KICA8ZyBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiPgogICAgPHBvbHlsaW5lIHBvaW50cz0iMzcwLjEsMjI1LjAgNTAwLjAsMTUwLjAgNjI5LjksMjI1LjAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI0IiBvcGFjaXR5PSIuODUiLz4KICAgIDxwb2x5bGluZSBwb2ludHM9IjM3MC4xLDIyNS4wIDUwMC4wLDMwMC4wIDYyOS45LDIyNS4wIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iLjM1Ii8+CiAgICA8bGluZSB4MT0iNTAwIiB5MT0iMzAwIiB4Mj0iNTAwIiB5Mj0iNDUwIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iLjI1Ii8+CiAgICA8cG9seWxpbmUgcG9pbnRzPSIzNzAuMSwyMjUuMCAzNzAuMSwzNzUuMCA1MDAuMCw0NTAuMCA2MjkuOSwzNzUuMCA2MjkuOSwyMjUuMCIgc3Ryb2tlPSIjMDIyMDFlIiBzdHJva2Utd2lkdGg9IjMiIG9wYWNpdHk9Ii4yNSIvPgogIDwvZz4KCiAgPGRlZnM+CiAgICA8ZyBpZD0idyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTI3LjAsNzYwKSBzY2FsZSgwLjMwMDAsLTAuMzAwMCkiPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuMCwwKSIgZD0iTTYyMiAxOTFRNjIyIDEwMyA1NjAuNSA1MS41UTQ5OSAwIDM4OSAwSDYyVjcwMkgzNzhRNDg1IDcwMiA1NDUuNSA2NTMuMFE2MDYgNjA0IDYwNiA1MjBRNjA2IDQ1OCA1NzMuNSA0MTcuMFE1NDEgMzc2IDQ4NyAzNjBRNTQ4IDM0NyA1ODUuMCAyOTkuNVE2MjIgMjUyIDYyMiAxOTFaTTIzMyA0MThIMzQ1UTM4NyA0MTggNDA5LjUgNDM2LjVRNDMyIDQ1NSA0MzIgNDkxUTQzMiA1MjcgNDA5LjUgNTQ2LjBRMzg3IDU2NSAzNDUgNTY1SDIzM1pNNDQ5IDIxNFE0NDkgMjUxIDQyNC41IDI3Mi4wUTQwMCAyOTMgMzU3IDI5M0gyMzNWMTM4SDM1OVE0MDIgMTM4IDQyNS41IDE1Ny41UTQ0OSAxNzcgNDQ5IDIxNFoiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSg3MDUuNywwKSIgZD0iTTY3MCA3MDJWMEg0OTlWMjg5SDIzM1YwSDYyVjcwMkgyMzNWNDI3SDQ5OVY3MDJaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTQ4My4zLDApIiBkPSJNMjMzIDcwMlYwSDYyVjcwMloiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxODI1LjAsMCkiIGQ9Ik00MiAyMTBIMjI0UTIyOCAxNzEgMjUxLjAgMTUwLjVRMjc0IDEzMCAzMTEgMTMwUTM0OSAxMzAgMzcxLjAgMTQ3LjVRMzkzIDE2NSAzOTMgMTk2UTM5MyAyMjIgMzc1LjUgMjM5LjBRMzU4IDI1NiAzMzIuNSAyNjcuMFEzMDcgMjc4IDI2MCAyOTJRMTkyIDMxMyAxNDkuMCAzMzQuMFExMDYgMzU1IDc1LjAgMzk2LjBRNDQgNDM3IDQ0IDUwM1E0NCA2MDEgMTE1LjAgNjU2LjVRMTg2IDcxMiAzMDAgNzEyUTQxNiA3MTIgNDg3LjAgNjU2LjVRNTU4IDYwMSA1NjMgNTAySDM3OFEzNzYgNTM2IDM1My4wIDU1NS41UTMzMCA1NzUgMjk0IDU3NVEyNjMgNTc1IDI0NC4wIDU1OC41UTIyNSA1NDIgMjI1IDUxMVEyMjUgNDc3IDI1Ny4wIDQ1OC4wUTI4OSA0MzkgMzU3IDQxN1E0MjUgMzk0IDQ2Ny41IDM3My4wUTUxMCAzNTIgNTQxLjAgMzEyLjBRNTcyIDI3MiA1NzIgMjA5UTU3MiAxNDkgNTQxLjUgMTAwLjBRNTExIDUxIDQ1My4wIDIyLjBRMzk1IC03IDMxNiAtN1EyMzkgLTcgMTc4LjAgMTguMFExMTcgNDMgODAuNSA5Mi4wUTQ0IDE0MSA0MiAyMTBaIi8+PC9nPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnZmFjZSIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2Q0ZmZmOCIvPjxzdG9wIG9mZnNldD0iLjQ1IiBzdG9wLWNvbG9yPSIjNGZlMGNiIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMGY5NDg4Ii8+PC9saW5lYXJHcmFkaWVudD4KICAgIDxmaWx0ZXIgaWQ9IndzaCIgeD0iLTIwJSIgeT0iLTIwJSIgd2lkdGg9IjE0MCUiIGhlaWdodD0iMTYwJSI+PGZlR2F1c3NpYW5CbHVyIHN0ZERldmlhdGlvbj0iOSIvPjwvZmlsdGVyPgogICAgPGNsaXBQYXRoIGlkPSJmYWNlY2xpcCI+PHVzZSBocmVmPSIjdyIvPjwvY2xpcFBhdGg+CiAgPC9kZWZzPgogIDx1c2UgaHJlZj0iI3ciIHg9IjMwIiB5PSI0MCIgZmlsbD0iIzAyMzEyZSIgb3BhY2l0eT0iLjM1IiBmaWx0ZXI9InVybCgjd3NoKSIvPgogIDx1c2UgaHJlZj0iI3ciIHg9IjIyLjAiIHk9IjIyLjAiIGZpbGw9InJnYig2LDQyLDQwKSIvPjx1c2UgaHJlZj0iI3ciIHg9IjIxLjAiIHk9IjIxLjAiIGZpbGw9InJnYig2LDQ0LDQyKSIvPjx1c2UgaHJlZj0iI3ciIHg9IjIwLjAiIHk9IjIwLjAiIGZpbGw9InJnYig2LDQ2LDQ0KSIvPjx1c2UgaHJlZj0iI3ciIHg9IjE5LjAiIHk9IjE5LjAiIGZpbGw9InJnYig3LDQ5LDQ2KSIvPjx1c2UgaHJlZj0iI3ciIHg9IjE4LjAiIHk9IjE4LjAiIGZpbGw9InJnYig3LDUxLDQ4KSIvPjx1c2UgaHJlZj0iI3ciIHg9IjE3LjAiIHk9IjE3LjAiIGZpbGw9InJnYig3LDU0LDUxKSIvPjx1c2UgaHJlZj0iI3ciIHg9IjE2LjAiIHk9IjE2LjAiIGZpbGw9InJnYig4LDU2LDUzKSIvPjx1c2UgaHJlZj0iI3ciIHg9IjE1LjAiIHk9IjE1LjAiIGZpbGw9InJnYig4LDU4LDU1KSIvPjx1c2UgaHJlZj0iI3ciIHg9IjE0LjAiIHk9IjE0LjAiIGZpbGw9InJnYig4LDYxLDU3KSIvPjx1c2UgaHJlZj0iI3ciIHg9IjEzLjAiIHk9IjEzLjAiIGZpbGw9InJnYig5LDYzLDYwKSIvPjx1c2UgaHJlZj0iI3ciIHg9IjEyLjAiIHk9IjEyLjAiIGZpbGw9InJnYig5LDY2LDYyKSIvPjx1c2UgaHJlZj0iI3ciIHg9IjExLjAiIHk9IjExLjAiIGZpbGw9InJnYigxMCw2OCw2NCkiLz48dXNlIGhyZWY9IiN3IiB4PSIxMC4wIiB5PSIxMC4wIiBmaWxsPSJyZ2IoMTAsNzAsNjYpIi8+PHVzZSBocmVmPSIjdyIgeD0iOS4wIiB5PSI5LjAiIGZpbGw9InJnYigxMCw3Myw2OCkiLz48dXNlIGhyZWY9IiN3IiB4PSI4LjAiIHk9IjguMCIgZmlsbD0icmdiKDExLDc1LDcxKSIvPjx1c2UgaHJlZj0iI3ciIHg9IjcuMCIgeT0iNy4wIiBmaWxsPSJyZ2IoMTEsNzgsNzMpIi8+PHVzZSBocmVmPSIjdyIgeD0iNi4wIiB5PSI2LjAiIGZpbGw9InJnYigxMSw4MCw3NSkiLz48dXNlIGhyZWY9IiN3IiB4PSI1LjAiIHk9IjUuMCIgZmlsbD0icmdiKDEyLDgyLDc3KSIvPjx1c2UgaHJlZj0iI3ciIHg9IjQuMCIgeT0iNC4wIiBmaWxsPSJyZ2IoMTIsODUsODApIi8+PHVzZSBocmVmPSIjdyIgeD0iMy4wIiB5PSIzLjAiIGZpbGw9InJnYigxMiw4Nyw4MikiLz48dXNlIGhyZWY9IiN3IiB4PSIyLjAiIHk9IjIuMCIgZmlsbD0icmdiKDEzLDkwLDg0KSIvPjx1c2UgaHJlZj0iI3ciIHg9IjEuMCIgeT0iMS4wIiBmaWxsPSJyZ2IoMTMsOTIsODYpIi8+CiAgPHVzZSBocmVmPSIjdyIgZmlsbD0idXJsKCNnZmFjZSkiLz4KICA8ZyBjbGlwLXBhdGg9InVybCgjZmFjZWNsaXApIj48cmVjdCB4PSIwIiB5PSI1MzAiIHdpZHRoPSIxMDAwIiBoZWlnaHQ9IjExMCIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjI4Ii8+PC9nPgogIDx1c2UgaHJlZj0iI3ciIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2U4ZmZmYiIgc3Ryb2tlLXdpZHRoPSIyLjIiIG9wYWNpdHk9Ii44Ii8+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTAzLjMsOTA1KSBzY2FsZSgwLjAzNDAsLTAuMDM0MCkiIGZpbGw9IiMwYjRmNGEiPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuMCwwKSIgZD0iTTYyMiAxOTFRNjIyIDEwMyA1NjAuNSA1MS41UTQ5OSAwIDM4OSAwSDYyVjcwMkgzNzhRNDg1IDcwMiA1NDUuNSA2NTMuMFE2MDYgNjA0IDYwNiA1MjBRNjA2IDQ1OCA1NzMuNSA0MTcuMFE1NDEgMzc2IDQ4NyAzNjBRNTQ4IDM0NyA1ODUuMCAyOTkuNVE2MjIgMjUyIDYyMiAxOTFaTTIzMyA0MThIMzQ1UTM4NyA0MTggNDA5LjUgNDM2LjVRNDMyIDQ1NSA0MzIgNDkxUTQzMiA1MjcgNDA5LjUgNTQ2LjBRMzg3IDU2NSAzNDUgNTY1SDIzM1pNNDQ5IDIxNFE0NDkgMjUxIDQyNC41IDI3Mi4wUTQwMCAyOTMgMzU3IDI5M0gyMzNWMTM4SDM1OVE0MDIgMTM4IDQyNS41IDE1Ny41UTQ0OSAxNzcgNDQ5IDIxNFoiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSg4MzUuNSwwKSIgZD0iTTMzIDM1M1EzMyA0NTYgODEuNSA1MzguMFExMzAgNjIwIDIxMi41IDY2Ni4wUTI5NSA3MTIgMzk0IDcxMlE0OTMgNzEyIDU3NS41IDY2Ni4wUTY1OCA2MjAgNzA1LjUgNTM4LjBRNzUzIDQ1NiA3NTMgMzUzUTc1MyAyNTAgNzA1LjAgMTY3LjVRNjU3IDg1IDU3NS4wIDM5LjBRNDkzIC03IDM5NCAtN1EyOTUgLTcgMjEyLjUgMzkuMFExMzAgODUgODEuNSAxNjcuNVEzMyAyNTAgMzMgMzUzWk01NzkgMzUzUTU3OSA0NDYgNTI4LjUgNTAxLjVRNDc4IDU1NyAzOTQgNTU3UTMwOSA1NTcgMjU4LjUgNTAyLjBRMjA4IDQ0NyAyMDggMzUzUTIwOCAyNjAgMjU4LjUgMjA0LjVRMzA5IDE0OSAzOTQgMTQ5UTQ3OCAxNDkgNTI4LjUgMjA1LjBRNTc5IDI2MSA1NzkgMzUzWiIvPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE3OTcuOSwwKSIgZD0iTTY5MyAzNTFRNjkzIDI0OCA2NDcuNSAxNjguMFE2MDIgODggNTE4LjUgNDQuMFE0MzUgMCAzMjUgMEg2MlY3MDJIMzI1UTQzNiA3MDIgNTE5LjAgNjU4LjBRNjAyIDYxNCA2NDcuNSA1MzQuNVE2OTMgNDU1IDY5MyAzNTFaTTUxOSAzNTFRNTE5IDQ0OCA0NjUuMCA1MDIuMFE0MTEgNTU2IDMxNCA1NTZIMjMzVjE0OEgzMTRRNDExIDE0OCA0NjUuMCAyMDEuMFE1MTkgMjU0IDUxOSAzNTFaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjcwMS40LDApIiBkPSJNNjY0IDcwMiA0MjEgMjMyVjBIMjUwVjIzMkw3IDcwMkgyMDFMMzM3IDQwOEw0NzIgNzAyWiIvPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDM1NDguOSwwKSIgZD0iIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzkzNy40LDApIiBkPSJNNjcwIDcwMlYwSDQ5OVYyODlIMjMzVjBINjJWNzAySDIzM1Y0MjdINDk5VjcwMloiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0ODQ0LjgsMCkiIGQ9Ik0yMzMgNTY1VjQyM0g0NjJWMjkxSDIzM1YxMzdINDkyVjBINjJWNzAySDQ5MlY1NjVaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNTU2Mi4zLDApIiBkPSJNNDk5IDEyNEgyMzdMMTk1IDBIMTZMMjcwIDcwMkg0NjhMNzIyIDBINTQxWk00NTUgMjU2IDM2OCA1MTMgMjgyIDI1NloiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSg2NDc1LjgsMCkiIGQ9Ik0yMzMgMTMySDQ1N1YwSDYyVjcwMkgyMzNaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNzEyOS4yLDApIiBkPSJNNTY3IDcwMlY1NjVIMzgxVjBIMjEwVjU2NUgyNFY3MDJaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNzg5Ni43LDApIiBkPSJNNjcwIDcwMlYwSDQ5OVYyODlIMjMzVjBINjJWNzAySDIzM1Y0MjdINDk5VjcwMloiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSg4ODA0LjIsMCkiIGQ9IiIvPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDkxOTIuNiwwKSIgZD0iTTIzMyA3MDJWMEg2MlY3MDJaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoOTY2NC4xLDApIiBkPSJNNjkwIDBINTE5TDIzMyA0MzNWMEg2MlY3MDJIMjMzTDUxOSAyNjdWNzAySDY5MFoiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMDU5Mi42LDApIiBkPSJNNTY3IDcwMlY1NjVIMzgxVjBIMjEwVjU2NUgyNFY3MDJaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTEzNjAuMSwwKSIgZD0iTTIzMyA1NjVWNDIzSDQ2MlYyOTFIMjMzVjEzN0g0OTJWMEg2MlY3MDJINDkyVjU2NVoiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMjA3Ny41LDApIiBkPSJNNTI4IDQ4MFE1MDkgNTE1IDQ3My41IDUzMy41UTQzOCA1NTIgMzkwIDU1MlEzMDcgNTUyIDI1Ny4wIDQ5Ny41UTIwNyA0NDMgMjA3IDM1MlEyMDcgMjU1IDI1OS41IDIwMC41UTMxMiAxNDYgNDA0IDE0NlE0NjcgMTQ2IDUxMC41IDE3OC4wUTU1NCAyMTAgNTc0IDI3MEgzNTdWMzk2SDcyOVYyMzdRNzEwIDE3MyA2NjQuNSAxMTguMFE2MTkgNjMgNTQ5LjAgMjkuMFE0NzkgLTUgMzkxIC01UTI4NyAtNSAyMDUuNSA0MC41UTEyNCA4NiA3OC41IDE2Ny4wUTMzIDI0OCAzMyAzNTJRMzMgNDU2IDc4LjUgNTM3LjVRMTI0IDYxOSAyMDUuMCA2NjQuNVEyODYgNzEwIDM5MCA3MTBRNTE2IDcxMCA2MDIuNSA2NDkuMFE2ODkgNTg4IDcxNyA0ODBaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTMwMTYuMCwwKSIgZD0iTTQyMCAwIDI3NCAyNjVIMjMzVjBINjJWNzAySDM0OVE0MzIgNzAyIDQ5MC41IDY3My4wUTU0OSA2NDQgNTc4LjAgNTkzLjVRNjA3IDU0MyA2MDcgNDgxUTYwNyA0MTEgNTY3LjUgMzU2LjBRNTI4IDMwMSA0NTEgMjc4TDYxMyAwWk0yMzMgMzg2SDMzOVEzODYgMzg2IDQwOS41IDQwOS4wUTQzMyA0MzIgNDMzIDQ3NFE0MzMgNTE0IDQwOS41IDUzNy4wUTM4NiA1NjAgMzM5IDU2MEgyMzNaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTM4NDQuNSwwKSIgZD0iTTQ5OSAxMjRIMjM3TDE5NSAwSDE2TDI3MCA3MDJINDY4TDcyMiAwSDU0MVpNNDU1IDI1NiAzNjggNTEzIDI4MiAyNTZaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTQ3NTcuOSwwKSIgZD0iTTU2NyA3MDJWNTY1SDM4MVYwSDIxMFY1NjVIMjRWNzAyWiIvPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE1NTI1LjQsMCkiIGQ9Ik0yMzMgNTY1VjQyM0g0NjJWMjkxSDIzM1YxMzdINDkyVjBINjJWNzAySDQ5MlY1NjVaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTYyNDIuOSwwKSIgZD0iTTY5MyAzNTFRNjkzIDI0OCA2NDcuNSAxNjguMFE2MDIgODggNTE4LjUgNDQuMFE0MzUgMCAzMjUgMEg2MlY3MDJIMzI1UTQzNiA3MDIgNTE5LjAgNjU4LjBRNjAyIDYxNCA2NDcuNSA1MzQuNVE2OTMgNDU1IDY5MyAzNTFaTTUxOSAzNTFRNTE5IDQ0OCA0NjUuMCA1MDIuMFE0MTEgNTU2IDMxNCA1NTZIMjMzVjE0OEgzMTRRNDExIDE0OCA0NjUuMCAyMDEuMFE1MTkgMjU0IDUxOSAzNTFaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTcxNDYuNCwwKSIgZD0iIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTc1MzQuOCwwKSIgZD0iTTQyIDIxMEgyMjRRMjI4IDE3MSAyNTEuMCAxNTAuNVEyNzQgMTMwIDMxMSAxMzBRMzQ5IDEzMCAzNzEuMCAxNDcuNVEzOTMgMTY1IDM5MyAxOTZRMzkzIDIyMiAzNzUuNSAyMzkuMFEzNTggMjU2IDMzMi41IDI2Ny4wUTMwNyAyNzggMjYwIDI5MlExOTIgMzEzIDE0OS4wIDMzNC4wUTEwNiAzNTUgNzUuMCAzOTYuMFE0NCA0MzcgNDQgNTAzUTQ0IDYwMSAxMTUuMCA2NTYuNVExODYgNzEyIDMwMCA3MTJRNDE2IDcxMiA0ODcuMCA2NTYuNVE1NTggNjAxIDU2MyA1MDJIMzc4UTM3NiA1MzYgMzUzLjAgNTU1LjVRMzMwIDU3NSAyOTQgNTc1UTI2MyA1NzUgMjQ0LjAgNTU4LjVRMjI1IDU0MiAyMjUgNTExUTIyNSA0NzcgMjU3LjAgNDU4LjBRMjg5IDQzOSAzNTcgNDE3UTQyNSAzOTQgNDY3LjUgMzczLjBRNTEwIDM1MiA1NDEuMCAzMTIuMFE1NzIgMjcyIDU3MiAyMDlRNTcyIDE0OSA1NDEuNSAxMDAuMFE1MTEgNTEgNDUzLjAgMjIuMFEzOTUgLTcgMzE2IC03UTIzOSAtNyAxNzguMCAxOC4wUTExNyA0MyA4MC41IDkyLjBRNDQgMTQxIDQyIDIxMFoiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxODMyNi4zLDApIiBkPSJNNjY0IDcwMiA0MjEgMjMyVjBIMjUwVjIzMkw3IDcwMkgyMDFMMzM3IDQwOEw0NzIgNzAyWiIvPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE5MTczLjgsMCkiIGQ9Ik00MiAyMTBIMjI0UTIyOCAxNzEgMjUxLjAgMTUwLjVRMjc0IDEzMCAzMTEgMTMwUTM0OSAxMzAgMzcxLjAgMTQ3LjVRMzkzIDE2NSAzOTMgMTk2UTM5MyAyMjIgMzc1LjUgMjM5LjBRMzU4IDI1NiAzMzIuNSAyNjcuMFEzMDcgMjc4IDI2MCAyOTJRMTkyIDMxMyAxNDkuMCAzMzQuMFExMDYgMzU1IDc1LjAgMzk2LjBRNDQgNDM3IDQ0IDUwM1E0NCA2MDEgMTE1LjAgNjU2LjVRMTg2IDcxMiAzMDAgNzEyUTQxNiA3MTIgNDg3LjAgNjU2LjVRNTU4IDYwMSA1NjMgNTAySDM3OFEzNzYgNTM2IDM1My4wIDU1NS41UTMzMCA1NzUgMjk0IDU3NVEyNjMgNTc1IDI0NC4wIDU1OC41UTIyNSA1NDIgMjI1IDUxMVEyMjUgNDc3IDI1Ny4wIDQ1OC4wUTI4OSA0MzkgMzU3IDQxN1E0MjUgMzk0IDQ2Ny41IDM3My4wUTUxMCAzNTIgNTQxLjAgMzEyLjBRNTcyIDI3MiA1NzIgMjA5UTU3MiAxNDkgNTQxLjUgMTAwLjBRNTExIDUxIDQ1My4wIDIyLjBRMzk1IC03IDMxNiAtN1EyMzkgLTcgMTc4LjAgMTguMFExMTcgNDMgODAuNSA5Mi4wUTQ0IDE0MSA0MiAyMTBaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTk5NjUuMiwwKSIgZD0iTTU2NyA3MDJWNTY1SDM4MVYwSDIxMFY1NjVIMjRWNzAyWiIvPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIwNzMyLjcsMCkiIGQ9Ik0yMzMgNTY1VjQyM0g0NjJWMjkxSDIzM1YxMzdINDkyVjBINjJWNzAySDQ5MlY1NjVaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjE0NTAuMiwwKSIgZD0iTTg1NyA3MDJWMEg2ODZWNDIxTDUyOSAwSDM5MUwyMzMgNDIyVjBINjJWNzAySDI2NEw0NjEgMjE2TDY1NiA3MDJaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjI1NDQuNiwwKSIgZD0iTTQyIDIxMEgyMjRRMjI4IDE3MSAyNTEuMCAxNTAuNVEyNzQgMTMwIDMxMSAxMzBRMzQ5IDEzMCAzNzEuMCAxNDcuNVEzOTMgMTY1IDM5MyAxOTZRMzkzIDIyMiAzNzUuNSAyMzkuMFEzNTggMjU2IDMzMi41IDI2Ny4wUTMwNyAyNzggMjYwIDI5MlExOTIgMzEzIDE0OS4wIDMzNC4wUTEwNiAzNTUgNzUuMCAzOTYuMFE0NCA0MzcgNDQgNTAzUTQ0IDYwMSAxMTUuMCA2NTYuNVExODYgNzEyIDMwMCA3MTJRNDE2IDcxMiA0ODcuMCA2NTYuNVE1NTggNjAxIDU2MyA1MDJIMzc4UTM3NiA1MzYgMzUzLjAgNTU1LjVRMzMwIDU3NSAyOTQgNTc1UTI2MyA1NzUgMjQ0LjAgNTU4LjVRMjI1IDU0MiAyMjUgNTExUTIyNSA0NzcgMjU3LjAgNDU4LjBRMjg5IDQzOSAzNTcgNDE3UTQyNSAzOTQgNDY3LjUgMzczLjBRNTEwIDM1MiA1NDEuMCAzMTIuMFE1NzIgMjcyIDU3MiAyMDlRNTcyIDE0OSA1NDEuNSAxMDAuMFE1MTEgNTEgNDUzLjAgMjIuMFEzOTUgLTcgMzE2IC03UTIzOSAtNyAxNzguMCAxOC4wUTExNyA0MyA4MC41IDkyLjBRNDQgMTQxIDQyIDIxMFoiLz48L2c+CiAgPHJlY3QgeD0iMTAzLjMiIHk9IjkyNyIgd2lkdGg9Ijc5My40IiBoZWlnaHQ9IjQiIHJ4PSIyIiBmaWxsPSIjMTliM2EzIiBvcGFjaXR5PSIuNyIvPgo8L3N2Zz4=" alt="BHIS: Body Health Integrated Systems" style="display:block;width:150px;max-width:50%;margin:0 auto 6px"><h2 id="ackT" style="margin-top:0;text-align:center">Before you start</h2>
+  <p><b>LabLens is an educational guide, not a doctor.</b> It compares your numbers with typical adult ranges and common patterns, then suggests <i>possibilities</i> and which kind of specialist to ask for. It <b>cannot diagnose</b> you or replace a medical examination, your symptoms, or your doctor’s judgement.</p>
+  <p>Always show your results to a qualified doctor before making decisions about treatment. Do not start, stop or change medicines because of this app.</p>
+  <div class="emerg"><b>Emergency?</b> Chest pain, difficulty breathing, severe bleeding, fainting, confusion, seizures, or sudden weakness: go to an emergency department now (Nigeria: call 112).</div>
+  <p style="color:var(--mute);font-size:14px">Works fully offline. Your entries are stored only on this device.</p>
+  <button class="btn p" id="ackBtn" style="width:100%">I understand</button>
+</div></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+'use strict';
+/* ===== LabLens test catalogue =====
+   N = numeric test: N(id,name,unit,range,opts)
+       range = [lo,hi] (null = open end) or {m:[..],f:[..]}
+       opts: p (pregnancy range), alts (other units), cl/ch (critical low/high), lo/hi (plain-language meaning), hint, dp
+   Q = qualitative test: Q(id,name,options,normalOptions,opts)  opts: say (meaning when abnormal), crit (critical options)
+   Reference ranges are typical ADULT ranges; labs differ, so users can enter their own lab's range. */
+const PANELS = [], TESTS = {};
+let CUR = null;
+function P(name, icon, note) { CUR = { name, icon, note: note || '', ids: [] }; PANELS.push(CUR); }
+function N(id, name, unit, range, o) {
+  o = o || {};
+  TESTS[id] = Object.assign({ id, name, type: 'n', unit, range, panel: CUR ? CUR.name : null }, o);
+  if (CUR && !o.calc) CUR.ids.push(id);
+}
+function Q(id, name, opts, normal, o) {
+  TESTS[id] = Object.assign({ id, name, type: 'q', opts, normal, panel: CUR ? CUR.name : null }, o || {});
+  CUR.ids.push(id);
+}
+const GRADE = ['Negative', 'Trace', '+', '++', '+++', '++++'];
+
+/* ---------- 1. Full blood count ---------- */
+P('Full Blood Count (FBC / CBC)', '🩸', 'Type the values printed on your report. Leave blank any test you do not have.');
+N('hb', 'Haemoglobin (Hb)', 'g/dL', { m: [13, 17], f: [12, 15.5] }, { p: [11, 15.5], alts: [{ u: 'g/L', f: 10 }], cl: 7, dp: 1,
+  lo: 'Low haemoglobin means anaemia: the blood carries less oxygen, which can cause tiredness, breathlessness, dizziness and pale skin.',
+  hi: 'High haemoglobin can come from dehydration, smoking, living at high altitude, lung or heart disease, or too many red cells (polycythaemia).' });
+N('pcv', 'PCV / Haematocrit (PCV)', '%', { m: [40, 52], f: [36, 47] }, { p: [33, 47], alts: [{ u: 'L/L', f: 0.01 }], cl: 21,
+  lo: 'Low PCV (packed cell volume) goes with anaemia: a lower share of the blood is red cells.',
+  hi: 'High PCV can be due to dehydration, smoking, lung disease or an excess of red cells.' });
+N('rbc', 'Red blood cell count (RBC)', '×10¹²/L', { m: [4.5, 5.9], f: [4.1, 5.1] }, { dp: 2,
+  lo: 'A low red cell count goes with anaemia.', hi: 'A high red cell count can be due to dehydration, smoking, lung disease, or thalassaemia trait (small but numerous cells).' });
+N('mcv', 'Mean cell volume (MCV)', 'fL', [80, 100], { dp: 0,
+  lo: 'Small red cells (microcytosis): typical of iron deficiency, thalassaemia trait or long-term illness.',
+  hi: 'Large red cells (macrocytosis): often vitamin B12 or folate deficiency, alcohol, liver or thyroid problems, or some medicines.' });
+N('mch', 'Mean cell haemoglobin (MCH)', 'pg', [27, 33], { dp: 1,
+  lo: 'Pale red cells with little haemoglobin: often iron deficiency or thalassaemia trait.', hi: 'High MCH usually goes with large red cells (B12/folate problems).' });
+N('mchc', 'MCHC', 'g/dL', [32, 36], { alts: [{ u: 'g/L', f: 10 }], dp: 1,
+  lo: 'Low MCHC means pale (hypochromic) red cells, typical of iron deficiency.', hi: 'Slightly high MCHC can be a lab artefact or seen in some inherited red-cell conditions.' });
+N('rdw', 'Red cell distribution width (RDW)', '%', [11.5, 14.5], { dp: 1,
+  hi: 'High RDW means red cells vary a lot in size, as in iron deficiency, B12/folate deficiency or mixed causes.' });
+N('wbc', 'White blood cell count (WBC)', '×10⁹/L', [4, 11], { p: [5, 15], alts: [{ u: '/µL', f: 1000 }], cl: 2, ch: 30, dp: 1,
+  lo: 'Low white cells weaken defence against infection. Causes include viral infections, some medicines, autoimmune disease or bone-marrow problems.',
+  hi: 'High white cells usually mean infection or inflammation, stress, steroids or smoking; very high counts need prompt review.' });
+N('neutp', 'Neutrophils (%)', '%', [40, 75], { dp: 0, lo: 'Low neutrophil share: viral infection, medicines or marrow problems (see absolute count).', hi: 'High neutrophils usually point to bacterial infection, inflammation or stress.' });
+N('lymp', 'Lymphocytes (%)', '%', [20, 45], { dp: 0, lo: 'Low lymphocyte share can follow stress, steroids or some infections.', hi: 'High lymphocytes are common with viral infections (and sometimes TB or chronic infections).' });
+N('monp', 'Monocytes (%)', '%', [2, 10], { dp: 0, hi: 'Raised monocytes can occur in recovery from infection, TB, malaria and chronic inflammation.' });
+N('eosp', 'Eosinophils (%)', '%', [1, 6], { dp: 0, hi: 'Raised eosinophils suggest worm (parasite) infection, allergy or asthma.' });
+N('basp', 'Basophils (%)', '%', [0, 1], { dp: 0, hi: 'Slightly raised basophils are usually of little importance on their own.' });
+N('neuta', 'Absolute neutrophils', '×10⁹/L', [2, 7.5], { cl: 0.5, dp: 2, alts: [{ u: '/µL', f: 1000 }],
+  lo: 'Low neutrophils (neutropenia) raise infection risk; the lower the count, the greater the risk.', hi: 'High neutrophils usually point to bacterial infection, inflammation or stress.' });
+N('lyma', 'Absolute lymphocytes', '×10⁹/L', [1, 4], { dp: 2, alts: [{ u: '/µL', f: 1000 }], lo: 'Low lymphocytes can follow stress, steroids or some infections.', hi: 'High lymphocytes are common in viral infection.' });
+N('eosa', 'Absolute eosinophils', '×10⁹/L', [0, 0.5], { dp: 2, alts: [{ u: '/µL', f: 1000 }], hi: 'Raised eosinophils suggest worm infection, allergy or asthma.' });
+N('plt', 'Platelets (PLT)', '×10⁹/L', [150, 400], { alts: [{ u: '/µL', f: 1000 }], cl: 20, ch: 1000, dp: 0,
+  lo: 'Low platelets (thrombocytopenia) can cause easy bruising or bleeding. Common causes: viral infections, malaria, medicines, liver disease, immune conditions.',
+  hi: 'High platelets can occur with iron deficiency, infection, inflammation or, rarely, a bone-marrow condition.' });
+N('retic', 'Reticulocytes', '%', [0.5, 2.5], { dp: 1,
+  lo: 'Low reticulocytes with anaemia suggest the marrow is not making enough red cells (nutritional, chronic disease or marrow cause).',
+  hi: 'High reticulocytes mean the marrow is working hard, as after bleeding or when red cells are being destroyed (haemolysis), or when anaemia is recovering.' });
+
+/* ---------- 2. Infections & serology ---------- */
+P('Infections & Serology', '🦠', 'Select the result printed on your report.');
+Q('mp', 'Malaria parasite (microscopy / RDT)', ['Negative', '+', '++', '+++', '++++'], ['Negative'], { say: 'Malaria parasites were seen. Malaria needs prompt treatment.' });
+Q('widalo', 'Widal test: Salmonella O titre', ['Negative', '1:20', '1:40', '1:80', '1:160', '1:320', '1:640'], ['Negative', '1:20', '1:40', '1:80'],
+  { say: 'A raised Widal titre may reflect typhoid, but Widal is unreliable in areas where typhoid is common (past exposure also raises it).' });
+Q('widalh', 'Widal test: Salmonella H titre', ['Negative', '1:20', '1:40', '1:80', '1:160', '1:320', '1:640'], ['Negative', '1:20', '1:40', '1:80'],
+  { say: 'A raised Widal titre may reflect typhoid, but Widal is unreliable in areas where typhoid is common (past exposure also raises it).' });
+Q('bcult', 'Blood culture', ['No growth', 'Growth (organism isolated)'], ['No growth'], { crit: ['Growth (organism isolated)'], say: 'A germ grew from the blood. This can be serious but is sometimes a skin contaminant; a doctor must review it promptly.' });
+Q('hiv', 'HIV screening test', ['Non-reactive', 'Reactive'], ['Non-reactive'], { say: 'A reactive screening test is not a final diagnosis. It must be confirmed with further tests.' });
+Q('hbsag', 'Hepatitis B surface antigen (HBsAg)', ['Negative', 'Positive'], ['Negative'], { say: 'Positive HBsAg means a current hepatitis B infection (acute or chronic).' });
+Q('hcv', 'Hepatitis C antibody (anti-HCV)', ['Negative', 'Positive'], ['Negative'], { say: 'Positive anti-HCV means exposure to hepatitis C; a PCR test shows whether the virus is still present. It is curable.' });
+Q('vdrl', 'Syphilis test (VDRL / RPR / TPHA)', ['Non-reactive', 'Reactive'], ['Non-reactive'], { say: 'A reactive result may mean syphilis (past or current) and needs confirmation. It is treatable.' });
+Q('hpylori', 'H. pylori test (antigen / antibody)', ['Negative', 'Positive'], ['Negative'], { say: 'H. pylori bacteria can cause gastritis and stomach ulcers. Antibody tests may stay positive after treatment.' });
+Q('preg', 'Pregnancy test (hCG)', ['Negative', 'Positive'], ['Negative'], { say: 'Positive hCG indicates pregnancy.' });
+Q('geno', 'Haemoglobin genotype', ['AA', 'AS', 'AC', 'SS', 'SC', 'CC'], ['AA'], {
+  say: function (s) {
+    return { AS: 'AS = sickle cell trait (a carrier). Usually healthy, but it matters for family planning.', AC: 'AC = haemoglobin C trait (a carrier). Usually healthy; matters for family planning.',
+      SS: 'SS = sickle cell disease, which needs regular specialist care.', SC: 'SC = a form of sickle cell disease, which needs specialist care.', CC: 'CC = haemoglobin C disease, usually mild anaemia; specialist review advised.' }[s];
+  } });
+
+/* ---------- 3. Inflammation ---------- */
+P('Inflammation Markers', '🔥');
+N('crp', 'C-reactive protein (CRP)', 'mg/L', [0, 5], { alts: [{ u: 'mg/dL', f: 0.1 }], dp: 1,
+  hi: 'Raised CRP means inflammation or infection somewhere in the body. Very high values (over 100 mg/L) usually mean a significant bacterial infection or serious inflammation.' });
+N('esr', 'Erythrocyte sedimentation rate (ESR)', 'mm/hr', { m: [0, 15], f: [0, 20] }, { dp: 0,
+  hi: 'A raised ESR is a non-specific sign of inflammation, infection, anaemia, pregnancy or chronic disease.' });
+N('pct', 'Procalcitonin (PCT)', 'ng/mL', [0, 0.5], { dp: 2,
+  hi: 'Raised procalcitonin suggests bacterial infection; values of 2 or more raise concern for severe infection (sepsis).' });
+
+/* ---------- 4. Liver ---------- */
+P('Liver Function (LFT)', '⚗️');
+N('alt', 'ALT (SGPT)', 'U/L', { m: [7, 55], f: [7, 45] }, { ch: 1000, dp: 0, hi: 'Raised ALT shows liver cell irritation or damage: viral hepatitis, fatty liver, alcohol, medicines or herbal remedies.' });
+N('ast', 'AST (SGOT)', 'U/L', [8, 48], { ch: 1000, dp: 0, hi: 'Raised AST can come from the liver, but also from muscle or heart injury.' });
+N('alp', 'Alkaline phosphatase (ALP)', 'U/L', [40, 129], { dp: 0, hi: 'Raised ALP suggests a bile-duct or bone problem (also normal in growing children and pregnancy).', lo: 'Low ALP is uncommon: malnutrition, zinc deficiency or some inherited conditions.' });
+N('ggt', 'Gamma-GT (GGT)', 'U/L', { m: [8, 61], f: [5, 36] }, { dp: 0, hi: 'Raised GGT points to the liver or bile ducts and is often raised by alcohol and some medicines.' });
+N('tbil', 'Total bilirubin', 'mg/dL', [0.1, 1.2], { alts: [{ u: 'µmol/L', f: 17.1 }], ch: 15, dp: 1, hi: 'Raised bilirubin causes yellow eyes/skin (jaundice). Causes include red-cell breakdown, liver disease, bile-duct blockage, or Gilbert syndrome (harmless).' });
+N('dbil', 'Direct (conjugated) bilirubin', 'mg/dL', [0, 0.3], { alts: [{ u: 'µmol/L', f: 17.1 }], dp: 1, hi: 'Raised direct bilirubin points to liver disease or a blocked bile duct.' });
+N('alb', 'Albumin', 'g/dL', [3.5, 5], { alts: [{ u: 'g/L', f: 10 }], cl: 2, dp: 1, lo: 'Low albumin can come from liver disease, kidney protein loss, poor nutrition, serious illness or gut disease.', hi: 'High albumin is usually due to dehydration.' });
+N('tp', 'Total protein', 'g/dL', [6, 8.3], { alts: [{ u: 'g/L', f: 10 }], dp: 1, lo: 'Low total protein: poor nutrition, liver or kidney disease.', hi: 'High total protein: dehydration, chronic infection or inflammation, or (rarely) an abnormal protein-producing blood condition.' });
+
+/* ---------- 5. Kidney & electrolytes ---------- */
+P('Kidney Function & Electrolytes', '💧', 'Urea may be reported as "urea" or "BUN" (blood urea nitrogen); they are not the same number. Check which your report uses.');
+N('urea', 'Urea', 'mmol/L', [2.5, 7.8], { alts: [{ u: 'mg/dL (urea)', f: 6.006 }], ch: 35, dp: 1, hint: 'If your report says BUN, use the Urea field only for "urea", not BUN.',
+  hi: 'Raised urea: dehydration, reduced kidney function, high-protein diet, bleeding in the gut or some medicines.', lo: 'Low urea: low protein intake, liver disease or over-hydration.' });
+N('cr', 'Creatinine', 'mg/dL', { m: [0.7, 1.3], f: [0.6, 1.1] }, { p: [0.4, 0.8], alts: [{ u: 'µmol/L', f: 88.4 }], ch: 6, dp: 2,
+  hi: 'Raised creatinine suggests the kidneys are filtering less well (or dehydration, or very muscular build, or some medicines).' });
+N('na', 'Sodium (Na⁺)', 'mmol/L', [135, 145], { cl: 125, ch: 155, dp: 0, lo: 'Low sodium can come from too much water intake, diuretics, vomiting/diarrhoea, or heart, kidney, liver or hormone problems. Severe lows cause confusion and seizures.', hi: 'High sodium usually means dehydration (not drinking enough or losing too much fluid).' });
+N('k', 'Potassium (K⁺)', 'mmol/L', [3.5, 5.1], { cl: 3, ch: 6, dp: 1, lo: 'Low potassium (vomiting, diarrhoea, water tablets) can cause weakness, cramps and abnormal heart rhythm.', hi: 'High potassium can disturb heart rhythm. It may be real (kidney problems, some drugs) or a false result from a damaged blood sample.' });
+N('chl', 'Chloride (Cl⁻)', 'mmol/L', [98, 107], { dp: 0, lo: 'Low chloride goes with vomiting, diuretics or some acid–base problems.', hi: 'High chloride goes with dehydration or some acid–base problems.' });
+N('hco3', 'Bicarbonate (HCO₃⁻ / total CO₂)', 'mmol/L', [22, 29], { cl: 12, dp: 0, lo: 'Low bicarbonate means the blood is tending toward acid (kidney disease, diabetic ketoacidosis, diarrhoea, serious illness).', hi: 'High bicarbonate: vomiting, diuretics or lung disease.' });
+N('ca', 'Calcium (total)', 'mg/dL', [8.6, 10.2], { alts: [{ u: 'mmol/L', f: 0.2495 }], cl: 6.5, ch: 13, dp: 1, lo: 'Low calcium: low vitamin D, low albumin, kidney or parathyroid problems.', hi: 'High calcium: overactive parathyroid glands, some cancers, too much vitamin D or certain medicines.' });
+N('mg', 'Magnesium', 'mg/dL', [1.7, 2.2], { alts: [{ u: 'mmol/L', f: 0.4114 }], cl: 1, ch: 4.9, dp: 2, lo: 'Low magnesium: poor intake, alcohol, diarrhoea or diuretics; may cause cramps and heart rhythm changes.', hi: 'High magnesium is mainly seen with kidney failure or magnesium-containing medicines.' });
+N('po4', 'Phosphate', 'mg/dL', [2.5, 4.5], { alts: [{ u: 'mmol/L', f: 0.3229 }], cl: 1, dp: 1, lo: 'Low phosphate: malnutrition, alcohol, vitamin D deficiency.', hi: 'High phosphate usually goes with reduced kidney function or parathyroid problems.' });
+N('ua', 'Uric acid', 'mg/dL', { m: [3.4, 7], f: [2.4, 6] }, { alts: [{ u: 'µmol/L', f: 59.48 }], dp: 1, hi: 'High uric acid can cause gout and kidney stones, and is linked with kidney disease, obesity and some medicines. Many people with high levels never develop gout.' });
+
+/* ---------- 6. Sugar ---------- */
+P('Blood Sugar & Diabetes', '🍬');
+N('fpg', 'Fasting blood glucose', 'mg/dL', [70, 99], { alts: [{ u: 'mmol/L', f: 0.0555 }], cl: 54, ch: 400, dp: 0, lo: 'Low blood sugar can cause shakiness, sweating, confusion and collapse. Causes: skipped meals, diabetes medicines, alcohol, hormone problems.', hi: 'Above the normal fasting range. 100–125 mg/dL suggests prediabetes; 126 or more (on two occasions) suggests diabetes.' });
+N('rpg', 'Random blood glucose', 'mg/dL', [70, 139], { alts: [{ u: 'mmol/L', f: 0.0555 }], cl: 54, ch: 400, dp: 0, lo: 'Low blood sugar can cause shakiness, sweating, confusion and collapse.', hi: 'Raised random glucose. 200 mg/dL or more with symptoms suggests diabetes.' });
+N('ogtt2', '2-hour OGTT glucose', 'mg/dL', [null, 139], { alts: [{ u: 'mmol/L', f: 0.0555 }], ch: 400, dp: 0, hi: '140–199 mg/dL suggests impaired glucose tolerance (prediabetes); 200 or more suggests diabetes.' });
+N('hba1c', 'HbA1c', '%', [4, 5.6], { alts: [{ u: 'mmol/mol', from: function (p) { return (p - 2.15) * 10.929; }, to: function (m) { return m / 10.929 + 2.15; } }], dp: 1,
+  hint: 'HbA1c can be unreliable with anaemia, sickle cell or recent transfusion.', hi: 'HbA1c shows the average sugar over about 3 months. 5.7–6.4% suggests prediabetes; 6.5% or more suggests diabetes.' });
+
+/* ---------- 7. Lipids ---------- */
+P('Lipid Profile (Cholesterol)', '🧈');
+N('tc', 'Total cholesterol', 'mg/dL', [null, 199], { alts: [{ u: 'mmol/L', f: 0.02586 }], dp: 0, hi: 'High total cholesterol raises long-term risk of heart disease and stroke.' });
+N('ldl', 'LDL cholesterol ("bad")', 'mg/dL', [null, 129], { alts: [{ u: 'mmol/L', f: 0.02586 }], dp: 0, hi: 'High LDL is the main cholesterol linked to clogged arteries; targets are lower if you already have heart disease or diabetes.' });
+N('hdl', 'HDL cholesterol ("good")', 'mg/dL', { m: [40, null], f: [50, null] }, { alts: [{ u: 'mmol/L', f: 0.02586 }], dp: 0, lo: 'Low HDL is linked with higher heart-disease risk (low exercise, smoking, obesity, diabetes).' });
+N('tg', 'Triglycerides', 'mg/dL', [null, 149], { alts: [{ u: 'mmol/L', f: 0.01129 }], ch: 2000, dp: 0, hi: 'High triglycerides come from sugar, refined carbohydrate and alcohol intake, obesity, diabetes or thyroid problems. Very high levels can inflame the pancreas.' });
+
+/* ---------- 8. Thyroid ---------- */
+P('Thyroid Function', '🦋');
+N('tsh', 'TSH', 'mIU/L', [0.4, 4], { dp: 2, lo: 'Low TSH usually means an overactive thyroid (or too much thyroid medicine).', hi: 'High TSH usually means an underactive thyroid.' });
+N('ft4', 'Free T4 (FT4)', 'ng/dL', [0.8, 1.8], { alts: [{ u: 'pmol/L', f: 12.87 }], dp: 2, lo: 'Low free T4 means too little thyroid hormone.', hi: 'High free T4 means too much thyroid hormone.' });
+N('ft3', 'Free T3 (FT3)', 'pg/mL', [2.3, 4.2], { alts: [{ u: 'pmol/L', f: 1.536 }], dp: 2, lo: 'Low free T3 can occur with underactive thyroid or any serious illness.', hi: 'High free T3 goes with an overactive thyroid.' });
+N('t4', 'Total T4', 'µg/dL', [5, 12], { alts: [{ u: 'nmol/L', f: 12.87 }], dp: 1, lo: 'Low total T4: underactive thyroid (also affected by protein levels).', hi: 'High total T4: overactive thyroid (also raised by pregnancy or oestrogen).' });
+N('t3', 'Total T3', 'ng/dL', [80, 200], { alts: [{ u: 'nmol/L', f: 0.0154 }], dp: 0, lo: 'Low total T3: underactive thyroid or illness.', hi: 'High total T3: overactive thyroid.' });
+N('tpo', 'Anti-TPO antibodies', 'IU/mL', [0, 34], { dp: 0, hi: 'Thyroid antibodies point to autoimmune thyroid disease (Hashimoto thyroiditis or Graves disease).' });
+
+/* ---------- 9. Urine ---------- */
+P('Urinalysis & Urine Culture', '🧪', 'Dipstick results use grades such as Negative, Trace, +, ++, +++.');
+Q('ur_pro', 'Urine protein', GRADE, ['Negative', 'Trace'], { say: 'Protein in urine can reflect kidney problems, infection, fever, high blood pressure, diabetes or hard exercise; in pregnancy it needs same-day attention.' });
+Q('ur_glu', 'Urine glucose', GRADE, ['Negative'], { say: 'Sugar in urine usually means blood sugar is high, though some people leak sugar at normal levels, especially in pregnancy.' });
+Q('ur_ket', 'Urine ketones', ['Negative', 'Trace', '+', '++', '+++'], ['Negative'], { say: 'Ketones appear with fasting, vomiting, low-carbohydrate diets, and uncontrolled diabetes (where they can be dangerous).' });
+Q('ur_bld', 'Urine blood', ['Negative', 'Trace', '+', '++', '+++'], ['Negative'], { say: 'Blood in urine can come from infection, stones, bilharzia, kidney disease or the urinary tract; menstruation can contaminate samples.' });
+Q('ur_nit', 'Urine nitrite', ['Negative', 'Positive'], ['Negative'], { say: 'Positive nitrite suggests bacteria in the urine (urinary infection).' });
+Q('ur_le', 'Leukocyte esterase', ['Negative', 'Trace', '+', '++', '+++'], ['Negative', 'Trace'], { say: 'White blood cell activity in the urine suggests infection or inflammation of the urinary tract.' });
+Q('ur_bil', 'Urine bilirubin', ['Negative', '+', '++', '+++'], ['Negative'], { say: 'Bilirubin in urine suggests a liver or bile-duct problem.' });
+Q('ur_uro', 'Urobilinogen', ['Normal', 'Increased'], ['Normal'], { say: 'Increased urobilinogen may come with liver disease or red-cell breakdown.' });
+N('ur_ph', 'Urine pH', '', [4.5, 8], { dp: 1, lo: 'Acidic urine: diet, diabetes or dehydration.', hi: 'Alkaline urine: diet, a urinary infection, or old sample.' });
+N('ur_sg', 'Urine specific gravity', '', [1.005, 1.03], { dp: 3, lo: 'Dilute urine: lots of fluid intake, or kidneys not concentrating well.', hi: 'Concentrated urine: usually dehydration.' });
+N('ur_pus', 'Pus cells (WBC) in urine', '/HPF', [0, 5], { dp: 0, hi: 'Increased pus cells suggest urinary infection or inflammation.' });
+N('ur_rbc', 'Red cells in urine', '/HPF', [0, 2], { dp: 0, hi: 'Red cells in urine suggest bleeding in the urinary tract (infection, stones, bilharzia, kidney disease and others).' });
+Q('ur_epi', 'Epithelial cells', ['None / Few', 'Moderate', 'Many'], ['None / Few'], { say: 'Many skin cells usually mean the sample picked up contamination; repeat with a clean-catch midstream sample if infection is suspected.' });
+Q('ur_cast', 'Casts', ['None', 'Hyaline', 'Granular', 'Red cell', 'Pus cell'], ['None', 'Hyaline'], { say: 'Granular, red-cell or pus-cell casts suggest the kidney itself is involved.' });
+Q('ur_crys', 'Crystals', ['None', 'Calcium oxalate', 'Uric acid', 'Phosphate', 'Other'], ['None'], { say: 'Crystals are often harmless but may go with stone formation if repeated or with symptoms.' });
+Q('ur_bact', 'Bacteria', ['None', 'Few', 'Moderate', 'Many'], ['None', 'Few'], { say: 'Moderate or many bacteria suggest infection (or a contaminated sample).' });
+Q('ur_sch', 'Schistosoma haematobium ova (bilharzia)', ['Not seen', 'Seen'], ['Not seen'], { say: 'Bilharzia (schistosomiasis) eggs were seen. This is treatable with medicine.' });
+Q('ur_cult', 'Urine culture', ['No significant growth', 'Significant growth', 'Mixed growth (contaminated)'], ['No significant growth'], { say: function (s) { return s === 'Significant growth' ? 'Bacteria grew in significant numbers: a urinary infection is likely; the lab usually reports which antibiotics work.' : 'Mixed growth usually means contamination; a clean repeat sample may be needed.'; } });
+
+/* ---------- 10. Stool ---------- */
+P('Stool Tests', '💩');
+Q('stoolocc', 'Stool occult (hidden) blood', ['Negative', 'Positive'], ['Negative'], { say: 'Hidden blood in the stool means bleeding somewhere in the digestive tract and should be investigated.' });
+Q('stoolova', 'Stool microscopy: ova / parasites', ['None seen', 'Seen'], ['None seen'], { say: 'Worm eggs or other parasites were seen in the stool; this is treatable.' });
+
+/* ---------- 11. Cardiac ---------- */
+P('Cardiac Markers', '❤️', 'Heart markers can be urgent. If you have chest pain, go to emergency care first.');
+N('trop', 'Troponin (hs-cTn, I or T)', 'ng/L', [0, 14], { alts: [{ u: 'ng/mL', f: 0.001 }], ch: 14, dp: 1, hint: 'Cut-offs differ by assay. If your lab prints its own range, use "My lab\'s range" (⋯).',
+  hi: 'Raised troponin means heart-muscle injury. It is an emergency sign until proven otherwise.' });
+N('ckmb', 'CK-MB', 'ng/mL', [0, 5], { dp: 1, hint: 'If your report uses U/L, enter your lab\'s range with the ⋯ button.', hi: 'Raised CK-MB suggests heart (or muscle) injury.' });
+N('ck', 'Creatine kinase (CK total)', 'U/L', { m: [39, 308], f: [26, 192] }, { dp: 0, hi: 'Raised CK means muscle injury (heavy exercise, injections, statins, trauma) or heart injury; very high values can strain the kidneys.' });
+N('ntbnp', 'NT-proBNP', 'pg/mL', [0, 125], { dp: 0, hint: 'The usual cut-off is 125 pg/mL under age 75; higher ages and kidney disease raise it.', hi: 'Raised NT-proBNP points to heart strain or heart failure (also raised by kidney disease and age).' });
+N('ldh', 'Lactate dehydrogenase (LDH)', 'U/L', [140, 280], { dp: 0, hi: 'LDH is a general marker of tissue damage: red-cell breakdown, liver, heart, muscle injury, infection or some cancers.' });
+N('ddimer', 'D-dimer', 'µg/mL FEU', [0, 0.5], { alts: [{ u: 'ng/mL', f: 1000 }], dp: 2, hi: 'D-dimer is raised in clots but also in infection, pregnancy, surgery, cancer and older age. A raised value cannot show where the problem is.' });
+
+/* ---------- 12. Clotting ---------- */
+P('Clotting Tests', '🩹');
+N('pt', 'Prothrombin time (PT)', 'sec', [11, 13.5], { dp: 1, hi: 'A long PT means blood takes longer to clot: warfarin, liver disease, vitamin K deficiency or clotting-factor problems.' });
+N('inr', 'INR', '', [0.8, 1.2], { ch: 4.5, dp: 2, hi: 'A raised INR means slow clotting. If you take warfarin, a higher INR (usually 2–3) is intended; follow your clinic\'s target.' });
+N('aptt', 'aPTT', 'sec', [25, 35], { dp: 1, hi: 'A long aPTT can come from heparin, haemophilia and other factor deficiencies, or antibodies that interfere with clotting.' });
+N('fib', 'Fibrinogen', 'mg/dL', [200, 400], { dp: 0, lo: 'Low fibrinogen can cause bleeding (liver disease, DIC, inherited).', hi: 'High fibrinogen is common with inflammation, pregnancy and smoking.' });
+
+/* ---------- 13. Iron & vitamins ---------- */
+P('Iron Studies & Vitamins', '💊');
+N('ferritin', 'Ferritin', 'ng/mL', { m: [24, 336], f: [11, 307] }, { dp: 0, lo: 'Low ferritin means low iron stores (iron deficiency), the earliest and most specific sign.', hi: 'High ferritin goes with inflammation, infection, liver disease, alcohol, fatty liver or (less often) iron overload.' });
+N('iron', 'Serum iron', 'µg/dL', [60, 170], { alts: [{ u: 'µmol/L', f: 0.1791 }], dp: 0, lo: 'Low serum iron goes with iron deficiency or long-term illness.', hi: 'High serum iron: iron tablets taken recently, or iron overload.' });
+N('tibc', 'Total iron-binding capacity (TIBC)', 'µg/dL', [240, 450], { alts: [{ u: 'µmol/L', f: 0.1791 }], dp: 0, lo: 'Low TIBC goes with inflammation or malnutrition.', hi: 'High TIBC goes with iron deficiency.' });
+N('tsat', 'Transferrin saturation', '%', [20, 50], { dp: 0, lo: 'Low saturation: iron deficiency or chronic illness.', hi: 'High saturation: possible iron overload.' });
+N('b12', 'Vitamin B12', 'pg/mL', [200, 900], { alts: [{ u: 'pmol/L', f: 0.7378 }], dp: 0, lo: 'Low B12 can cause anaemia and nerve problems (tingling, balance). Causes: diet, poor absorption, metformin, stomach conditions.' });
+N('folate', 'Folate (vitamin B9)', 'ng/mL', [3, 17], { alts: [{ u: 'nmol/L', f: 2.266 }], dp: 1, lo: 'Low folate: poor diet, alcohol, pregnancy demands, or some medicines. Important before and in early pregnancy.' });
+N('vitd', 'Vitamin D (25-OH)', 'ng/mL', [30, 100], { alts: [{ u: 'nmol/L', f: 2.496 }], dp: 0, lo: 'Low vitamin D can weaken bones and muscles. Below 20 ng/mL is deficiency; 20–29 is insufficiency.', hi: 'Very high vitamin D is usually from supplements.' });
+
+/* ---------- 14. Hormones ---------- */
+P('Hormones & Fertility', '⚖️', 'Female FSH/LH depend on cycle day and menopause; note which day the test was done.');
+N('fsh', 'FSH', 'mIU/mL', [1.5, 12.5], { dp: 1, lo: 'Low FSH may suggest a pituitary or hypothalamus cause, or hormone medicines.', hi: 'High FSH suggests the ovaries or testes are not responding well (menopause, premature ovarian insufficiency, testicular failure).' });
+N('lh', 'LH', 'mIU/mL', { m: [1.5, 9.3], f: [2, 12.6] }, { dp: 1, lo: 'Low LH may suggest a pituitary or hypothalamus cause.', hi: 'High LH: menopause, ovarian or testicular failure, PCOS, or an LH surge mid-cycle.' });
+N('prl', 'Prolactin', 'ng/mL', { m: [2, 18], f: [2, 29] }, { alts: [{ u: 'mIU/L', f: 21.2 }], dp: 1, hi: 'High prolactin can come from pregnancy, breastfeeding, stress, some medicines, an underactive thyroid or a pituitary growth (usually benign).' });
+N('testo', 'Testosterone (total)', 'ng/dL', { m: [300, 1000], f: [15, 70] }, { alts: [{ u: 'nmol/L', f: 0.0347 }], dp: 0, lo: 'Low testosterone can reduce libido, energy and muscle mass; causes include testicular, pituitary, obesity, medicines and chronic illness.', hi: 'In women high testosterone suggests PCOS or other hormone problems; in men it is usually from supplements.' });
+N('cort', 'Cortisol (morning)', 'µg/dL', [6, 23], { alts: [{ u: 'nmol/L', f: 27.59 }], dp: 1, hint: 'Reference range applies to an 8 a.m. sample.', lo: 'Low morning cortisol may mean adrenal insufficiency (tiredness, low blood pressure, low sugar).', hi: 'High cortisol can be from stress, illness, steroid medicines, oestrogen or (rarely) Cushing syndrome.' });
+
+/* ---------- 15. Semen ---------- */
+P('Semen Analysis', '🧬', 'Reference limits: WHO manual 6th edition (2021).');
+N('sv', 'Volume', 'mL', [1.4, null], { dp: 1, lo: 'Low volume: incomplete collection, short abstinence, or blockage/hormone problems.' });
+N('sc', 'Sperm concentration', '×10⁶/mL', [16, null], { dp: 1, lo: 'Low sperm concentration (oligozoospermia). Zero sperm is azoospermia.' });
+N('stm', 'Total motility', '%', [42, null], { dp: 0, lo: 'Reduced sperm movement (asthenozoospermia).' });
+N('spm', 'Progressive motility', '%', [30, null], { dp: 0, lo: 'Fewer sperm swimming forward than expected.' });
+N('smo', 'Normal forms (morphology)', '%', [4, null], { dp: 0, lo: 'Fewer normally shaped sperm (teratozoospermia).' });
+N('sva', 'Vitality (live sperm)', '%', [54, null], { dp: 0, lo: 'A lower share of live sperm than expected.' });
+N('sph', 'Semen pH', '', [7.2, null], { dp: 1, lo: 'Low pH with low volume can suggest a blockage of the sperm ducts.' });
+N('swbc', 'Leukocytes in semen', '×10⁶/mL', [0, 0.99], { dp: 2, hi: 'Raised white cells may suggest infection or inflammation of the genital tract.' });
+
+/* ---------- 16. Tumour markers ---------- */
+P('Tumour Markers & PSA', '🎗️', 'These markers are NOT used alone to diagnose cancer.');
+N('psa', 'Prostate-specific antigen (PSA)', 'ng/mL', [0, 4], { dp: 2, hint: 'Normal PSA rises gradually with age; ejaculation, cycling or infection can raise it temporarily.', hi: 'Raised PSA can come from enlarged prostate, prostate infection/inflammation, recent ejaculation, cycling or catheter use, or prostate cancer.' });
+N('afp', 'Alpha-fetoprotein (AFP)', 'ng/mL', [0, 10], { dp: 1, hi: 'Raised AFP can be seen in liver disease, liver cancer, some testicular/ovarian tumours and pregnancy.' });
+N('cea', 'CEA', 'ng/mL', [0, 5], { dp: 1, hi: 'Raised CEA can occur in smokers, inflammation, and several cancers (especially bowel).' });
+N('ca125', 'CA-125', 'U/mL', [0, 35], { dp: 0, hi: 'Raised CA-125 is common in fibroids, endometriosis, pelvic infection, menstruation, liver/heart disease, and sometimes ovarian cancer.' });
+N('ca199', 'CA 19-9', 'U/mL', [0, 37], { dp: 0, hi: 'Raised CA 19-9 can come from bile-duct blockage, pancreatitis, or pancreatic and other digestive cancers.' });
+N('ca153', 'CA 15-3', 'U/mL', [0, 30], { dp: 0, hi: 'Raised CA 15-3 can come from breast conditions, liver disease or some cancers; it is mostly used to monitor known breast cancer.' });
+
+/* ---------- 17. Blood gas ---------- */
+P('Blood Gas (ABG / VBG)', '🫧', 'Usually done in hospital. Values below are for ARTERIAL blood.');
+N('abg_ph', 'pH', '', [7.35, 7.45], { cl: 7.2, ch: 7.6, dp: 2, lo: 'Blood is too acidic (acidosis).', hi: 'Blood is too alkaline (alkalosis).' });
+N('abg_pco2', 'pCO₂', 'mmHg', [35, 45], { alts: [{ u: 'kPa', f: 0.1333 }], cl: 20, ch: 70, dp: 0, lo: 'Low CO₂: over-breathing (anxiety, pain, low oxygen, fever) or compensation for acidosis.', hi: 'High CO₂: not breathing out enough (lung disease, sedation, exhaustion).' });
+N('abg_po2', 'pO₂', 'mmHg', [80, 100], { alts: [{ u: 'kPa', f: 0.1333 }], cl: 60, dp: 0, lo: 'Low blood oxygen (hypoxaemia).' });
+N('abg_hco3', 'HCO₃⁻ (blood gas)', 'mmol/L', [22, 26], { dp: 0, lo: 'Low bicarbonate: metabolic acidosis.', hi: 'High bicarbonate: metabolic alkalosis or compensation for lung disease.' });
+N('lact', 'Lactate', 'mmol/L', [0.5, 2.2], { alts: [{ u: 'mg/dL', f: 9.01 }], ch: 4, dp: 1, hi: 'Raised lactate means tissues are not getting enough oxygen or the body is under severe stress (shock, infection, seizures).' });
+N('be', 'Base excess', 'mmol/L', [-2, 2], { dp: 1, lo: 'Negative base excess points to metabolic acidosis.', hi: 'Positive base excess points to metabolic alkalosis.' });
+
+/* ---------- 18. Pancreas ---------- */
+P('Pancreas Enzymes', '🍽️');
+N('amy', 'Amylase', 'U/L', [30, 110], { dp: 0, hi: 'Raised amylase can come from the pancreas (pancreatitis), salivary glands, kidney failure and other causes.' });
+N('lip', 'Lipase', 'U/L', [13, 60], { dp: 0, hi: 'Raised lipase is the more specific sign of pancreas inflammation (pancreatitis).' });
+
+/* ---------- Calculated values (not typed by users) ---------- */
+CUR = null;
+N('egfr', 'eGFR (calculated, CKD-EPI 2021)', 'mL/min/1.73m²', [60, null], { calc: true, cl: 15, dp: 0, lo: 'Estimated kidney filtering rate below 60 suggests reduced kidney function.' });
+N('cca', 'Albumin-corrected calcium (calculated)', 'mg/dL', [8.6, 10.2], { calc: true, cl: 6.5, ch: 13, dp: 1, lo: 'Corrected calcium is low.', hi: 'Corrected calcium is high.' });
+N('ag', 'Anion gap (calculated)', 'mmol/L', [8, 16], { calc: true, dp: 0, hi: 'A high anion gap points to acids building up (ketones, lactate, kidney failure, toxins).', lo: 'A low anion gap can be a lab artefact or very low albumin.' });
+
+'use strict';
+/* ===== LabLens engine: evaluation, derived values, pattern rules ===== */
+
+/* ---- specialties ---- */
+const GP = 'Physician (Internal Medicine / GP)', HAEM = 'Haematologist', NEPH = 'Nephrologist', GI = 'Gastroenterologist / Hepatologist',
+  ENDO = 'Endocrinologist', CARD = 'Cardiologist', URO = 'Urologist', OBG = 'Obstetrician / Gynaecologist', ID = 'Infectious Disease Specialist',
+  ONC = 'Oncologist', RHEUM = 'Rheumatologist', PULM = 'Pulmonologist', NEURO = 'Neurologist', FERT = 'Fertility Specialist',
+  ALLG = 'Allergist / Immunologist', DIET = 'Dietitian / Nutritionist', GEN = 'Genetic Counsellor', ER = 'Emergency Department';
+const SPEC_INFO = {};
+SPEC_INFO[GP] = 'Your first stop for most adult health problems. Reviews you, orders more tests and refers you on if needed.';
+SPEC_INFO[HAEM] = 'Doctor for blood disorders: anaemia, clotting problems, sickle cell disease and blood cancers.';
+SPEC_INFO[NEPH] = 'Kidney specialist.';
+SPEC_INFO[GI] = 'Specialist in the stomach, bowel, liver, gallbladder and pancreas.';
+SPEC_INFO[ENDO] = 'Specialist in hormones, diabetes, thyroid, bones and metabolism.';
+SPEC_INFO[CARD] = 'Heart and circulation specialist.';
+SPEC_INFO[URO] = 'Specialist in the urinary tract and male reproductive system, including the prostate.';
+SPEC_INFO[OBG] = 'Pregnancy, childbirth and women’s reproductive health.';
+SPEC_INFO[ID] = 'Handles complex or persistent infections, HIV, hepatitis and tropical diseases.';
+SPEC_INFO[ONC] = 'Cancer specialist. Reviews raised tumour markers together with scans or biopsies.';
+SPEC_INFO[RHEUM] = 'Joint, gout and autoimmune inflammatory conditions.';
+SPEC_INFO[PULM] = 'Lung and breathing specialist.';
+SPEC_INFO[NEURO] = 'Brain and nerve specialist.';
+SPEC_INFO[FERT] = 'Evaluates and treats difficulty conceiving, in both men and women.';
+SPEC_INFO[ALLG] = 'Allergies, asthma-related allergy and immune problems.';
+SPEC_INFO[DIET] = 'Practical eating plans for diabetes, cholesterol, weight and deficiencies.';
+SPEC_INFO[GEN] = 'Explains inherited conditions such as sickle cell and helps couples plan safely.';
+SPEC_INFO[ER] = 'Go straight to a hospital emergency unit; do not wait for an appointment.';
+
+const URGENCY = [
+  { lvl: 0, label: 'No action needed beyond routine care', cls: 'u0', text: 'Nothing here looks urgent.' },
+  { lvl: 1, label: 'Routine: see a doctor in the next 1–4 weeks', cls: 'u1', text: 'Book an appointment to go over these results.' },
+  { lvl: 2, label: 'See a doctor soon: within the next few days', cls: 'u2', text: 'Do not wait weeks. Arrange a review promptly.' },
+  { lvl: 3, label: 'Urgent: seek medical care today', cls: 'u3', text: 'Go to a hospital or clinic today. If you feel very unwell, go to the emergency department now.' }
+];
+const CONF = { 3: 'Strong match', 2: 'Likely match', 1: 'Possible' };
+
+/* ---- helpers ---- */
+function fmt(n, dp) {
+  if (n == null || isNaN(n)) return '';
+  if (dp == null) { const a = Math.abs(n); dp = a >= 100 ? 0 : a >= 10 ? 1 : a >= 1 ? 2 : 3; }
+  return String(+n.toFixed(dp));
+}
+const SHORT = { hdl: 'HDL cholesterol', ldl: 'LDL cholesterol', abg_hco3: 'Bicarbonate (blood gas)', smo: 'Normal sperm forms', hco3: 'Bicarbonate', ft4: 'Free T4', ft3: 'Free T3', pcv: 'PCV', plt: 'Platelets', wbc: 'WBC', ur_pro: 'Urine protein', ur_glu: 'Urine glucose', alt: 'ALT', ast: 'AST', ur_pus: 'Urine pus cells', ur_rbc: 'Urine red cells', cr: 'Creatinine', na: 'Sodium', k: 'Potassium', ca: 'Calcium', mg: 'Magnesium', ua: 'Uric acid' };
+function shortName(t) {
+  if (SHORT[t.id]) return SHORT[t.id];
+  const m = t.name.match(/\(([^)"]+)\)/);
+  return m && m[1].length <= 12 ? m[1] : t.name.replace(/ \(.*\)$/, '');
+}
+function rangeFor(t, prof) {
+  if (prof.preg && t.p) return t.p;
+  const r = t.range;
+  if (!r) return null;
+  if (Array.isArray(r)) return r;
+  if (prof.sex === 'F') return r.f;
+  if (prof.sex === 'M') return r.m;
+  return null;
+}
+function toDef(t, u, v) {
+  if (!u) return v;
+  const a = t.alts[u - 1];
+  return a.to ? a.to(v) : v / a.f;
+}
+function unitLabel(t, u) { return u ? t.alts[u - 1].u : t.unit; }
+function num(x) { const v = parseFloat(String(x == null ? '' : x).replace(',', '.')); return isNaN(v) ? null : v; }
+
+function evalNum(t, e, prof) {
+  const raw = num(e.v);
+  if (raw == null) return null;
+  const u = e.u || 0;
+  const val = toDef(t, u, raw);
+  const cl = num(e.rl), ch = num(e.rh);
+  const custom = cl != null || ch != null;
+  let lo, hi, flag = null, crit = null;
+  if (custom) { lo = cl; hi = ch; flag = (lo != null && raw < lo) ? 'L' : (hi != null && raw > hi) ? 'H' : 'N'; }
+  else {
+    const r = rangeFor(t, prof);
+    if (r) {
+      lo = r[0]; hi = r[1];
+      flag = (lo != null && val < lo) ? 'L' : (hi != null && val > hi) ? 'H' : 'N';
+      if (t.cl != null && val < t.cl) crit = 'L';
+      if (t.ch != null && val > t.ch) crit = 'H';
+    }
+  }
+  let sev = 0;
+  if (flag === 'H' && hi) { const x = (custom ? raw : val) / hi; sev = x < 1.2 ? 1 : x < 2 ? 2 : 3; }
+  if (flag === 'L' && lo) { const x = lo / ((custom ? raw : val) || 1e-9); sev = x < 1.2 ? 1 : x < 2 ? 2 : 3; }
+  return { id: t.id, t: t, type: 'n', rawStr: String(e.v).trim(), raw, val, lo, hi, flag, crit, sev, unit: unitLabel(t, u), custom: custom, derived: false };
+}
+function evalQ(t, e) {
+  if (!e.s) return null;
+  const lvl = t.opts.indexOf(e.s);
+  if (lvl < 0) return null;
+  const normal = t.normal.indexOf(e.s) >= 0;
+  return { id: t.id, t: t, type: 'q', sel: e.s, lvl, flag: normal ? 'N' : 'A', crit: (t.crit && t.crit.indexOf(e.s) >= 0) ? 'A' : null, sev: normal ? 0 : 1, derived: false };
+}
+function pseudo(id, val, prof) {
+  const t = TESTS[id];
+  const r = rangeFor(t, prof) || t.range;
+  const lo = r[0], hi = r[1];
+  const flag = (lo != null && val < lo) ? 'L' : (hi != null && val > hi) ? 'H' : 'N';
+  let crit = null;
+  if (t.cl != null && val < t.cl) crit = 'L';
+  if (t.ch != null && val > t.ch) crit = 'H';
+  return { id, t, type: 'n', rawStr: fmt(val, t.dp), raw: val, val, lo, hi, flag, crit, sev: 0, unit: t.unit, custom: false, derived: true };
+}
+
+function derive(res, prof) {
+  const v = function (id) { return res[id] ? res[id].val : null; };
+  // absolute counts from % and WBC
+  if (v('wbc') != null) {
+    [['neuta', 'neutp'], ['lyma', 'lymp'], ['eosa', 'eosp']].forEach(function (p) {
+      if (!res[p[0]] && v(p[1]) != null) res[p[0]] = pseudo(p[0], v('wbc') * v(p[1]) / 100, prof);
+    });
+  }
+  if (prof.age >= 18 && v('cr') != null) {
+    const k = prof.sex === 'F' ? 0.7 : 0.9, a = prof.sex === 'F' ? -0.241 : -0.302, s = v('cr');
+    const e = 142 * Math.pow(Math.min(s / k, 1), a) * Math.pow(Math.max(s / k, 1), -1.2) * Math.pow(0.9938, prof.age) * (prof.sex === 'F' ? 1.012 : 1);
+    res.egfr = pseudo('egfr', e, prof);
+  }
+  if (v('ca') != null && v('alb') != null && v('alb') < 4) res.cca = pseudo('cca', v('ca') + 0.8 * (4 - v('alb')), prof);
+  if (v('na') != null && v('chl') != null && v('hco3') != null) res.ag = pseudo('ag', v('na') - v('chl') - v('hco3'), prof);
+  if (!res.tsat && v('iron') != null && v('tibc') != null && v('tibc') > 0) res.tsat = pseudo('tsat', v('iron') / v('tibc') * 100, prof);
+}
+
+function makeCtx(res, prof) {
+  const c = {
+    prof: prof, res: res, age: prof.age, sex: prof.sex, preg: prof.preg,
+    has: function (id) { return !!res[id]; },
+    v: function (id) { return res[id] ? res[id].val : undefined; },
+    hi: function (id) { return !!res[id] && res[id].flag === 'H'; },
+    lo: function (id) { return !!res[id] && res[id].flag === 'L'; },
+    nl: function (id) { return !!res[id] && res[id].flag === 'N'; },
+    sel: function (id) { return res[id] ? res[id].sel : undefined; },
+    lvl: function (id) { return res[id] ? res[id].lvl : -1; },
+    x: function (id) { return res[id] && res[id].hi ? res[id].val / res[id].hi : undefined; },
+    d: function (id) {
+      const r = res[id]; if (!r) return '';
+      if (c._used) c._used[id] = 1;
+      const nm = shortName(r.t);
+      if (r.type === 'q') return nm + ': ' + r.sel;
+      return nm + ' ' + (r.derived ? fmt(r.val, r.t.dp) : r.rawStr) + (r.unit ? ' ' + r.unit : '') + (r.flag === 'H' ? ' (high)' : r.flag === 'L' ? ' (low)' : '');
+    },
+    max: function () { let m = null; for (let i = 0; i < arguments.length; i++) { const x = c.v(arguments[i]); if (x != null && (m == null || x > m)) m = x; } return m; },
+    min: function () { let m = null; for (let i = 0; i < arguments.length; i++) { const x = c.v(arguments[i]); if (x != null && (m == null || x < m)) m = x; } return m; }
+  };
+  return c;
+}
+
+/* ---- rules ---- */
+const RULES = [];
+function R(id, name, spec, urg, what, next, t) { RULES.push({ id, name, spec, urg, what, next, t }); }
+const lvlOk = function (c, id, n) { return c.lvl(id) >= n; };
+
+/* ======== BLOOD ======== */
+R('iron', 'Iron-deficiency anaemia pattern', [GP, HAEM], 1,
+  'Red cell size, haemoglobin and/or iron stores suggest too little iron for making healthy red blood cells. Common causes: low dietary iron, heavy periods, pregnancy, worm infestation, or slow bleeding from the stomach or bowel.',
+  'Iron studies (ferritin), stool test for blood and worms, and a review for sources of blood loss. In men and after menopause a doctor will look for bleeding in the gut. Treatment is iron plus fixing the cause.',
+  function (c) {
+    const an = c.lo('hb') || c.lo('pcv');
+    if (!an && !c.lo('ferritin')) return null;
+    const e = [], k = { s: 0 };
+    if (an) { e.push(c.d(c.lo('hb') ? 'hb' : 'pcv')); k.s += 1; }
+    if (c.lo('mcv')) { e.push(c.d('mcv')); k.s += 1; }
+    if (c.lo('mch')) e.push(c.d('mch'));
+    if (c.lo('mchc')) e.push(c.d('mchc'));
+    if (c.lo('ferritin')) { e.push(c.d('ferritin')); k.s += 2; }
+    if (c.lo('iron')) { e.push(c.d('iron')); k.s += 1; }
+    if (c.hi('tibc')) { e.push(c.d('tibc')); k.s += 1; }
+    if (c.lo('tsat')) e.push(c.d('tsat'));
+    if (c.hi('rdw')) e.push(c.d('rdw'));
+    if (c.sel('stoolocc') === 'Positive') { e.push(c.d('stoolocc')); k.s += 1; }
+    if (k.s < 2) return null;
+    if (c.nl('ferritin') && c.hi('crp')) return null;
+    return { ev: e, conf: k.s >= 4 ? 3 : k.s >= 3 ? 2 : 1, urg: c.v('hb') < 8 ? 2 : 1 };
+  });
+R('thal', 'Thalassaemia trait or other small-cell anaemia', [HAEM, GEN], 1,
+  'Very small red cells with a normal or high red-cell count and normal iron stores can mean thalassaemia trait, an inherited and usually harmless carrier state that is often mistaken for iron deficiency.',
+  'Haemoglobin electrophoresis and iron studies. A genetic counsellor can advise on family planning.',
+  function (c) {
+    if (!c.lo('mcv') || !c.has('rbc') || c.lo('ferritin')) return null;
+    const m = c.v('mcv') / c.v('rbc');
+    if (!(c.hi('rbc') || m < 13)) return null;
+    const e = [c.d('mcv'), c.d('rbc'), 'Mentzer index ' + fmt(m, 1) + ' (under 13 favours thalassaemia trait)'];
+    if (c.has('ferritin') && !c.lo('ferritin')) e.push(c.d('ferritin'));
+    return { ev: e, conf: c.has('ferritin') ? 2 : 1 };
+  });
+R('macro', 'Large-cell anaemia (B12 / folate and other causes)', [GP, HAEM], 1,
+  'Anaemia with unusually large red cells most often comes from vitamin B12 or folate deficiency; alcohol, liver disease, an underactive thyroid and some medicines can also do it.',
+  'Vitamin B12 and folate levels, thyroid and liver tests, and a medicine and alcohol review. B12 deficiency can also affect nerves, so report tingling or balance problems.',
+  function (c) {
+    if (!(c.lo('hb') || c.lo('pcv')) || !c.hi('mcv')) return null;
+    const e = [c.d(c.lo('hb') ? 'hb' : 'pcv'), c.d('mcv')]; let s = 1;
+    if (c.lo('b12')) { e.push(c.d('b12')); s += 2; }
+    if (c.lo('folate')) { e.push(c.d('folate')); s += 1; }
+    if (c.hi('tsh')) e.push(c.d('tsh'));
+    if (c.hi('ggt')) e.push(c.d('ggt'));
+    return { ev: e, conf: s >= 3 ? 3 : s >= 2 ? 2 : 1, urg: c.v('hb') < 8 ? 2 : 1 };
+  });
+R('normo', 'Anaemia: cause still to be worked out', [GP, HAEM], 1,
+  'Anaemia with normal-sized cells (or when red cell size was not entered) has several possible causes: long-term illness or inflammation, reduced kidney function, early iron deficiency, recent blood loss, malaria or red-cell breakdown.',
+  'Reticulocyte count, iron studies, kidney tests, a malaria test, and a review of recent illness, bleeding or medicines.',
+  function (c) {
+    if (!(c.lo('hb') || c.lo('pcv')) || (c.has('mcv') && !c.nl('mcv'))) return null;
+    const e = [c.d(c.lo('hb') ? 'hb' : 'pcv')]; if (c.has('mcv')) e.push(c.d('mcv')); let s = 1;
+    if (c.lo('egfr')) { e.push(c.d('egfr')); s++; }
+    if (c.hi('crp')) e.push(c.d('crp'));
+    if (c.hi('esr')) e.push(c.d('esr'));
+    if (c.lvl('mp') > 0) { e.push(c.d('mp')); s++; }
+    return { ev: e, conf: s >= 3 ? 2 : 1, urg: c.v('hb') < 8 ? 2 : 1 };
+  });
+R('haemolysis', 'Red blood cells being destroyed faster than normal (haemolysis)', [HAEM, GP], 2,
+  'Anaemia together with a high reticulocyte count and raised bilirubin or LDH suggests red cells are breaking down early. Causes include sickle cell disease, malaria, G6PD deficiency (after certain medicines or foods), immune causes and inherited conditions.',
+  'Blood film, direct Coombs test, G6PD test, haemoglobin electrophoresis and a malaria test.',
+  function (c) {
+    if (!(c.lo('hb') || c.lo('pcv')) || !c.hi('retic') || !(c.hi('tbil') || c.hi('ldh'))) return null;
+    const e = [c.d(c.lo('hb') ? 'hb' : 'pcv'), c.d('retic')];
+    if (c.hi('tbil')) e.push(c.d('tbil'));
+    if (c.hi('ldh')) e.push(c.d('ldh'));
+    return { ev: e, conf: 3 };
+  });
+R('sickle', 'Sickle cell disease', [HAEM, GEN], 1,
+  'Genotype SS or SC means sickle cell disease: red cells can sickle, causing pain crises, anaemia and infections. It needs regular specialist care, folic acid, vaccinations, plenty of fluids and a plan for what to do during a crisis.',
+  'Seek a haematologist for a care plan. Go to hospital urgently for severe pain, fever, chest pain, breathlessness, weakness of a limb or a prolonged painful erection.',
+  function (c) { const g = c.sel('geno'); if (g === 'SS' || g === 'SC') return { ev: [c.d('geno')], conf: 3 }; return null; });
+R('trait', 'Haemoglobin carrier (trait) status', [GEN, HAEM], 0,
+  'Genotype AS or AC means you carry one sickle (or C) gene. You are usually healthy, but if your partner is also a carrier (AS, AC, SS, SC) each child has a real chance of sickle cell disease.',
+  'Genetic counselling is advisable before starting a family, ideally with your partner’s genotype known. Carriers rarely need treatment.',
+  function (c) { const g = c.sel('geno'); if (g === 'AS' || g === 'AC') return { ev: [c.d('geno')], conf: 3 }; return null; });
+R('polycyth', 'High red cell count (polycythaemia / dehydration)', [GP, HAEM, PULM], 1,
+  'A high haemoglobin and PCV can be due to dehydration, smoking, low oxygen from lung or sleep problems, living at altitude, testosterone use, or a bone-marrow condition (polycythaemia vera).',
+  'Repeat after good hydration, oxygen level check, and, if persistent, JAK2 testing by a haematologist.',
+  function (c) {
+    if (!c.hi('hb') && !c.hi('pcv')) return null;
+    const e = []; if (c.hi('hb')) e.push(c.d('hb')); if (c.hi('pcv')) e.push(c.d('pcv')); if (c.hi('rbc')) e.push(c.d('rbc'));
+    if (c.hi('na')) e.push(c.d('na'));
+    return { ev: e, conf: c.hi('hb') && c.hi('pcv') ? 2 : 1, urg: (c.v('pcv') > 60 || c.v('hb') > 20) ? 2 : 1 };
+  });
+R('neutropenia', 'Low neutrophils (neutropenia)', [HAEM, GP], 2,
+  'Neutrophils fight bacteria. Low numbers raise infection risk. Common causes are viral infections, some medicines, autoimmune disease, nutritional deficiency, benign inherited variation, or bone-marrow problems.',
+  'Repeat blood count with film, review of medicines, B12/folate. Fever with a low neutrophil count is an emergency.',
+  function (c) {
+    if (!c.lo('neuta')) return null;
+    const a = c.v('neuta');
+    return { ev: [c.d('neuta')], conf: 3, urg: a < 0.5 ? 3 : a < 1 ? 2 : 1 };
+  });
+R('pancytopenia', 'Low red cells, white cells and platelets together (pancytopenia)', [HAEM], 2,
+  'When all three blood cell lines are low, the bone marrow may not be making enough cells, or cells may be destroyed or trapped (for example by an enlarged spleen). Causes include severe B12/folate deficiency, infections, medicines, autoimmune disease and marrow disorders.',
+  'Urgent blood film, reticulocytes, B12/folate, liver and viral tests; a haematologist may arrange marrow tests.',
+  function (c) {
+    if (!(c.lo('hb') || c.lo('pcv')) || !c.lo('wbc') || !c.lo('plt')) return null;
+    return { ev: [c.d(c.lo('hb') ? 'hb' : 'pcv'), c.d('wbc'), c.d('plt')], conf: 3 };
+  });
+R('highwbc', 'Very high white cell count', [HAEM, GP], 2,
+  'A white cell count above 30 is much higher than usual infections cause. Doctors check for severe infection, a reaction to illness or medicines, or a blood cancer such as leukaemia.',
+  'Blood film review and prompt assessment, often the same or next day.',
+  function (c) { if (c.v('wbc') > 30) return { ev: [c.d('wbc')], conf: 2, urg: 3 }; return null; });
+R('thrombocytopenia', 'Low platelet count (thrombocytopenia)', [HAEM, GP], 1,
+  'Platelets help blood to clot. Low counts can follow viral infections (including dengue), malaria, medicines, liver disease with an enlarged spleen, pregnancy-related conditions, immune thrombocytopenia (ITP) or marrow problems.',
+  'Repeat count with a blood film, malaria test, liver tests and medicine review. Report nosebleeds, gum bleeding, black stools or heavy bruising at once.',
+  function (c) {
+    if (!c.lo('plt')) return null;
+    const p = c.v('plt'); const e = [c.d('plt')];
+    if (c.lvl('mp') > 0) e.push(c.d('mp'));
+    return { ev: e, conf: 3, urg: p < 20 ? 3 : p < 50 ? 2 : 1 };
+  });
+R('thrombocytosis', 'High platelet count (thrombocytosis)', [GP, HAEM], 1,
+  'Most often a reaction to iron deficiency, infection or inflammation. Rarely it is from a bone-marrow condition.',
+  'Repeat count, iron studies and inflammation markers. Persistent counts above 600 deserve haematology review.',
+  function (c) { if (!c.hi('plt')) return null; const e = [c.d('plt')]; if (c.lo('ferritin')) e.push(c.d('ferritin')); if (c.hi('crp')) e.push(c.d('crp')); return { ev: e, conf: 2, urg: c.v('plt') > 600 ? 2 : 1 }; });
+R('bacterial', 'Bacterial infection or inflammation pattern', [GP], 1,
+  'A high white cell count with many neutrophils, often with raised CRP, is the typical response to a bacterial infection or other inflammation (and can also follow stress or steroid use).',
+  'A doctor will look for the source of infection (chest, urine, skin, throat, abdomen) and decide on cultures and antibiotics. Do not self-medicate with leftover antibiotics.',
+  function (c) {
+    const neut = c.hi('neuta') || c.hi('neutp');
+    if (!(c.hi('wbc') && neut) && !(neut && (c.hi('crp') || c.hi('pct')))) return null;
+    const e = []; ['wbc', 'neuta', 'neutp', 'crp', 'pct', 'esr'].forEach(function (i) { if (c.hi(i)) e.push(c.d(i)); });
+    const s = e.length;
+    return { ev: e, conf: s >= 3 ? 3 : 2, urg: (c.v('crp') > 100 || c.v('pct') >= 2 || c.v('wbc') > 20) ? 2 : 1 };
+  });
+R('viral', 'Viral infection pattern', [GP], 1,
+  'More lymphocytes than usual, with a normal or low neutrophil count, is common with viral infections such as flu, dengue, hepatitis, EBV or the aftermath of a cold.',
+  'Usually settles on its own; see a doctor if you have a persistent fever, weight loss or night sweats.',
+  function (c) {
+    if (!(c.hi('lymp') || c.hi('lyma'))) return null;
+    if (c.hi('neutp') || c.hi('neuta')) return null;
+    const e = [c.d(c.hi('lyma') ? 'lyma' : 'lymp')]; if (c.lo('neuta') || c.lo('neutp')) e.push(c.d(c.lo('neuta') ? 'neuta' : 'neutp'));
+    return { ev: e, conf: 1 };
+  });
+R('eos', 'Raised eosinophils (worms, allergy)', [ID, ALLG, GP], 1,
+  'Eosinophils rise with worm (parasite) infections such as schistosomiasis, hookworm, ascaris and filariasis, and with allergies, asthma, eczema and some medicines.',
+  'Stool and urine microscopy for parasites, and allergy or asthma review. Worm infections are usually easy to treat.',
+  function (c) {
+    if (!(c.hi('eosa') || c.hi('eosp'))) return null;
+    const e = [c.d(c.hi('eosa') ? 'eosa' : 'eosp')]; let s = 1;
+    if (c.sel('stoolova') === 'Seen') { e.push(c.d('stoolova')); s += 2; }
+    if (c.sel('ur_sch') === 'Seen') { e.push(c.d('ur_sch')); s += 2; }
+    return { ev: e, conf: s >= 3 ? 3 : 2 };
+  });
+
+/* ======== INFECTIONS ======== */
+R('malaria', 'Malaria', [GP, ID], 3,
+  'Malaria parasites were seen. Malaria is common in Nigeria and curable, but it can turn severe quickly, especially in children, pregnant women and people with sickle cell disease. Treatment should start the same day with medicine prescribed by a clinician.',
+  'Start treatment promptly as prescribed. Go to hospital urgently if there is confusion, convulsions, repeated vomiting, difficulty breathing, dark urine, severe weakness or yellow eyes.',
+  function (c) {
+    if (c.lvl('mp') < 1) return null;
+    const e = [c.d('mp')]; const u = 3;
+    if (c.lo('hb')) e.push(c.d('hb')); if (c.lo('plt')) e.push(c.d('plt'));
+    return { ev: e, conf: 3, urg: u, note: c.preg ? 'You are pregnant: malaria in pregnancy is dangerous. Tell your doctor or antenatal clinic today.' : '' };
+  });
+R('typhoid', 'Typhoid fever (Salmonella) — needs confirmation', [GP, ID], 1,
+  'A raised Widal titre can reflect typhoid, but the Widal test is unreliable: past infection, vaccination and other illness raise it too, and it can be normal early in true typhoid. The diagnosis depends on symptoms (prolonged fever, abdominal pain, headache) and ideally blood culture.',
+  'A doctor may request a blood culture or a typhoid PCR/antigen test before treating. Avoid self-treating on the Widal result alone.',
+  function (c) {
+    const o = c.lvl('widalo') >= 4, h = c.lvl('widalh') >= 4;
+    if (!o && !h) return null;
+    const e = []; if (o) e.push(c.d('widalo')); if (h) e.push(c.d('widalh'));
+    return { ev: e, conf: (o && h) || c.lvl('widalo') >= 5 || c.lvl('widalh') >= 5 ? 2 : 1 };
+  });
+R('bacteraemia', 'Germs growing in the blood', [GP, ID, ER], 3,
+  'A positive blood culture means bacteria or yeast were found in the bloodstream. Sometimes this is a skin contaminant, but it can mean a serious bloodstream infection (sepsis) and needs same-day medical review.',
+  'Hospital assessment, repeat cultures, and antibiotics chosen using the culture sensitivities.',
+  function (c) { return c.sel('bcult') === 'Growth (organism isolated)' ? { ev: [c.d('bcult')], conf: 3 } : null; });
+R('hiv', 'HIV screening test reactive (needs confirmation)', [ID, GP], 2,
+  'A reactive HIV screening test is not a diagnosis. It must be confirmed with a second, different test. If HIV is confirmed, modern treatment is effective: people on treatment stay healthy, live normal lifespans and do not pass HIV to partners.',
+  'Visit an HIV treatment centre or your doctor for confirmatory testing and counselling. Free confirmatory tests and treatment are available at government facilities in Nigeria. Do not start medicines or make big decisions until it is confirmed.',
+  function (c) { return c.sel('hiv') === 'Reactive' ? { ev: [c.d('hiv')], conf: 2 } : null; });
+R('hbv', 'Hepatitis B infection', [GI, ID], 1,
+  'A positive HBsAg means the hepatitis B virus is in your blood. Some people clear it within six months; others carry it long term, which can silently damage the liver over many years. It is manageable with monitoring and, when needed, treatment.',
+  'Liver tests, hepatitis B DNA (viral load), e-antigen, liver scan. Household and sexual contacts should be tested and vaccinated. Avoid alcohol and unprescribed herbal products.',
+  function (c) {
+    if (c.sel('hbsag') !== 'Positive') return null;
+    const e = [c.d('hbsag')]; if (c.hi('alt')) e.push(c.d('alt')); if (c.hi('ast')) e.push(c.d('ast'));
+    return { ev: e, conf: 3, urg: (c.hi('alt') || c.hi('ast') || c.hi('tbil')) ? 2 : 1 };
+  });
+R('hcv', 'Hepatitis C exposure', [GI, ID], 1,
+  'A positive anti-HCV test means you have been exposed to hepatitis C. About one in four people clear it; the rest need a viral load test (PCR). Hepatitis C is now curable with a short course of tablets.',
+  'HCV RNA (PCR) test, liver tests and fibrosis assessment.',
+  function (c) { return c.sel('hcv') === 'Positive' ? { ev: [c.d('hcv')], conf: 3 } : null; });
+R('syphilis', 'Syphilis (needs confirmation)', [ID, GP], 2,
+  'A reactive syphilis screen suggests past or current syphilis, but false positives and old treated infection are possible. Untreated syphilis can damage the heart and nerves, but it is easily treated with penicillin.',
+  'Confirmatory test (TPHA/FTA) and a doctor’s review. Partners may need testing. Pregnant women must be treated urgently to protect the baby.',
+  function (c) { return c.sel('vdrl') === 'Reactive' ? { ev: [c.d('vdrl')], conf: 2, urg: c.preg ? 3 : 2 } : null; });
+R('hpylori', 'Helicobacter pylori infection', [GI, GP], 1,
+  'H. pylori is a stomach bacterium that causes gastritis and ulcers and raises stomach-cancer risk over decades. It is treatable with a short course of combination medicines.',
+  'See a doctor about "triple therapy". Tell them if you have stomach pain, black stools or vomiting blood. Testing again after treatment confirms it has cleared.',
+  function (c) { return c.sel('hpylori') === 'Positive' ? { ev: [c.d('hpylori')], conf: 3 } : null; });
+R('pregnant', 'Pregnancy', [OBG], 1,
+  'The pregnancy test is positive. Early antenatal care gives you and your baby the best start; some medicines and tests change in pregnancy.',
+  'Book antenatal care, start folic acid, avoid alcohol, tobacco and unprescribed medicines, and tell any doctor you see that you are pregnant. Severe pain, heavy bleeding or one-sided abdominal pain needs urgent care (possible ectopic pregnancy).',
+  function (c) { return c.sel('preg') === 'Positive' ? { ev: [c.d('preg')], conf: 3 } : null; });
+
+/* ======== INFLAMMATION ======== */
+R('sepsis', 'Marker of possible severe bacterial infection (sepsis)', [GP, ER], 3,
+  'Procalcitonin of 2 ng/mL or more raises concern for a severe bacterial infection that has spread through the body.',
+  'Hospital assessment today, especially if you have fever, fast breathing or heartbeat, confusion or feel very unwell.',
+  function (c) { return c.v('pct') >= 2 ? { ev: [c.d('pct')], conf: 2 } : null; });
+R('inflam', 'Active inflammation (non-specific)', [GP, RHEUM], 1,
+  'CRP and ESR rise with infection, injury, autoimmune disease, some cancers and many other conditions. They tell you something is going on, but not what.',
+  'Your doctor will connect these with symptoms: fever, joint pain or swelling, cough, urinary or abdominal symptoms, weight loss.',
+  function (c) {
+    if (!(c.v('crp') > 10 || c.hi('esr'))) return null;
+    const e = []; if (c.hi('crp')) e.push(c.d('crp')); if (c.hi('esr')) e.push(c.d('esr'));
+    return { ev: e, conf: 1, urg: c.v('crp') > 100 ? 2 : 1 };
+  });
+
+/* ======== LIVER ======== */
+R('hepatocell', 'Liver cell irritation or damage', [GI, GP], 1,
+  'Raised ALT/AST mean liver cells are inflamed or injured. Common causes: viral hepatitis (B, C, A, E), fatty liver, alcohol, medicines (including some antibiotics, TB drugs and herbal products), muscle injury (for AST) and malaria.',
+  'Hepatitis B and C tests, liver ultrasound, a medicine and alcohol review, and repeat liver tests. Stop non-essential herbal remedies and alcohol until reviewed.',
+  function (c) {
+    if (!c.hi('alt') && !c.hi('ast')) return null;
+    const e = []; ['alt', 'ast', 'ggt', 'alp', 'tbil'].forEach(function (i) { if (c.hi(i)) e.push(c.d(i)); });
+    const x = Math.max(c.x('alt') || 0, c.x('ast') || 0);
+    if (c.sel('hbsag') === 'Positive') e.push(c.d('hbsag')); if (c.sel('hcv') === 'Positive') e.push(c.d('hcv'));
+    let note = '';
+    if (c.v('ast') && c.v('alt') && c.v('ast') / c.v('alt') >= 2 && c.hi('ast')) note = 'AST is about twice ALT or more (ratio ' + fmt(c.v('ast') / c.v('alt'), 1) + '), a pattern seen with alcohol-related liver injury.';
+    return { ev: e, conf: x >= 3 ? 3 : 2, urg: x >= 10 ? 2 : 1, note: note };
+  });
+R('cholestasis', 'Bile-duct / cholestatic liver pattern', [GI, GP], 1,
+  'Raised ALP and GGT with or without raised bilirubin suggest that bile is not draining well: gallstones, bile-duct blockage, liver inflammation, some medicines, or conditions that infiltrate the liver.',
+  'Abdominal ultrasound, and a doctor’s examination. Jaundice with fever and abdominal pain needs urgent care.',
+  function (c) {
+    if (!c.hi('alp') || !(c.hi('ggt') || c.hi('tbil') || c.hi('dbil'))) return null;
+    const e = [c.d('alp')]; ['ggt', 'tbil', 'dbil'].forEach(function (i) { if (c.hi(i)) e.push(c.d(i)); });
+    if (c.hi('ca199')) e.push(c.d('ca199'));
+    return { ev: e, conf: c.hi('ggt') ? 3 : 2, urg: c.v('tbil') > 3 ? 2 : 1 };
+  });
+R('indirectbili', 'Raised indirect bilirubin (Gilbert syndrome or red-cell breakdown)', [GP, HAEM], 1,
+  'Mildly raised bilirubin with normal liver enzymes is often Gilbert syndrome, a harmless inherited trait that flares with fasting or illness. It can also reflect red-cell breakdown.',
+  'Reticulocyte count and blood film to exclude haemolysis. No treatment is needed for Gilbert syndrome.',
+  function (c) {
+    if (!c.hi('tbil') || c.hi('dbil') || c.hi('alt') || c.hi('ast') || c.hi('alp')) return null;
+    const e = [c.d('tbil')]; if (c.has('dbil')) e.push(c.d('dbil')); if (c.has('alt')) e.push(c.d('alt'));
+    return { ev: e, conf: c.has('dbil') ? 2 : 1 };
+  });
+R('hypoalb', 'Low albumin (protein) in the blood', [GP, NEPH, GI], 1,
+  'Low albumin means too little protein in the blood: liver disease, protein lost through the kidneys or gut, poor nutrition, or long-term inflammation.',
+  'Urine protein test, liver and kidney review, and a nutrition and symptom assessment.',
+  function (c) {
+    if (!c.lo('alb')) return null;
+    const e = [c.d('alb')]; if (c.lvl('ur_pro') >= 2) e.push(c.d('ur_pro')); if (c.hi('alt')) e.push(c.d('alt')); if (c.hi('inr')) e.push(c.d('inr'));
+    return { ev: e, conf: e.length > 1 ? 2 : 1, urg: c.v('alb') < 2 ? 2 : 1 };
+  });
+R('nephrotic', 'Kidney protein-leak (nephrotic) pattern', [NEPH], 2,
+  'Heavy protein in the urine with low blood albumin (and often high cholesterol and leg or face swelling) is the nephrotic pattern: the kidney filters are leaking protein.',
+  'Urgent kidney review, urine protein quantification, kidney function and blood pressure check.',
+  function (c) {
+    if (c.lvl('ur_pro') < 3 || !c.lo('alb')) return null;
+    const e = [c.d('ur_pro'), c.d('alb')]; if (c.hi('tc')) e.push(c.d('tc'));
+    return { ev: e, conf: 3 };
+  });
+R('fattyliver', 'Fatty liver (metabolic) pattern', [GI, ENDO, DIET], 1,
+  'Mildly raised liver enzymes with high triglycerides, high sugar or high cholesterol often indicate fatty liver, which is very common and can be reversed with weight loss, a healthier diet and exercise.',
+  'Liver ultrasound, blood sugar and lipid review, and lifestyle changes. Avoid alcohol until reviewed.',
+  function (c) {
+    if (!(c.hi('alt') || c.hi('ast') || c.hi('ggt'))) return null;
+    if ((c.x('alt') || 0) >= 3 || (c.x('ast') || 0) >= 3) return null;
+    const e = []; ['alt', 'ast', 'ggt'].forEach(function (i) { if (c.hi(i)) e.push(c.d(i)); });
+    let s = 0; ['tg', 'tc', 'fpg', 'hba1c', 'rpg'].forEach(function (i) { if (c.hi(i)) { e.push(c.d(i)); s++; } });
+    if (c.lo('hdl')) { e.push(c.d('hdl')); s++; }
+    return s ? { ev: e, conf: s >= 2 ? 2 : 1 } : null;
+  });
+R('liverfail', 'Reduced liver function (advanced liver disease concern)', [GI], 2,
+  'Low albumin, a prolonged INR/PT, raised bilirubin and low platelets together can mean the liver is not making proteins properly, as in advanced liver disease.',
+  'Prompt hepatology review, liver ultrasound and, in some cases, an endoscopy. Avoid alcohol and unprescribed products.',
+  function (c) {
+    const e = []; if (c.lo('alb')) e.push(c.d('alb')); if (c.hi('inr')) e.push(c.d('inr')); if (c.hi('pt')) e.push(c.d('pt')); if (c.hi('tbil')) e.push(c.d('tbil')); if (c.lo('plt')) e.push(c.d('plt'));
+    return e.length >= 3 ? { ev: e, conf: e.length >= 4 ? 3 : 2 } : null;
+  });
+
+/* ======== KIDNEY & ELECTROLYTES ======== */
+R('ckd', 'Reduced kidney function', [NEPH, GP], 1,
+  'The estimated filtering rate (eGFR) is below 60, or creatinine and urea are raised. If this persists beyond three months it is chronic kidney disease. A short-term drop can also result from dehydration, infection, medicines (painkillers such as NSAIDs, some herbal products) or blockage. High blood pressure and diabetes are the commonest long-term causes.',
+  'Repeat the tests, urine protein/albumin test, blood pressure check, kidney ultrasound and a medicine review. Stay well hydrated unless told otherwise and avoid anti-inflammatory painkillers.',
+  function (c) {
+    const g = c.v('egfr');
+    const low = c.lo('egfr') || (c.hi('cr') && c.hi('urea'));
+    if (!low) return null;
+    const e = []; if (c.has('egfr')) e.push(c.d('egfr')); if (c.hi('cr')) e.push(c.d('cr')); if (c.hi('urea')) e.push(c.d('urea'));
+    if (c.lvl('ur_pro') >= 2) e.push(c.d('ur_pro')); if (c.hi('k')) e.push(c.d('k')); if (c.hi('ua')) e.push(c.d('ua'));
+    let stage = '';
+    if (g != null) stage = g >= 45 ? 'eGFR in the G3a band (45–59)' : g >= 30 ? 'eGFR in the G3b band (30–44)' : g >= 15 ? 'eGFR in the G4 band (15–29): severely reduced' : 'eGFR below 15 (G5): kidney failure range';
+    return { ev: e, conf: g != null && g < 60 ? 3 : 2, urg: g != null ? (g < 15 ? 3 : g < 30 ? 2 : 1) : 1, note: stage };
+  });
+R('prerenal', 'Dehydration pattern', [GP], 1,
+  'Urea raised more than creatinine, high sodium, a high red-cell count or concentrated urine point to the body being short of water (vomiting, diarrhoea, fever, heat, not drinking enough, or diuretics).',
+  'Drink fluids if you are able and not told to restrict them; oral rehydration solution helps after vomiting and diarrhoea. See a doctor if you cannot keep fluids down.',
+  function (c) {
+    const e = []; let s = 0;
+    if (c.hi('urea') && !c.hi('cr') && c.has('cr')) {
+      const r = c.v('urea') / (c.v('cr') * 88.4) * 1000;
+      if (r > 100) { e.push(c.d('urea')); e.push('Urea-to-creatinine ratio about ' + fmt(r, 0) + ' (over 100 favours dehydration)'); s += 2; }
+    }
+    if (c.hi('na')) { e.push(c.d('na')); s++; }
+    if (c.hi('ur_sg') ) { e.push(c.d('ur_sg')); s++; }
+    if (c.hi('hb') && c.hi('pcv')) { e.push(c.d('pcv')); s++; }
+    return s >= 2 ? { ev: e, conf: s >= 3 ? 2 : 1 } : null;
+  });
+R('hyperk', 'High potassium', [GP, NEPH], 1,
+  'High potassium can disturb the heart rhythm. It may be real (kidney problems, medicines such as ACE inhibitors or potassium-sparing diuretics) or falsely high if the blood sample was damaged or left standing.',
+  'Repeat the test promptly and have an ECG if it is confirmed. Avoid potassium supplements and salt substitutes until reviewed.',
+  function (c) { return c.hi('k') ? { ev: [c.d('k')].concat(c.hi('cr') ? [c.d('cr')] : []), conf: 3, urg: c.v('k') >= 6 ? 3 : c.v('k') >= 5.5 ? 2 : 1 } : null; });
+R('hypok', 'Low potassium', [GP], 1,
+  'Low potassium can cause weakness, cramps and heart-rhythm problems. Common causes are vomiting, diarrhoea, water tablets (diuretics), laxatives and low intake.',
+  'Review of medicines and recent illness; potassium replacement if confirmed.',
+  function (c) { return c.lo('k') ? { ev: [c.d('k')], conf: 3, urg: c.v('k') < 3 ? 3 : c.v('k') < 3.2 ? 2 : 1 } : null; });
+R('hypona', 'Low sodium', [GP, NEPH, ENDO], 1,
+  'Low sodium means too much water relative to salt in the blood. Causes: heavy water intake, diuretics, vomiting or diarrhoea, heart, kidney or liver disease, and some hormone problems. Severe low sodium can cause confusion and seizures.',
+  'Review of medicines, fluids and symptoms; repeat the test; urine and thyroid/cortisol tests as directed. Do not drink large amounts of plain water.',
+  function (c) { return c.lo('na') ? { ev: [c.d('na')], conf: 3, urg: c.v('na') < 125 ? 3 : c.v('na') < 130 ? 2 : 1 } : null; });
+R('hyperna', 'High sodium', [GP], 1,
+  'High sodium usually reflects dehydration. In older or very ill people it can become dangerous.',
+  'Rehydrate under medical guidance if sodium is markedly high or you are unwell.',
+  function (c) { return c.hi('na') ? { ev: [c.d('na')], conf: 3, urg: c.v('na') > 150 ? 2 : 1 } : null; });
+R('hypoca', 'Low calcium', [ENDO, GP], 1,
+  'Low calcium can come from low vitamin D, low albumin, kidney disease, parathyroid problems or low magnesium. It can cause cramps, tingling and, when severe, seizures.',
+  'Albumin-corrected calcium, vitamin D, parathyroid hormone, magnesium and kidney tests.',
+  function (c) {
+    const key = c.has('cca') ? 'cca' : 'ca'; if (!c.lo(key)) return null;
+    const e = [c.d(key)]; if (c.lo('vitd')) e.push(c.d('vitd')); if (c.lo('mg')) e.push(c.d('mg')); if (c.lo('alb')) e.push(c.d('alb'));
+    return { ev: e, conf: 3, urg: c.v(key) < 7.5 ? 2 : 1 };
+  });
+R('hyperca', 'High calcium', [ENDO, GP], 2,
+  'High calcium can come from an overactive parathyroid gland (the commonest cause), cancers, too much vitamin D or calcium, and some medicines. It can cause thirst, constipation, kidney stones and confusion.',
+  'Repeat calcium with parathyroid hormone, vitamin D and kidney tests. Drink plenty of fluids.',
+  function (c) {
+    const key = c.has('cca') ? 'cca' : 'ca'; if (!c.hi(key)) return null;
+    return { ev: [c.d(key)], conf: 3, urg: c.v(key) > 12 ? 3 : 2 };
+  });
+R('otherlytes', 'Magnesium or phosphate imbalance', [GP, NEPH], 1,
+  'Magnesium and phosphate levels outside the range often accompany kidney disease, malnutrition, alcohol use, diarrhoea or diuretics.',
+  'Review together with kidney tests and symptoms.',
+  function (c) { const e = []; ['mg', 'po4'].forEach(function (i) { if (c.hi(i) || c.lo(i)) e.push(c.d(i)); }); return e.length ? { ev: e, conf: 1 } : null; });
+R('uric', 'High uric acid (gout risk)', [RHEUM, GP, NEPH], 1,
+  'High uric acid can crystallise in joints (gout) or the kidneys (stones). Many people with high levels never get gout. Causes include diet (red meat, alcohol, sugary drinks), obesity, kidney disease and some medicines.',
+  'A doctor will check for joint symptoms, kidney function and stones. Lifestyle changes help; medicines are used only when needed.',
+  function (c) { if (!c.hi('ua')) return null; const e = [c.d('ua')]; if (c.hi('cr')) e.push(c.d('cr')); return { ev: e, conf: 2 }; });
+R('lowbic', 'Low bicarbonate / tendency to acidity', [GP, NEPH], 1,
+  'Low bicarbonate in the blood means a tendency toward acid build-up (metabolic acidosis), often from kidney disease, diarrhoea, diabetic ketoacidosis, or serious illness.',
+  'Review with kidney tests and blood sugar. A markedly low value or illness needs urgent care.',
+  function (c) { return c.lo('hco3') ? { ev: [c.d('hco3')], conf: 2, urg: c.v('hco3') < 15 ? 3 : c.v('hco3') < 18 ? 2 : 1 } : null; });
+
+/* ======== SUGAR & LIPIDS ======== */
+R('diabetes', 'Diabetes range blood sugar', [ENDO, GP, DIET], 2,
+  'Your sugar values are in the range used to diagnose diabetes. Doctors usually confirm with a repeat test on another day unless there are clear symptoms (thirst, frequent urination, weight loss). Diabetes is common, treatable and manageable with diet, exercise and, if needed, medicines.',
+  'Repeat fasting glucose or HbA1c, urine protein, kidney, lipid and eye checks, and a diet and activity plan. Monitor symptoms of very high sugar (extreme thirst, vomiting, drowsiness).',
+  function (c) {
+    const e = []; let s = 0;
+    if (c.v('fpg') >= 126) { e.push(c.d('fpg')); s++; }
+    if (c.v('rpg') >= 200) { e.push(c.d('rpg')); s++; }
+    if (c.v('ogtt2') >= 200) { e.push(c.d('ogtt2')); s++; }
+    if (c.v('hba1c') >= 6.5) { e.push(c.d('hba1c')); s++; }
+    if (!s) return null;
+    if (c.has('ur_glu') && c.lvl('ur_glu') >= 2) e.push(c.d('ur_glu'));
+    const g = c.max('fpg', 'rpg');
+    return { ev: e, conf: s >= 2 ? 3 : 2, urg: (g != null && g >= 300) ? 3 : 2 };
+  });
+R('prediabetes', 'Prediabetes range blood sugar', [GP, ENDO, DIET], 1,
+  'Blood sugar is higher than normal but below the diabetes range. This is a warning stage, and it can often be reversed with weight loss, regular exercise and diet changes.',
+  'Repeat the test in 3–6 months, review diet and weight, and check blood pressure and cholesterol.',
+  function (c) {
+    if (c.v('fpg') >= 126 || c.v('rpg') >= 200 || c.v('ogtt2') >= 200 || c.v('hba1c') >= 6.5) return null;
+    const e = []; let s = 0;
+    if (c.v('fpg') >= 100) { e.push(c.d('fpg')); s++; }
+    if (c.v('ogtt2') >= 140) { e.push(c.d('ogtt2')); s++; }
+    if (c.v('hba1c') >= 5.7) { e.push(c.d('hba1c')); s++; }
+    return s ? { ev: e, conf: s >= 2 ? 3 : 2 } : null;
+  });
+R('hypoglyc', 'Low blood sugar', [GP, ENDO], 2,
+  'Low blood sugar can cause sweating, shaking, confusion and fainting. Causes include skipped meals, diabetes medicines, alcohol, and hormone or liver problems.',
+  'If symptoms are present take fast-acting sugar and seek care. Repeated lows need investigation (insulin, cortisol, liver and kidney tests).',
+  function (c) {
+    const g = c.min('fpg', 'rpg'); if (g == null || g >= 70) return null;
+    return { ev: [c.d(c.v('fpg') != null && c.v('fpg') < 70 ? 'fpg' : 'rpg')], conf: 3, urg: g < 54 ? 3 : 2 };
+  });
+R('dka', 'Possible diabetic ketoacidosis (DKA)', [ER, ENDO], 3,
+  'High blood sugar with ketones in the urine can mean the body is producing dangerous acids. Symptoms: heavy thirst, vomiting, abdominal pain, fast deep breathing, drowsiness.',
+  'Go to a hospital today. DKA needs treatment with fluids and insulin.',
+  function (c) {
+    const g = c.max('fpg', 'rpg'); if (g == null || g < 250 || c.lvl('ur_ket') < 3) return null;
+    return { ev: [c.d(c.v('fpg') != null && c.v('fpg') >= 250 ? 'fpg' : 'rpg'), c.d('ur_ket')], conf: 3 };
+  });
+R('lipids', 'Abnormal cholesterol / blood fats', [GP, CARD, ENDO, DIET], 1,
+  'High LDL or total cholesterol, high triglycerides or low HDL raise the long-term risk of heart attack and stroke, especially with diabetes, high blood pressure, smoking or family history. Lifestyle changes (less fried, fatty and sugary food, more exercise, weight loss, no smoking) come first; medicines are used when risk is high.',
+  'A doctor will estimate your overall heart risk, check blood pressure, sugar, thyroid and kidney, and may treat. A fasting sample is best for triglycerides.',
+  function (c) {
+    const e = []; ['tc', 'ldl', 'tg'].forEach(function (i) { if (c.hi(i)) e.push(c.d(i)); }); if (c.lo('hdl')) e.push(c.d('hdl'));
+    if (!e.length) return null;
+    return { ev: e, conf: 3, urg: c.v('tg') > 500 ? 2 : 1, note: c.v('tg') > 500 ? 'Triglycerides above 500 mg/dL raise the risk of pancreatitis; avoid alcohol and fatty meals and see a doctor soon.' : (c.hi('tc') || c.hi('ldl')) && c.hi('tsh') ? 'An underactive thyroid can raise cholesterol; your TSH is also high.' : '' };
+  });
+R('metsyn', 'Metabolic syndrome pattern', [GP, ENDO, CARD, DIET], 1,
+  'High triglycerides, low HDL and raised blood sugar together are the classic metabolic-syndrome pattern, linked with abdominal obesity, insulin resistance and higher risk of diabetes and heart disease.',
+  'Check waist size and blood pressure; diet, exercise and weight loss are the mainstays.',
+  function (c) {
+    if (!c.hi('tg') || !c.lo('hdl')) return null;
+    const sugar = c.v('fpg') >= 100 || c.v('hba1c') >= 5.7 || c.v('rpg') >= 140; if (!sugar) return null;
+    const e = [c.d('tg'), c.d('hdl')]; ['fpg', 'hba1c', 'rpg'].forEach(function (i) { if (c.hi(i)) e.push(c.d(i)); });
+    return { ev: e, conf: 3 };
+  });
+
+/* ======== THYROID ======== */
+R('hypothyroid', 'Underactive thyroid (hypothyroidism)', [ENDO, GP], 1,
+  'A high TSH means the pituitary is pushing the thyroid harder. With low free T4 it indicates an underactive thyroid (often Hashimoto disease). Symptoms: tiredness, weight gain, cold intolerance, constipation, dry skin, low mood.',
+  'Repeat TSH and FT4 and check anti-TPO. Treatment is a daily levothyroxine tablet if confirmed. A mildly high TSH with normal FT4 is often just re-checked in 6–12 weeks.',
+  function (c) {
+    if (!c.hi('tsh')) return null;
+    const e = [c.d('tsh')]; let s = 1;
+    if (c.lo('ft4')) { e.push(c.d('ft4')); s += 2; } else if (c.nl('ft4')) { e.push(c.d('ft4') + ' — normal'); }
+    if (c.lo('t4')) { e.push(c.d('t4')); s++; }
+    if (c.hi('tpo')) { e.push(c.d('tpo')); s++; }
+    const sub = c.nl('ft4') && !c.lo('t4');
+    return { ev: e, conf: s >= 3 ? 3 : 2, urg: 1, note: sub ? 'With a normal FT4 this is called subclinical hypothyroidism, which is often just monitored.' : '' };
+  });
+R('hyperthyroid', 'Overactive thyroid (hyperthyroidism)', [ENDO, GP], 1,
+  'A low TSH with high thyroid hormones suggests an overactive thyroid (Graves disease, nodules, thyroiditis). Symptoms: weight loss, palpitations, tremor, heat intolerance, anxiety, diarrhoea.',
+  'Repeat thyroid tests, TSH-receptor antibodies and possibly a thyroid scan. A low TSH with normal hormones (subclinical) is usually rechecked.',
+  function (c) {
+    if (!c.lo('tsh')) return null;
+    const e = [c.d('tsh')]; let s = 1;
+    if (c.hi('ft4')) { e.push(c.d('ft4')); s += 2; } if (c.hi('ft3')) { e.push(c.d('ft3')); s += 2; } if (c.hi('t4')) { e.push(c.d('t4')); s++; } if (c.hi('t3')) { e.push(c.d('t3')); s++; }
+    if (c.lo('ft4')) return null;
+    return { ev: e, conf: s >= 3 ? 3 : 2, urg: (c.x('ft4') || 0) > 2 ? 2 : 1, note: s < 3 ? 'With normal thyroid hormones this is called subclinical hyperthyroidism, which is usually rechecked.' : '' };
+  });
+R('centralthy', 'Low thyroid hormone with a TSH that is not raised', [ENDO], 1,
+  'If thyroid hormones are low but TSH is not raised, the cause may be the pituitary gland, severe illness, or recent medicines, rather than the thyroid itself.',
+  'Endocrine review with pituitary hormone tests.',
+  function (c) { return c.lo('ft4') && !c.hi('tsh') && c.has('tsh') ? { ev: [c.d('ft4'), c.d('tsh')], conf: 2 } : null; });
+R('thyauto', 'Thyroid antibodies present (autoimmune thyroid tendency)', [ENDO], 0,
+  'Anti-TPO antibodies mean the immune system is targeting the thyroid. With normal thyroid tests this carries a risk of future thyroid problems.',
+  'Periodic TSH checks (about yearly).',
+  function (c) { return c.hi('tpo') && !c.hi('tsh') && !c.lo('tsh') ? { ev: [c.d('tpo')], conf: 2 } : null; });
+
+/* ======== HEART ======== */
+R('trop', 'Possible heart-muscle injury (e.g. heart attack)', [ER, CARD], 3,
+  'Raised troponin means heart muscle cells are injured. A heart attack is the most important cause, but kidney failure, severe infection, lung clots, myocarditis and heart failure can also raise it.',
+  'Go to a hospital emergency unit now and show this result. Call an ambulance if you have chest pain, breathlessness or sweating; do not drive yourself.',
+  function (c) { return c.hi('trop') ? { ev: [c.d('trop')].concat(c.hi('ckmb') ? [c.d('ckmb')] : []), conf: 3 } : null; });
+R('hf', 'Heart strain / possible heart failure', [CARD, GP], 2,
+  'A raised NT-proBNP points to the heart working under strain, as in heart failure. Kidney disease, older age, lung clots and atrial fibrillation can also raise it.',
+  'Heart ultrasound (echocardiogram), ECG, chest X-ray, kidney tests. Seek urgent care for breathlessness lying flat, leg swelling or sudden weight gain.',
+  function (c) { return c.hi('ntbnp') ? { ev: [c.d('ntbnp')], conf: 2 } : null; });
+R('ck', 'Raised muscle enzyme (CK)', [GP, NEPH], 1,
+  'CK rises after heavy exercise, injections, injury and with some medicines (statins), thyroid disease and muscle disease. Very high levels from muscle breakdown can injure the kidneys.',
+  'Rest, drink plenty of fluids and check kidney function; seek care for muscle pain with dark urine.',
+  function (c) { if (!c.hi('ck')) return null; const e = [c.d('ck')]; if (c.hi('cr')) e.push(c.d('cr')); return { ev: e, conf: 2, urg: (c.x('ck') || 0) > 5 ? 2 : 1 }; });
+R('ddimer', 'Raised D-dimer (non-specific; clots not excluded)', [GP, PULM, CARD], 2,
+  'D-dimer is a clot-breakdown marker. A normal level helps rule out clots; a raised one is common in infection, pregnancy, recent surgery, cancer and older age and does not show where the problem is.',
+  'A doctor will decide on scans. Go to emergency care for sudden chest pain, sudden breathlessness, coughing blood, or a swollen, painful leg.',
+  function (c) { return c.hi('ddimer') ? { ev: [c.d('ddimer')], conf: 1 } : null; });
+
+/* ======== CLOTTING ======== */
+R('inr', 'Slow blood clotting (prolonged PT / INR)', [GP, HAEM, GI], 2,
+  'A prolonged PT or raised INR means blood takes longer to clot. Common causes: warfarin, liver disease, vitamin K deficiency or other clotting-factor problems.',
+  'If you take warfarin, your target is usually 2–3: follow your anticoagulant clinic. Otherwise liver tests and a doctor’s review; avoid aspirin and anti-inflammatory painkillers until advised.',
+  function (c) {
+    if (!(c.hi('inr') || c.hi('pt'))) return null;
+    const e = []; if (c.hi('inr')) e.push(c.d('inr')); if (c.hi('pt')) e.push(c.d('pt')); if (c.hi('tbil') || c.lo('alb')) e.push('Liver-related abnormalities are also present');
+    return { ev: e, conf: 2, urg: c.v('inr') > 4.5 ? 3 : c.v('inr') >= 1.5 ? 2 : 1 };
+  });
+R('aptt', 'Prolonged aPTT (clotting pathway)', [HAEM], 2,
+  'A long aPTT can be from heparin treatment, inherited clotting-factor deficiencies (such as haemophilia or von Willebrand disease), liver disease or antibodies that interfere with clotting.',
+  'Repeat with mixing studies and factor assays arranged by a haematologist.',
+  function (c) { return c.hi('aptt') ? { ev: [c.d('aptt')], conf: 2 } : null; });
+
+/* ======== VITAMINS & IRON ======== */
+R('b12', 'Low vitamin B12', [GP, HAEM, NEURO], 1,
+  'Low B12 can cause anaemia and nerve damage (tingling, numbness, balance or memory problems). Causes include a vegetarian diet, poor absorption (pernicious anaemia, stomach surgery), long-term metformin or acid-reducing medicines.',
+  'B12 replacement by tablets or injection as the doctor decides, and tests for the cause. Report tingling, numbness or unsteadiness.',
+  function (c) { return c.lo('b12') ? { ev: [c.d('b12')].concat(c.hi('mcv') ? [c.d('mcv')] : []), conf: 3 } : null; });
+R('folate', 'Low folate', [GP, OBG], 1,
+  'Low folate can cause anaemia and, in pregnancy, birth defects of the baby’s spine. Causes: poor diet, alcohol, pregnancy, some epilepsy medicines and poor absorption.',
+  'Folic acid supplements as advised. Folate is especially important before and in early pregnancy.',
+  function (c) { return c.lo('folate') ? { ev: [c.d('folate')], conf: 3 } : null; });
+R('vitd', 'Low vitamin D', [GP, ENDO], 1,
+  'Low vitamin D (below 20 ng/mL is deficiency; 20–29 insufficiency) can cause bone and muscle weakness and, in children, rickets. Causes include little sun exposure, covering clothing, dark skin, obesity and poor absorption.',
+  'Vitamin D supplements as advised, sensible sun exposure and calcium-rich food. Check calcium and parathyroid hormone if very low.',
+  function (c) { return c.lo('vitd') ? { ev: [c.d('vitd')], conf: 3, urg: 1 } : null; });
+R('ferritinhigh', 'Raised ferritin', [GP, HAEM, GI], 1,
+  'Ferritin often rises with inflammation, infection, liver disease (including fatty liver), alcohol and obesity. Rarely it reflects iron overload (haemochromatosis) or transfusion-related iron excess.',
+  'Check transferrin saturation, liver tests and CRP; very high values (above 1000) deserve prompt review.',
+  function (c) { if (!c.hi('ferritin')) return null; const e = [c.d('ferritin')]; if (c.hi('tsat')) e.push(c.d('tsat')); if (c.hi('alt')) e.push(c.d('alt')); return { ev: e, conf: 1, urg: c.v('ferritin') > 1000 ? 2 : 1 }; });
+
+/* ======== URINE ======== */
+R('uti', 'Possible urinary tract infection (UTI)', [GP, URO], 2,
+  'Nitrite, white cells (leukocyte esterase, pus cells), bacteria or a positive culture suggest a urinary infection. Symptoms: burning when passing urine, frequency, urgency, lower belly pain. Fever, loin pain or vomiting suggests the kidneys may be involved.',
+  'Confirm with a clean-catch (midstream) urine culture and sensitivity, treat with the antibiotic your doctor chooses, and drink plenty of fluids. Men, children, pregnant women and repeat infections need prompt review.',
+  function (c) {
+    const e = []; let s = 0;
+    if (c.sel('ur_nit') === 'Positive') { e.push(c.d('ur_nit')); s += 2; }
+    if (c.lvl('ur_le') >= 2) { e.push(c.d('ur_le')); s += 1; }
+    if (c.hi('ur_pus')) { e.push(c.d('ur_pus')); s += 1; }
+    if (c.lvl('ur_bact') >= 2) { e.push(c.d('ur_bact')); s += 1; }
+    if (c.sel('ur_cult') === 'Significant growth') { e.push(c.d('ur_cult')); s += 3; }
+    if (!e.length) return null;
+    return { ev: e, conf: s >= 3 ? 3 : s >= 2 ? 2 : 1, note: c.lvl('ur_epi') >= 1 ? 'Skin cells are present in the sample, so contamination is possible; a clean repeat may be needed.' : '' };
+  });
+R('haematuria', 'Blood in the urine', [URO, NEPH, GP], 2,
+  'Blood in the urine has many causes: infection, stones, bilharzia (schistosomiasis), kidney conditions, enlarged prostate, and occasionally tumours. Menstrual blood can contaminate samples.',
+  'Repeat urine test (not during a period), urine microscopy for eggs and casts, kidney and bladder ultrasound, and a urology or kidney review if it persists.',
+  function (c) {
+    if (c.lvl('ur_bld') < 2 && !c.hi('ur_rbc')) return null;
+    const e = []; if (c.lvl('ur_bld') >= 1) e.push(c.d('ur_bld')); if (c.hi('ur_rbc')) e.push(c.d('ur_rbc')); if (c.sel('ur_sch') === 'Seen') e.push(c.d('ur_sch')); if (c.lvl('ur_cast') === 3) e.push(c.d('ur_cast'));
+    return { ev: e, conf: e.length >= 2 ? 3 : 2, urg: 2 };
+  });
+R('schisto', 'Bilharzia (urinary schistosomiasis)', [ID, URO, GP], 1,
+  'Schistosoma haematobium eggs were seen. This is caught from fresh-water contact (rivers, ponds, lakes). It is treated effectively with praziquantel.',
+  'Treatment by a doctor, and follow-up urine tests. Avoid contact with infected water.',
+  function (c) { return c.sel('ur_sch') === 'Seen' ? { ev: [c.d('ur_sch')], conf: 3 } : null; });
+R('glycosuria', 'Sugar in the urine', [GP, ENDO], 1,
+  'Glucose in urine usually means blood sugar is high, though some people (and many pregnant women) leak sugar at normal blood levels.',
+  'Check fasting or random blood glucose and HbA1c.',
+  function (c) { return c.lvl('ur_glu') >= 2 ? { ev: [c.d('ur_glu')], conf: 2 } : null; });
+R('proteinuria', 'Protein in the urine (proteinuria)', [NEPH, GP], 1,
+  'Persistent protein in the urine is an early sign of kidney damage, often from high blood pressure, diabetes or kidney inflammation. Fever, infection, hard exercise and dehydration can cause temporary protein.',
+  'Repeat the test (first morning sample), urine protein-to-creatinine or albumin-to-creatinine ratio, kidney function and blood pressure.',
+  function (c) { return c.lvl('ur_pro') >= 2 ? { ev: [c.d('ur_pro')], conf: c.lvl('ur_pro') >= 3 ? 3 : 2, urg: c.lvl('ur_pro') >= 4 ? 2 : 1 } : null; });
+R('preeclampsia', 'Protein in the urine during pregnancy (possible pre-eclampsia)', [OBG, ER], 3,
+  'Protein in the urine during pregnancy can be a sign of pre-eclampsia (high blood pressure of pregnancy), which can threaten mother and baby.',
+  'Contact your antenatal clinic or go to a hospital today for a blood pressure check. Severe headache, vision changes, upper abdominal pain, sudden swelling or reduced baby movements need emergency care.',
+  function (c) { return c.preg && c.lvl('ur_pro') >= 2 ? { ev: [c.d('ur_pro')], conf: 3 } : null; });
+R('ketonuria', 'Ketones in the urine', [GP, ENDO], 1,
+  'Ketones appear when the body burns fat for energy: fasting, vomiting, low-carbohydrate diets, pregnancy, or uncontrolled diabetes.',
+  'If you have diabetes or high sugar with ketones and feel unwell, seek care urgently.',
+  function (c) { return c.lvl('ur_ket') >= 2 ? { ev: [c.d('ur_ket')], conf: 2 } : null; });
+R('urinebili', 'Liver pigments in the urine', [GI, GP], 1,
+  'Bilirubin in the urine or increased urobilinogen can come with liver disease, a blocked bile duct, or red-cell breakdown.',
+  'Liver tests and a doctor’s review, particularly if you have yellow eyes or dark urine.',
+  function (c) { const e = []; if (c.lvl('ur_bil') >= 1) e.push(c.d('ur_bil')); if (c.sel('ur_uro') === 'Increased') e.push(c.d('ur_uro')); return e.length ? { ev: e, conf: 2 } : null; });
+R('casts', 'Kidney casts in urine', [NEPH], 1,
+  'Granular, red-cell or pus-cell casts are formed in the kidney tubules and suggest the kidney itself is involved.',
+  'Kidney function tests, urine protein quantification and review by a kidney specialist.',
+  function (c) { const l = c.lvl('ur_cast'); return l >= 2 ? { ev: [c.d('ur_cast')], conf: l === 3 ? 3 : 2, urg: l === 3 ? 2 : 1 } : null; });
+
+/* ======== STOOL ======== */
+R('occult', 'Hidden blood in the stool', [GI, GP], 2,
+  'Blood not visible to the eye can come from piles, stomach or duodenal ulcers, H. pylori gastritis, polyps, worm infections, inflammatory bowel disease or bowel cancer.',
+  'A doctor will decide on endoscopy or colonoscopy, plus an iron/blood count review. Report black or bloody stools, vomiting blood or weight loss urgently.',
+  function (c) { if (c.sel('stoolocc') !== 'Positive') return null; const e = [c.d('stoolocc')]; if (c.lo('hb')) e.push(c.d('hb')); if (c.lo('ferritin')) e.push(c.d('ferritin')); if (c.sel('hpylori') === 'Positive') e.push(c.d('hpylori')); return { ev: e, conf: e.length >= 2 ? 3 : 2 }; });
+R('stoolparasite', 'Intestinal parasites', [GP, ID], 1,
+  'Parasites or their eggs seen in stool indicate a worm or protozoal infection (for example ascaris, hookworm, Entamoeba, Giardia).',
+  'Anti-parasitic treatment prescribed by a doctor; wash hands, drink safe water and treat household contacts if advised.',
+  function (c) { return c.sel('stoolova') === 'Seen' ? { ev: [c.d('stoolova')], conf: 3 } : null; });
+
+/* ======== HORMONES & FERTILITY ======== */
+R('psa', 'Raised PSA', [URO], 1,
+  'PSA can rise from an enlarged prostate, prostate infection or irritation, recent ejaculation, cycling, a urinary catheter, or prostate cancer. A raised PSA is a reason for review, not a cancer diagnosis.',
+  'Repeat PSA after 4–6 weeks without triggers, a digital rectal exam, urine test and possibly free-PSA or prostate MRI. A urologist decides on biopsy.',
+  function (c) { return c.hi('psa') ? { ev: [c.d('psa')], conf: 2, urg: c.v('psa') > 10 ? 2 : 1 } : null; });
+R('hypogonad', 'Low testosterone (male)', [ENDO, URO], 1,
+  'Low testosterone with raised LH/FSH points to the testes; low testosterone with low or normal LH/FSH points to the pituitary or to obesity, illness, sleep problems or medicines.',
+  'Repeat morning (8–10 a.m.) testosterone with LH, FSH, prolactin and thyroid tests, then an endocrine or urology review.',
+  function (c) {
+    if (c.sex !== 'M' || !c.lo('testo')) return null;
+    const e = [c.d('testo')]; let s = 1;
+    if (c.hi('lh') || c.hi('fsh')) { if (c.hi('lh')) e.push(c.d('lh')); if (c.hi('fsh')) e.push(c.d('fsh')); s += 1; }
+    return { ev: e, conf: s >= 2 ? 2 : 1 };
+  });
+R('pcos', 'Polycystic ovary syndrome (PCOS) pattern', [OBG, ENDO], 1,
+  'A raised LH-to-FSH ratio and/or raised testosterone in a woman can fit PCOS, a common condition that may cause irregular periods, acne, excess hair and difficulty conceiving. It is diagnosed with symptoms and a pelvic ultrasound, not blood tests alone.',
+  'A gynaecology or endocrine review, pelvic ultrasound, blood sugar and lipid checks. Lifestyle changes and weight management help.',
+  function (c) {
+    if (c.sex !== 'F') return null;
+    const e = []; let s = 0;
+    if (c.has('lh') && c.has('fsh') && c.v('fsh') > 0 && c.v('lh') / c.v('fsh') >= 2) { e.push('LH:FSH ratio about ' + fmt(c.v('lh') / c.v('fsh'), 1) + ' (2 or above)'); s++; }
+    if (c.hi('testo')) { e.push(c.d('testo')); s++; }
+    if (s && (c.hi('fpg') || c.hi('hba1c'))) e.push(c.hi('fpg') ? c.d('fpg') : c.d('hba1c'));
+    return s ? { ev: e, conf: s >= 2 ? 2 : 1 } : null;
+  });
+R('prolactin', 'Raised prolactin', [ENDO, OBG], 1,
+  'Prolactin can be raised by pregnancy, breastfeeding, stress, a recent meal or exercise, an underactive thyroid, medicines (some antipsychotics, anti-sickness drugs, antidepressants) and by a prolactin-producing pituitary growth (prolactinoma, usually benign and treatable).',
+  'Repeat the test rested, with thyroid tests and a pregnancy test. Pituitary MRI if persistently high. May cause irregular periods, milk discharge or low libido.',
+  function (c) { if (!c.hi('prl')) return null; const e = [c.d('prl')]; if (c.hi('tsh')) e.push(c.d('tsh')); return { ev: e, conf: 2, urg: c.x('prl') > 4 ? 2 : 1 }; });
+R('menopause', 'Pattern consistent with menopause / ovarian slowing', [OBG, ENDO], 0,
+  'A high FSH (and LH) in a woman over 40 fits the menopause transition. In a younger woman it can indicate premature ovarian insufficiency, which needs assessment.',
+  'Gynaecology review. FSH varies day to day, so the diagnosis rests on symptoms and period history, and it is repeated if needed.',
+  function (c) {
+    if (c.sex !== 'F' || !c.hi('fsh') || c.v('fsh') < 25) return null;
+    const e = [c.d('fsh')]; if (c.hi('lh')) e.push(c.d('lh'));
+    if (c.age < 40) return { ev: e, conf: 2, urg: 1, note: 'At your age a high FSH should be checked by a doctor (premature ovarian insufficiency).' };
+    return { ev: e, conf: 2 };
+  });
+R('cortlow', 'Low morning cortisol (possible adrenal insufficiency)', [ENDO], 2,
+  'A low morning cortisol can mean the adrenal glands are not making enough cortisol (tiredness, weight loss, low blood pressure, low sugar, salt craving). It can also follow long-term steroid use.',
+  'Endocrine review with an ACTH (Synacthen) test. Severe weakness, vomiting or fainting is an emergency.',
+  function (c) { return c.lo('cort') ? { ev: [c.d('cort')], conf: 2 } : null; });
+R('corthigh', 'Raised cortisol', [ENDO], 1,
+  'Cortisol rises with stress, illness, poor sleep, oestrogen, steroid medicines and sampling at the wrong time. Persistent excess (Cushing syndrome) is rare.',
+  'Repeat with correct timing; a late-night salivary cortisol or dexamethasone test if suspected.',
+  function (c) { return c.hi('cort') ? { ev: [c.d('cort')], conf: 1 } : null; });
+
+/* ======== SEMEN ======== */
+R('azoo', 'No sperm seen (azoospermia)', [URO, FERT], 1,
+  'No sperm were found. Causes: blockage of the sperm ducts, or the testes not producing sperm (hormonal or genetic causes), previous infections or surgery. Some causes are treatable and sperm can sometimes be retrieved.',
+  'Repeat the test, check FSH, LH and testosterone, a scrotal examination and ultrasound, and possibly genetic tests.',
+  function (c) { return c.has('sc') && c.v('sc') === 0 ? { ev: [c.d('sc')], conf: 3 } : null; });
+R('semen', 'Semen results below WHO reference limits', [URO, FERT], 1,
+  'One or more semen measures are below the lower reference limits. A single sample can vary widely with abstinence time, illness and fever, so repeat testing after about 2–3 months is standard. Being below the limit does not mean you cannot father a child.',
+  'A urologist or fertility specialist can check for varicocele, infection and hormones, and advise on lifestyle (smoking, alcohol, heat, medicines) and treatment options.',
+  function (c) {
+    if (c.has('sc') && c.v('sc') === 0) return null;
+    const e = []; ['sv', 'sc', 'stm', 'spm', 'smo', 'sva', 'sph'].forEach(function (i) { if (c.lo(i)) e.push(c.d(i)); }); if (c.hi('swbc')) e.push(c.d('swbc'));
+    return e.length ? { ev: e, conf: e.length >= 2 ? 3 : 2 } : null;
+  });
+
+/* ======== TUMOUR MARKERS ======== */
+R('tumour', 'Raised tumour marker(s)', [ONC, GP], 1,
+  'Tumour markers can be raised by many harmless conditions (infection, inflammation, benign growths, smoking, pregnancy) and can be normal in some cancers. They are never used alone to diagnose cancer.',
+  'Your doctor will decide on scans, clinical examination, and repeat testing. Do not panic; most mildly raised markers have non-cancer explanations.',
+  function (c) {
+    const info = { afp: ['AFP', GI], cea: ['CEA', GI], ca125: ['CA-125', OBG], ca199: ['CA 19-9', GI], ca153: ['CA 15-3', ONC] };
+    const e = []; let u = 1;
+    Object.keys(info).forEach(function (k) { if (c.hi(k)) { e.push(c.d(k)); if ((c.x(k) || 0) >= 3) u = 2; } });
+    if (!e.length) return null;
+    if (c.hi('afp') && (c.sel('hbsag') === 'Positive' || c.sel('hcv') === 'Positive')) e.push('Hepatitis B or C is present, so liver cancer surveillance is important');
+    return { ev: e, conf: 1, urg: u };
+  });
+
+/* ======== BLOOD GAS / PANCREAS ======== */
+R('acidbase', 'Acid–base disturbance on blood gas', [ER, PULM, GP], 3,
+  'The blood pH is outside the normal range. Doctors read pH with CO₂ and bicarbonate to separate lung (respiratory) from metabolic causes. This usually occurs in acutely ill patients and needs urgent hospital management.',
+  'Seek emergency medical care. The cause, such as diabetic ketoacidosis, kidney failure, severe infection, lung disease or poisoning, must be treated quickly.',
+  function (c) {
+    if (!c.has('abg_ph')) return null;
+    const ph = c.v('abg_ph'); if (ph >= 7.35 && ph <= 7.45) return null;
+    const e = [c.d('abg_ph')]; let type;
+    if (ph < 7.35) {
+      if (c.hi('abg_pco2') && !c.lo('abg_hco3')) type = 'Respiratory acidosis pattern: CO₂ retained (low breathing effort or lung disease)';
+      else if (c.lo('abg_hco3') || c.lo('be')) type = 'Metabolic acidosis pattern' + (c.hi('ag') ? ' with a raised anion gap (ketones, lactate, kidney failure or toxins)' : '') + (c.hi('lact') ? ', with raised lactate' : '');
+      else type = 'Acidosis (type unclear from the values given)';
+    } else {
+      if (c.lo('abg_pco2')) type = 'Respiratory alkalosis pattern: over-breathing (pain, anxiety, fever, low oxygen, lung clots)';
+      else if (c.hi('abg_hco3') || c.hi('be')) type = 'Metabolic alkalosis pattern (vomiting, diuretics, low potassium)';
+      else type = 'Alkalosis (type unclear from the values given)';
+    }
+    ['abg_pco2', 'abg_hco3', 'lact', 'be'].forEach(function (i) { if (c.has(i) && !c.nl(i)) e.push(c.d(i)); });
+    return { ev: e, conf: 3, note: type };
+  });
+R('hypoxia', 'Low blood oxygen', [ER, PULM], 3,
+  'A low oxygen level in arterial blood means the lungs are not getting enough oxygen into the blood.',
+  'Emergency review. Causes include pneumonia, asthma or COPD attack, lung clot, heart failure and others.',
+  function (c) { return c.lo('abg_po2') ? { ev: [c.d('abg_po2')], conf: 3, urg: c.v('abg_po2') < 60 ? 3 : 2 } : null; });
+R('lactate', 'Raised lactate', [ER, GP], 3,
+  'Raised lactate means tissues are short of oxygen or the body is in severe physiological stress, as in shock, severe infection, bleeding or seizures.',
+  'This needs urgent assessment in hospital.',
+  function (c) { return c.hi('lact') ? { ev: [c.d('lact')], conf: 2, urg: c.v('lact') >= 4 ? 3 : 2 } : null; });
+R('aniongap', 'High anion gap (acid build-up)', [GP, ER, NEPH], 2,
+  'A high anion gap suggests unmeasured acids in the blood (ketones, lactate, kidney failure, toxins, some poisonings).',
+  'Check blood sugar, kidney function, lactate and ketones promptly.',
+  function (c) { return c.hi('ag') ? { ev: [c.d('ag')].concat(c.lo('hco3') ? [c.d('hco3')] : []), conf: 2 } : null; });
+R('pancreatitis', 'Possible pancreas inflammation (pancreatitis)', [GI, ER], 3,
+  'Lipase or amylase more than three times the upper limit, particularly with severe upper abdominal pain that radiates to the back and vomiting, points to acute pancreatitis. Gallstones and alcohol are the commonest causes; very high triglycerides can also cause it.',
+  'Seek hospital care today. Avoid alcohol and food until assessed.',
+  function (c) {
+    const l = c.x('lip'), a = c.x('amy');
+    if ((l && l > 3) || (a && a > 3)) { const e = []; if (c.hi('lip')) e.push(c.d('lip')); if (c.hi('amy')) e.push(c.d('amy')); if (c.hi('tg')) e.push(c.d('tg')); return { ev: e, conf: 3 }; }
+    return null;
+  });
+R('mildpanc', 'Mildly raised pancreas enzymes', [GI, GP], 1,
+  'Amylase or lipase raised less than three times normal has many causes (kidney disease, salivary gland problems, gut conditions, medicines, early pancreatitis).',
+  'A doctor will correlate with abdominal symptoms; repeat the test if you have pain.',
+  function (c) {
+    const l = c.x('lip'), a = c.x('amy');
+    if (((l && l > 3) || (a && a > 3))) return null;
+    const e = []; if (c.hi('lip')) e.push(c.d('lip')); if (c.hi('amy')) e.push(c.d('amy'));
+    return e.length ? { ev: e, conf: 1 } : null;
+  });
+
+/* ---- main entry ---- */
+function normProfile(p) {
+  const age = num(p && p.age);
+  return { age: age == null ? 0 : age, sex: p && (p.sex === 'F' || p.sex === 'M') ? p.sex : '', preg: !!(p && p.sex === 'F' && p.preg === 'Yes') };
+}
+function refText(t, prof, e) {
+  if (t.type === 'q') return 'Normal: ' + t.normal.join(' / ');
+  const cl = e && num(e.rl), ch = e && num(e.rh);
+  const u = e && e.u ? unitLabel(t, e.u) : t.unit;
+  if (cl != null || ch != null) return 'Your lab: ' + (cl != null && ch != null ? fmt(cl) + '–' + fmt(ch) : cl != null ? '≥ ' + fmt(cl) : '≤ ' + fmt(ch)) + ' ' + u;
+  const r = rangeFor(t, prof);
+  if (!r) return 'Select your sex above';
+  let lo = r[0], hi = r[1];
+  if (e && e.u) { const a = t.alts[e.u - 1]; const f = function (x) { return x == null ? null : a.from ? a.from(x) : x * a.f; }; lo = f(lo); hi = f(hi); }
+  const dp = t.dp != null ? (e && e.u ? undefined : t.dp) : undefined;
+  const s = lo != null && hi != null ? fmt(lo, dp) + '–' + fmt(hi, dp) : lo != null ? '≥ ' + fmt(lo, dp) : '≤ ' + fmt(hi, dp);
+  return 'Normal: ' + s + ' ' + u;
+}
+function meaning(r) {
+  const t = r.t;
+  if (r.type === 'q') { const s = t.say; return typeof s === 'function' ? s(r.sel) : (s || ''); }
+  if (r.flag === 'H') return t.hi || 'Above the usual range; discuss with your doctor.';
+  if (r.flag === 'L') return t.lo || 'Below the usual range; discuss with your doctor.';
+  return '';
+}
+
+function interpret(state) {
+  const prof = normProfile(state.profile);
+  const res = {};
+  Object.keys(state.vals || {}).forEach(function (id) {
+    const t = TESTS[id]; if (!t || t.calc) return;
+    const e = state.vals[id];
+    const r = t.type === 'n' ? evalNum(t, e, prof) : evalQ(t, e);
+    if (r) res[id] = r;
+  });
+  derive(res, prof);
+  const c = makeCtx(res, prof);
+  const fired = [];
+  const explained = {};
+  RULES.forEach(function (rule) {
+    let o = null;
+    c._used = {};
+    try { o = rule.t(c); } catch (err) { o = null; }
+    if (o && o.ev && o.ev.length) Object.keys(c._used).forEach(function (k) { explained[k] = 1; });
+    if (o && o.ev && o.ev.length) fired.push({ id: rule.id, name: rule.name, spec: rule.spec, what: rule.what, next: rule.next, ev: o.ev, conf: o.conf || 1, urg: o.urg != null ? o.urg : rule.urg, note: o.note || '' });
+  });
+  fired.sort(function (a, b) { return b.urg - a.urg || b.conf - a.conf; });
+
+  const critical = [];
+  Object.keys(res).forEach(function (id) { if (res[id].crit) critical.push(res[id]); });
+  let urgency = 0;
+  fired.forEach(function (f) { if (f.urg > urgency) urgency = f.urg; });
+  if (critical.length) urgency = 3;
+  if (!fired.length && Object.keys(res).some(function (id) { return res[id].flag === 'L' || res[id].flag === 'H' || res[id].flag === 'A'; })) urgency = Math.max(urgency, 1);
+
+  // specialties
+  const score = {}, why = {};
+  fired.forEach(function (f) {
+    if (f.urg === 0 && f.conf === 1) return;
+    f.spec.forEach(function (s) {
+      score[s] = (score[s] || 0) + f.conf * (1 + f.urg * 0.5) + (f.spec[0] === s ? 0.5 : 0);
+      (why[s] = why[s] || []).push(f.name);
+    });
+  });
+  const anyAbn = Object.keys(res).some(function (id) { return res[id].flag !== 'N'; });
+  const specs = Object.keys(score).sort(function (a, b) { return score[b] - score[a]; }).map(function (s) { return { name: s, info: SPEC_INFO[s] || '', why: why[s].filter(function (x, i, a) { return a.indexOf(x) === i; }) }; });
+  if (anyAbn && !specs.some(function (s) { return s.name === GP; })) specs.unshift({ name: GP, info: SPEC_INFO[GP], why: ['Review of your abnormal results'] });
+  if (urgency >= 3) {
+    let er = specs.filter(function (s) { return s.name === ER; })[0];
+    if (!er) er = { name: ER, info: SPEC_INFO[ER], why: ['One or more urgent findings'] };
+    const rest = specs.filter(function (s) { return s.name !== ER && s.name !== GP; });
+    const gp = specs.filter(function (s) { return s.name === GP; });
+    specs.length = 0; [er].concat(rest, gp).forEach(function (s) { specs.push(s); });
+  }
+
+  // table
+  const rows = [], normalPanels = [], abnormalPanels = [];
+  PANELS.forEach(function (p) {
+    const ids = p.ids.filter(function (id) { return res[id]; });
+    if (!ids.length) return;
+    let allNormal = true;
+    ids.forEach(function (id) { const r = res[id]; if (r.flag !== 'N') allNormal = false; rows.push({ panel: p.name, r: r, ref: refText(r.t, prof, state.vals[id]), meaning: meaning(r), value: r.type === 'q' ? r.sel : r.rawStr + (r.unit ? ' ' + r.unit : '') }); });
+    (allNormal ? normalPanels : abnormalPanels).push(p.name);
+  });
+  const calc = ['egfr', 'cca', 'ag', 'neuta', 'lyma', 'eosa', 'tsat'].filter(function (id) { return res[id] && res[id].derived; }).map(function (id) { const r = res[id]; return { r: r, ref: refText(r.t, prof), value: fmt(r.val, r.t.dp) + (r.unit ? ' ' + r.unit : ''), meaning: meaning(r) }; });
+  const count = Object.keys(res).filter(function (id) { return !res[id].derived; }).length;
+  const abnormalCount = Object.keys(res).filter(function (id) { return !res[id].derived && res[id].flag !== 'N'; }).length;
+
+  const other = Object.keys(res).filter(function (id) { return res[id].flag !== 'N' && !explained[id]; }).map(function (id) { const r = res[id]; return { r: r, value: r.type === 'q' ? r.sel : (r.derived ? fmt(r.val, r.t.dp) : r.rawStr) + (r.unit ? ' ' + r.unit : ''), meaning: meaning(r) }; });
+  const warnings = [];
+  if (prof.age && prof.age < 18) warnings.push('Reference ranges in this app are for adults (18+). Results for children and teenagers use different ranges, so flags here may be wrong. A paediatrician should interpret them.');
+  if (prof.preg) warnings.push('You indicated pregnancy. Pregnancy changes many normal ranges (this app adjusts only haemoglobin, PCV, white cells and creatinine). Review all results with your antenatal doctor.');
+  if (prof.age >= 65) warnings.push('Several normal ranges shift with older age (for example kidney function, PSA and some blood counts). Your doctor will interpret them in that context.');
+
+  return { prof, res, fired, critical, urgency, specs, rows, calc, other, normalPanels, abnormalPanels, count, abnormalCount, warnings };
+}
+
+if (typeof module !== 'undefined') module.exports = { PANELS, TESTS, RULES, interpret, refText, fmt, num, URGENCY, CONF, SPEC_INFO, normProfile, rangeFor, toDef, unitLabel };
+
+</script>
+<script>
+(function () {
+'use strict';
+var KEY = 'lablens_state_v1', SAVED = 'lablens_saved_v1', ACK = 'lablens_ack_v1';
+var state = { profile: { age: '', sex: '', preg: '' }, vals: {} };
+var lastResult = null;
+var deferredInstall = null;
+var LOGO_SRC = document.querySelector('#ack img').getAttribute('src');
+
+function $(s, r) { return (r || document).querySelector(s); }
+function $$(s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); }
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+var store = {
+  get: function (k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
+  set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } },
+  del: function (k) { try { localStorage.removeItem(k); } catch (e) {} }
+};
+var toastT;
+function toast(msg) { var t = $('#toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove('on'); }, 2200); }
+
+/* ---------- build input form ---------- */
+function rowHTML(t) {
+  var name = esc(t.name);
+  var hint = t.hint ? '<small class="hint">' + esc(t.hint) + '</small>' : '';
+  var key = esc((t.name + ' ' + t.id + ' ' + (t.panel || '')).toLowerCase());
+  if (t.type === 'q') {
+    return '<div class="row" data-id="' + t.id + '" data-key="' + key + '"><div class="lab"><label for="i_' + t.id + '">' + name + '</label>' + hint + '</div>' +
+      '<div class="ctl"><select class="q" id="i_' + t.id + '"><option value="">— select —</option>' + t.opts.map(function (o) { return '<option>' + esc(o) + '</option>'; }).join('') + '</select><span class="chip"></span></div></div>';
+  }
+  var units = [t.unit].concat((t.alts || []).map(function (a) { return a.u; }));
+  var unitEl = units.length > 1
+    ? '<select class="unit" aria-label="Unit for ' + name + '">' + units.map(function (u, i) { return '<option value="' + i + '">' + esc(u) + '</option>'; }).join('') + '</select>'
+    : '<span class="unit-s">' + esc(t.unit || '') + '</span>';
+  return '<div class="row" data-id="' + t.id + '" data-key="' + key + '"><div class="lab"><label for="i_' + t.id + '">' + name + '</label><small class="ref"></small>' + hint + '</div>' +
+    '<div class="ctl"><input id="i_' + t.id + '" class="val" inputmode="decimal" autocomplete="off" placeholder="value">' + unitEl + '<span class="chip"></span>' +
+    '<button type="button" class="rng" title="Use my lab’s normal range" aria-label="Use my lab’s own normal range for ' + name + '">⋯</button></div>' +
+    '<div class="custom" hidden><span>My lab’s range</span><input class="rl" inputmode="decimal" placeholder="low" aria-label="Lower limit"><span>to</span><input class="rh" inputmode="decimal" placeholder="high" aria-label="Upper limit"></div></div>';
+}
+function buildPanels() {
+  $('#panels').innerHTML = PANELS.map(function (p) {
+    return '<details class="panel" data-panel="' + esc(p.name) + '"><summary><span class="pi" aria-hidden="true">' + p.icon + '</span><span class="pn">' + esc(p.name) + '</span><span class="badge" hidden></span></summary>' +
+      (p.note ? '<p class="pnote">' + esc(p.note) + '</p>' : '') + '<div class="rows">' + p.ids.map(function (id) { return rowHTML(TESTS[id]); }).join('') + '</div></details>';
+  }).join('');
+}
+function applyStateToForm() {
+  $('#age').value = state.profile.age || '';
+  $$('input[name=sex]').forEach(function (r) { r.checked = r.value === state.profile.sex; });
+  $$('input[name=preg]').forEach(function (r) { r.checked = r.value === (state.profile.preg || 'No') && state.profile.sex === 'F'; });
+  $$('.row').forEach(function (row) {
+    var id = row.getAttribute('data-id'), t = TESTS[id], e = state.vals[id] || {};
+    if (t.type === 'q') { $('select.q', row).value = e.s || ''; }
+    else {
+      $('.val', row).value = e.v || '';
+      var u = $('select.unit', row); if (u) u.value = String(e.u || 0);
+      $('.rl', row).value = e.rl || ''; $('.rh', row).value = e.rh || '';
+      var has = (e.rl || e.rh); $('.custom', row).hidden = !has; $('.rng', row).classList.toggle('on', !!has);
+    }
+  });
+  syncPreg(); refreshAll();
+}
+function syncPreg() { $('#pregBox').hidden = state.profile.sex !== 'F'; }
+function persist() { store.set(KEY, state); }
+
+/* ---------- live row refresh ---------- */
+function refreshRow(id) {
+  var row = $('.row[data-id="' + id + '"]'); if (!row) return;
+  var t = TESTS[id], e = state.vals[id] || {}, prof = normProfile(state.profile), chip = $('.chip', row);
+  var ref = $('.ref', row); if (ref) ref.textContent = refText(t, prof, e);
+  var r = t.type === 'n' ? evalNum(t, e, prof) : evalQ(t, e);
+  if (!r || !r.flag) { chip.textContent = ''; chip.className = 'chip'; return; }
+  var label = r.crit ? 'Critical' : r.flag === 'N' ? 'Normal' : r.flag === 'L' ? 'Low' : r.flag === 'H' ? 'High' : 'Abnormal';
+  chip.textContent = label; chip.className = 'chip ' + (r.crit ? 'c-X' : 'c-' + r.flag);
+}
+function filled(id) {
+  var t = TESTS[id], e = state.vals[id]; if (!e) return false;
+  return t.type === 'q' ? !!e.s : num(e.v) != null;
+}
+function refreshAll() {
+  Object.keys(TESTS).forEach(function (id) { if (!TESTS[id].calc) refreshRow(id); });
+  var total = 0;
+  $$('details.panel').forEach(function (d) {
+    var p = PANELS.filter(function (x) { return x.name === d.getAttribute('data-panel'); })[0];
+    var n = p.ids.filter(filled).length; total += n;
+    var b = $('.badge', d); b.hidden = !n; b.textContent = n;
+  });
+  $('#btnGo').textContent = total ? 'Interpret ' + total + ' result' + (total > 1 ? 's' : '') : 'Interpret results';
+  $('#btnGo').disabled = !total;
+  return total;
+}
+
+/* ---------- events: input form ---------- */
+function onField(ev) {
+  var t = ev.target, row = t.closest && t.closest('.row');
+  if (row) {
+    var id = row.getAttribute('data-id'), e = state.vals[id] = state.vals[id] || {};
+    if (t.classList.contains('val')) { e.v = t.value; }
+    else if (t.classList.contains('unit')) { e.u = parseInt(t.value, 10) || 0; }
+    else if (t.classList.contains('rl')) { e.rl = t.value; }
+    else if (t.classList.contains('rh')) { e.rh = t.value; }
+    else if (t.classList.contains('q')) { e.s = t.value; }
+    refreshRow(id); refreshAll(); persist();
+    return;
+  }
+  if (t.id === 'age') { state.profile.age = t.value; }
+  else if (t.name === 'sex') { state.profile.sex = t.value; if (t.value !== 'F') state.profile.preg = ''; else if (!state.profile.preg) state.profile.preg = 'No'; syncPreg(); applyPregRadios(); }
+  else if (t.name === 'preg') { state.profile.preg = t.value; }
+  else return;
+  $('#profErr').hidden = true; refreshAll(); persist();
+}
+function applyPregRadios() { $$('input[name=preg]').forEach(function (r) { r.checked = r.value === (state.profile.preg || 'No'); }); }
+
+function search() {
+  var q = $('#search').value.trim().toLowerCase(), any = false;
+  $$('details.panel').forEach(function (d) {
+    var hit = 0;
+    $$('.row', d).forEach(function (r) { var m = !q || r.getAttribute('data-key').indexOf(q) >= 0; r.classList.toggle('hide', !m); if (m) hit++; });
+    d.hidden = !hit; if (hit) any = true;
+    if (q && hit) d.open = true;
+  });
+  $('#noMatch').hidden = any;
+}
+
+/* ---------- views ---------- */
+function show(view) {
+  ['input', 'result', 'saved', 'about'].forEach(function (v) { $('#view-' + v).hidden = v !== view; });
+  $('#bar').hidden = view !== 'input';
+  window.scrollTo(0, 0);
+}
+
+/* ---------- results rendering ---------- */
+function flagChip(r) {
+  var label = r.crit ? 'Critical' : r.flag === 'N' ? 'Normal' : r.flag === 'L' ? 'Low' : r.flag === 'H' ? 'High' : 'Abnormal';
+  if (r.sev >= 3 && !r.crit && (r.flag === 'L' || r.flag === 'H')) label = r.flag === 'L' ? 'Very low' : 'Very high';
+  return '<span class="chip ' + (r.crit ? 'c-X' : 'c-' + r.flag) + '">' + label + '</span>';
+}
+function renderResult(R) {
+  var U = URGENCY[R.urgency], h = [];
+  var today = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+  h.push('<button class="back noprint" data-act="edit">← Back to results entry</button>');
+  h.push('<div class="printhead"><img src="' + LOGO_SRC + '" alt="BHIS" style="height:70px"><h2>LabLens report by BHIS</h2><div>' + esc(today) + ' · Age ' + esc(R.prof.age) + ' · ' + (R.prof.sex === 'F' ? 'Female' : 'Male') + (R.prof.preg ? ' (pregnant)' : '') + '</div></div>');
+  h.push('<div class="urg ' + U.cls + '" role="alert"><p class="uh">' + esc(U.label) + '</p><p>' + esc(U.text) + '</p></div>');
+  if (R.critical.length) {
+    h.push('<div class="alert"><b>⚠ Possibly dangerous value' + (R.critical.length > 1 ? 's' : '') + '</b><ul>' + R.critical.map(function (r) {
+      return '<li><b>' + esc(shortName(r.t)) + ':</b> ' + esc(r.type === 'q' ? r.sel : r.rawStr + ' ' + r.unit) + '</li>'; }).join('') + '</ul><p style="margin:8px 0 0">Values this far out of range can be dangerous, particularly if you feel unwell. Contact a doctor or go to a hospital today.</p></div>');
+  }
+  R.warnings.forEach(function (w) { h.push('<div class="warn">' + esc(w) + '</div>'); });
+  h.push('<div class="stat"><div><b>' + R.count + '</b><span>results entered</span></div><div><b>' + R.abnormalCount + '</b><span>outside the usual range</span></div><div><b>' + R.fired.length + '</b><span>patterns found</span></div></div>');
+
+  /* conditions */
+  h.push('<h2>What these results may suggest</h2>');
+  if (!R.fired.length && !R.other.length) {
+    h.push('<div class="card"><p style="margin:0">' + (R.abnormalCount ? 'The values outside the usual range do not form a clear pattern here. See the detail below and discuss them with your doctor.' : 'Every result you entered is within the usual range. That is reassuring, but normal tests do not rule out illness. If you have symptoms, see a doctor.') + '</p></div>');
+  }
+  R.fired.forEach(function (f) {
+    h.push('<div class="card cond c' + f.urg + '"><h3>' + esc(f.name) + '</h3><div class="meta"><span class="tag ' + (f.conf === 3 ? 's3' : '') + '">' + esc(CONF[f.conf]) + '</span><span class="tag">' + (['Routine info', 'Routine review', 'See doctor soon', 'Urgent'][f.urg]) + '</span></div>' +
+      '<h4>Why it was flagged</h4><ul>' + f.ev.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
+      '<h4>What it can mean</h4><p>' + esc(f.what) + '</p>' + (f.note ? '<div class="note">' + esc(f.note) + '</div>' : '') +
+      '<h4>Usual next steps</h4><p>' + esc(f.next) + '</p>' +
+      '<div class="specs">' + f.spec.map(function (s) { return '<span class="spec">' + esc(s) + '</span>'; }).join('') + '</div></div>');
+  });
+  if (R.other.length) {
+    h.push('<div class="card"><h3>Other results outside the usual range</h3><p class="lead" style="margin:0 0 6px">These did not match a larger pattern. Mention them to your doctor.</p>' +
+      R.other.map(function (o) { return '<div class="res"><div class="n">' + esc(shortName(o.r.t)) + '</div><div class="v">' + esc(o.value) + '</div><div class="m">' + flagChip(o.r) + ' ' + esc(o.meaning) + '</div></div>'; }).join('') + '</div>');
+  }
+
+  /* specialists */
+  if (R.specs.length) {
+    h.push('<h2>Which doctor to see</h2><div class="drs">' + R.specs.slice(0, 6).map(function (s, i) {
+      return '<div class="card"><h3>' + (i === 0 ? '★ ' : '') + esc(s.name) + '</h3><p>' + esc(s.info) + '</p><small>For: ' + esc(s.why.slice(0, 3).join('; ')) + '</small></div>'; }).join('') +
+      '</div><p class="lead">In most cases start with a general doctor, who can examine you, repeat tests and refer you to the right specialist.</p>');
+  }
+
+  /* details */
+  h.push('<h2>Your results in detail</h2><div class="card">');
+  var lastP = '';
+  R.rows.forEach(function (x) {
+    if (x.panel !== lastP) { h.push('<div class="res-panel">' + esc(x.panel) + '</div>'); lastP = x.panel; }
+    h.push('<div class="res"><div class="n">' + esc(shortName(x.r.t) === x.r.t.name ? x.r.t.name : x.r.t.name) + '</div><div class="v">' + esc(x.value) + '</div><div class="r">' + esc(x.ref) + '</div><div class="f">' + flagChip(x.r) + '</div>' + (x.meaning && x.r.flag !== 'N' ? '<div class="m">' + esc(x.meaning) + '</div>' : '') + '</div>');
+  });
+  h.push('</div>');
+  if (R.calc.length) {
+    h.push('<h2>Calculated for you</h2><div class="card">' + R.calc.map(function (x) {
+      return '<div class="res"><div class="n">' + esc(x.r.t.name) + '</div><div class="v">' + esc(x.value) + '</div><div class="r">' + esc(x.ref) + '</div><div class="f">' + flagChip(x.r) + '</div>' + (x.meaning && x.r.flag !== 'N' ? '<div class="m">' + esc(x.meaning) + '</div>' : '') + '</div>'; }).join('') + '</div>');
+  }
+  if (R.normalPanels.length) {
+    h.push('<h2>Within the usual range</h2><div class="normals">' + R.normalPanels.map(function (p) { return '<span class="tag">✓ ' + esc(p) + '</span>'; }).join('') + '</div>');
+  }
+
+  h.push('<div class="emerg" style="margin-top:20px"><b>Get emergency care now</b> for chest pain, trouble breathing, severe bleeding, fainting, confusion, seizures, sudden weakness or numbness, severe headache with vision changes, or a high fever with a stiff neck or rash (Nigeria: call 112). Do not wait for an appointment.</div>');
+  h.push('<div class="disc"><b>Important:</b> LabLens gives general educational information only. It cannot diagnose any condition, does not know your symptoms, examination, medicines, history or the lab’s own methods, and can be wrong. Normal ranges differ between labs; use the range printed on your report where it differs. Always discuss your results with a qualified doctor before acting on them.</div>');
+
+  h.push('<div class="card noprint"><h3>Save this report on this device</h3><div class="savebox"><input id="saveName" placeholder="Name, e.g. Mum – Nov 2026" aria-label="Report name" maxlength="60"><button class="btn p" style="flex:0 0 auto" data-act="save">Save</button></div></div>');
+  h.push('<div class="actions noprint"><button class="btn s" data-act="print">Print / save as PDF</button><button class="btn s" data-act="copy">Copy summary</button><button class="btn s" data-act="edit">Edit results</button></div>');
+  $('#view-result').innerHTML = h.join('');
+}
+
+function summaryText(R) {
+  var L = [], U = URGENCY[R.urgency];
+  L.push('LabLens summary (' + new Date().toLocaleDateString() + ')');
+  L.push('Age ' + R.prof.age + ', ' + (R.prof.sex === 'F' ? 'female' : 'male') + (R.prof.preg ? ', pregnant' : ''));
+  L.push('Urgency: ' + U.label);
+  if (R.critical.length) L.push('Possibly dangerous: ' + R.critical.map(function (r) { return shortName(r.t) + ' ' + (r.type === 'q' ? r.sel : r.rawStr + ' ' + r.unit); }).join('; '));
+  L.push('');
+  if (R.fired.length) { L.push('Possible patterns (not diagnoses):'); R.fired.forEach(function (f) { L.push('- ' + f.name + ' [' + CONF[f.conf] + ']: ' + f.ev.join('; ')); }); L.push(''); }
+  if (R.specs.length) L.push('Suggested doctors: ' + R.specs.slice(0, 5).map(function (s) { return s.name; }).join(', '));
+  L.push(''); L.push('Results outside range:');
+  R.rows.forEach(function (x) { if (x.r.flag !== 'N') L.push('- ' + x.r.t.name + ': ' + x.value + ' (' + x.ref + ')'); });
+  L.push(''); L.push('Educational guide only. Not a diagnosis. Please review with a doctor.');
+  return L.join('\n');
+}
+function copyText(txt) {
+  function fallback() { var ta = document.createElement('textarea'); ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); toast('Summary copied'); } catch (e) { toast('Could not copy'); } document.body.removeChild(ta); }
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(function () { toast('Summary copied'); }, fallback); else fallback();
+}
+
+/* ---------- run ---------- */
+function run() {
+  var p = normProfile(state.profile), err = $('#profErr');
+  if (!(p.age > 0 && p.age < 121)) { err.textContent = 'Please enter your age (1–120) to continue.'; err.hidden = false; $('#age').focus(); $('#age').scrollIntoView({ block: 'center' }); return; }
+  if (!p.sex) { err.textContent = 'Please choose your sex: normal ranges differ for men and women.'; err.hidden = false; $('#age').scrollIntoView({ block: 'center' }); return; }
+  err.hidden = true;
+  lastResult = interpret(state);
+  renderResult(lastResult);
+  show('result');
+}
+
+/* ---------- saved ---------- */
+function renderSaved() {
+  var list = store.get(SAVED) || [], h = ['<button class="back" data-act="edit">← Back</button><h2 style="margin-top:6px">Saved reports</h2><p class="lead">Stored only on this device (in this browser).</p>'];
+  if (!list.length) h.push('<div class="card">Nothing saved yet. After interpreting results, use “Save this report”.</div>');
+  list.forEach(function (it) {
+    var n = Object.keys(it.state.vals || {}).length;
+    h.push('<div class="card saved-item"><div class="t"><b>' + esc(it.name) + '</b><small>' + esc(new Date(it.date).toLocaleString()) + '</small></div><button class="btn s" data-act="load" data-id="' + esc(it.id) + '">Open</button><button class="btn d" data-act="del" data-id="' + esc(it.id) + '">Delete</button></div>');
+  });
+  $('#view-saved').innerHTML = h.join('');
+}
+function renderAbout() {
+  $('#view-about').innerHTML = '<button class="back" data-act="edit">← Back</button><img class="aboutlogo" src="' + LOGO_SRC + '" alt="BHIS: Body Health Integrated Systems"><h2 style="margin-top:6px">About LabLens</h2><div class="card"><h3>Created by BHIS</h3><p>LabLens is created and owned by <b>BHIS \u2013 Body Health Integrated Systems</b>. \u00A9 2026 BHIS. All rights reserved.</p></div>' +
+    '<div class="card"><h3>What it does</h3><p>You type results from a lab report. LabLens flags values outside typical adult ranges, explains them in plain language, looks for <b>patterns</b> across tests (for example low haemoglobin with small red cells and low ferritin), suggests what <i>might</i> explain them, how urgent it is, and which type of specialist to ask for.</p></div>' +
+    '<div class="card"><h3>What it cannot do</h3><ul><li>It cannot diagnose. Only a doctor who examines you can.</li><li>It does not know your symptoms, medicines, history, or sample quality.</li><li>Ranges are typical adult values; labs and populations differ. Use “⋯” to enter your lab’s own range.</li><li>Children, pregnancy and older age change normal values. Only some pregnancy adjustments are built in.</li><li>Photos and PDFs are not read: entering numbers is safer than automatic scanning.</li></ul></div>' +
+    '<div class="card"><h3>Privacy</h3><p>Everything runs on your device. No internet connection, accounts, ads or tracking. Entries are saved in this browser’s local storage only. “Clear” erases the current entries.</p></div>' +
+    '<div class="card"><h3>Install on your phone</h3><p><b>Android (Chrome):</b> open the app link once while online, then menu ⋮ → “Install app” or “Add to Home screen”.<br><b>iPhone (Safari):</b> Share → “Add to Home Screen”.<br><b>Computer (Chrome/Edge):</b> click the install icon in the address bar. After the first visit it opens offline.</p></div>' +
+    '<div class="card"><h3>Reference sources</h3><p>Typical adult reference intervals from standard clinical laboratory references; CKD-EPI 2021 equation for eGFR (no race term); ADA criteria for glucose/HbA1c; WHO 2021 semen reference limits; WHO anaemia and pregnancy haemoglobin cut-offs. Version 1.1.</p></div>';
+}
+
+/* ---------- click router ---------- */
+function onClick(ev) {
+  var a = ev.target.closest && ev.target.closest('[data-act]');
+  if (a) {
+    var act = a.getAttribute('data-act');
+    if (act === 'edit') { show('input'); return; }
+    if (act === 'print') { window.print(); return; }
+    if (act === 'copy') { if (lastResult) copyText(summaryText(lastResult)); return; }
+    if (act === 'save') {
+      var name = ($('#saveName').value || '').trim() || ('Report ' + new Date().toLocaleDateString());
+      var list = store.get(SAVED) || [];
+      list.unshift({ id: String(Date.now()), name: name, date: new Date().toISOString(), state: JSON.parse(JSON.stringify(state)) });
+      toast(store.set(SAVED, list.slice(0, 50)) ? 'Saved on this device' : 'Could not save (storage blocked)');
+      return;
+    }
+    if (act === 'load') {
+      var it = (store.get(SAVED) || []).filter(function (x) { return x.id === a.getAttribute('data-id'); })[0];
+      if (it) { state = it.state; persist(); applyStateToForm(); show('input'); toast('Report loaded'); }
+      return;
+    }
+    if (act === 'del') {
+      if (!confirm('Delete this saved report?')) return;
+      store.set(SAVED, (store.get(SAVED) || []).filter(function (x) { return x.id !== a.getAttribute('data-id'); })); renderSaved(); return;
+    }
+  }
+  var rng = ev.target.closest && ev.target.closest('.rng');
+  if (rng) { var row = rng.closest('.row'), c = $('.custom', row); c.hidden = !c.hidden; rng.classList.toggle('on', !c.hidden); if (!c.hidden) $('.rl', row).focus(); }
+}
+
+/* ---------- init ---------- */
+function setHH() { var h = $('.top'); if (h) document.documentElement.style.setProperty('--hh', h.offsetHeight + 'px'); }
+function init() {
+  setHH(); window.addEventListener('resize', setHH);
+  buildPanels();
+  var saved = store.get(KEY); if (saved && saved.profile && saved.vals) state = saved;
+  applyStateToForm();
+  document.addEventListener('input', onField);
+  document.addEventListener('change', onField);
+  document.addEventListener('click', onClick);
+  $('#search').addEventListener('input', search);
+  $('#btnGo').addEventListener('click', run);
+  $('#btnClear').addEventListener('click', function () {
+    if (!confirm('Clear all entered results and your age/sex?')) return;
+    state = { profile: { age: '', sex: '', preg: '' }, vals: {} }; store.del(KEY); applyStateToForm(); toast('Cleared');
+  });
+  $('#btnSaved').addEventListener('click', function () { renderSaved(); show('saved'); });
+  $('#btnAbout').addEventListener('click', function () { renderAbout(); show('about'); });
+  if (!store.get(ACK)) { $('#ack').hidden = false; }
+  $('#ackBtn').addEventListener('click', function () { store.set(ACK, 1); $('#ack').hidden = true; });
+  show('input');
+
+  window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferredInstall = e; $('#btnInstall').hidden = false; });
+  $('#btnInstall').addEventListener('click', function () { if (deferredInstall) { deferredInstall.prompt(); deferredInstall = null; $('#btnInstall').hidden = true; } });
+  window.addEventListener('appinstalled', function () { $('#btnInstall').hidden = true; });
+
+  if (location.protocol === 'file:') { $('#offlinePill').hidden = false; setHH(); }
+  else if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').then(function () { return navigator.serviceWorker.ready; }).then(function () { $('#offlinePill').hidden = false; setHH(); }).catch(function () {});
+  }
+}
+init();
+})();
+
+</script>
+</body>
+</html>

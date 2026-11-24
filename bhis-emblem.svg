@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="300 100 400 440" width="400" height="440" role="img" aria-label="BHIS emblem">
+  <defs>
+    <linearGradient id="gte" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b6fff2"/><stop offset=".55" stop-color="#4fe0cb"/><stop offset="1" stop-color="#19b3a3"/></linearGradient>
+    <linearGradient id="gle" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#14948a"/><stop offset="1" stop-color="#0a4f4b"/></linearGradient>
+    <linearGradient id="gre" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f766e"/><stop offset="1" stop-color="#062f2d"/></linearGradient>
+    <linearGradient id="gwe" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#cdeeea"/></linearGradient>
+    <linearGradient id="glosse" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <filter id="blure" x="-50%" y="-300%" width="200%" height="700%"><feGaussianBlur stdDeviation="14"/></filter>
+    <filter id="softe" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#04302d" flood-opacity=".45"/></filter>
+  </defs>
+  <ellipse cx="500" cy="484" rx="158" ry="26" fill="#02312e" opacity=".35" filter="url(#blure)"/>
+  <g stroke-linejoin="round" stroke-width="3">
+    <polygon points="370.1,225.0 500.0,300.0 500.0,450.0 370.1,375.0" fill="url(#gle)" stroke="url(#gle)"/>
+    <polygon points="500.0,300.0 629.9,225.0 629.9,375.0 500.0,450.0" fill="url(#gre)" stroke="url(#gre)"/>
+    <polygon points="500.0,150.0 629.9,225.0 500.0,300.0 370.1,225.0" fill="url(#gte)" stroke="url(#gte)"/>
+  </g>
+  <polygon points="500.0,150.0 629.9,225.0 500.0,300.0 370.1,225.0" fill="url(#glosse)" opacity=".6"/>
+  <!-- top: medical cross -->
+  <g transform="matrix(129.904 -75.000 129.904 75.000 370.1 225.0)" filter="url(#softe)"><path fill="url(#gwe)" d="M.38 .16h.24v.22h.22v.24h-.22v.22h-.24v-.22h-.22v-.24h.22z"/></g>
+  <!-- left: pulse line -->
+  <g transform="matrix(129.904 75.000 0.000 150.000 370.1 225.0)"><polyline fill="none" stroke="#fff" stroke-width=".055" stroke-linecap="round" stroke-linejoin="round" points=".1,.5 .3,.5 .4,.3 .53,.74 .64,.42 .72,.5 .9,.5" filter="url(#softe)"/></g>
+  <!-- right: heart -->
+  <g transform="matrix(129.904 -75.000 0.000 150.000 500.0 300.0)"><path fill="url(#gwe)" opacity=".95" filter="url(#softe)" d="M.5 .77C.14 .55 .17 .24 .34 .24C.44 .24 .5 .31 .5 .37C.5 .31 .56 .24 .66 .24C.83 .24 .86 .55 .5 .77Z"/></g>
+  <!-- bevel edges -->
+  <g fill="none" stroke-linecap="round">
+    <polyline points="370.1,225.0 500.0,150.0 629.9,225.0" stroke="#fff" stroke-width="4" opacity=".85"/>
+    <polyline points="370.1,225.0 500.0,300.0 629.9,225.0" stroke="#fff" stroke-width="2" opacity=".35"/>
+    <line x1="500" y1="300" x2="500" y2="450" stroke="#fff" stroke-width="2" opacity=".25"/>
+    <polyline points="370.1,225.0 370.1,375.0 500.0,450.0 629.9,375.0 629.9,225.0" stroke="#02201e" stroke-width="3" opacity=".25"/>
+  </g>
+</svg>
