@@ -129,6 +129,12 @@ details.panel[open]>summary::after{transform:rotate(45deg)}
 .foot{display:flex;align-items:center;gap:10px;color:var(--mute);font-size:13px;margin:28px 0 8px;padding-top:14px;border-top:1px solid var(--line)}
 .aboutlogo{display:block;width:min(320px,80%);margin:4px auto 10px;background:#fff;border-radius:18px;padding:8px}
 
+a.btn{display:flex;align-items:center;justify-content:center;text-decoration:none;text-align:center}
+.licb{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--accbg);border-color:var(--acc)}
+.licb span{font-weight:600;color:var(--acc2)}
+.licb .btn{padding:8px 12px;min-height:40px;flex:0 0 auto}
+textarea{resize:vertical}
+
 </style>
 </head>
 <body>
@@ -140,6 +146,7 @@ details.panel[open]>summary::after{transform:rotate(45deg)}
 <main class="wrap">
   <!-- INPUT -->
   <section id="view-input">
+    <div class="card licb" id="licBanner" hidden><span id="licBannerText"></span><button class="btn s" id="licBannerBtn" type="button">Enter code</button></div>
     <div class="card">
       <h3>1. About you</h3>
       <p class="lead">Normal ranges depend on age and sex. Nothing you enter leaves this device.</p>
@@ -185,6 +192,17 @@ details.panel[open]>summary::after{transform:rotate(45deg)}
   <div class="emerg"><b>Emergency?</b> Chest pain, difficulty breathing, severe bleeding, fainting, confusion, seizures, or sudden weakness: go to an emergency department now (Nigeria: call 112).</div>
   <p style="color:var(--mute);font-size:14px">Works fully offline. Your entries are stored only on this device.</p>
   <button class="btn p" id="ackBtn" style="width:100%">I understand</button>
+</div></div>
+<div class="modal" id="lic" hidden><div class="box" role="dialog" aria-modal="true" aria-labelledby="licT">
+  <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAwIDEwMDAiIHdpZHRoPSIxMDAwIiBoZWlnaHQ9IjEwMDAiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iQkhJUzogQm9keSBIZWFsdGggSW50ZWdyYXRlZCBTeXN0ZW1zIj4KCiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9Imd0IiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYjZmZmYyIi8+PHN0b3Agb2Zmc2V0PSIuNTUiIHN0b3AtY29sb3I9IiM0ZmUwY2IiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMxOWIzYTMiLz48L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnbCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzE0OTQ4YSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzBhNGY0YiIvPjwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImdyIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMGY3NjZlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMDYyZjJkIi8+PC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ3ciIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZmZmZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNjZGVlZWEiLz48L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnbG9zcyIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZiIgc3RvcC1vcGFjaXR5PSIuNTUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmZmYiIHN0b3Atb3BhY2l0eT0iMCIvPjwvbGluZWFyR3JhZGllbnQ+CiAgICA8ZmlsdGVyIGlkPSJibHVyIiB4PSItNTAlIiB5PSItMzAwJSIgd2lkdGg9IjIwMCUiIGhlaWdodD0iNzAwJSI+PGZlR2F1c3NpYW5CbHVyIHN0ZERldmlhdGlvbj0iMTQiLz48L2ZpbHRlcj4KICAgIDxmaWx0ZXIgaWQ9InNvZnQiIHg9Ii0yMCUiIHk9Ii0yMCUiIHdpZHRoPSIxNDAlIiBoZWlnaHQ9IjE0MCUiPjxmZURyb3BTaGFkb3cgZHg9IjIiIGR5PSI0IiBzdGREZXZpYXRpb249IjMiIGZsb29kLWNvbG9yPSIjMDQzMDJkIiBmbG9vZC1vcGFjaXR5PSIuNDUiLz48L2ZpbHRlcj4KICA8L2RlZnM+CiAgPGVsbGlwc2UgY3g9IjUwMCIgY3k9IjQ4NCIgcng9IjE1OCIgcnk9IjI2IiBmaWxsPSIjMDIzMTJlIiBvcGFjaXR5PSIuMzUiIGZpbHRlcj0idXJsKCNibHVyKSIvPgogIDxnIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMyI+CiAgICA8cG9seWdvbiBwb2ludHM9IjM3MC4xLDIyNS4wIDUwMC4wLDMwMC4wIDUwMC4wLDQ1MC4wIDM3MC4xLDM3NS4wIiBmaWxsPSJ1cmwoI2dsKSIgc3Ryb2tlPSJ1cmwoI2dsKSIvPgogICAgPHBvbHlnb24gcG9pbnRzPSI1MDAuMCwzMDAuMCA2MjkuOSwyMjUuMCA2MjkuOSwzNzUuMCA1MDAuMCw0NTAuMCIgZmlsbD0idXJsKCNncikiIHN0cm9rZT0idXJsKCNncikiLz4KICAgIDxwb2x5Z29uIHBvaW50cz0iNTAwLjAsMTUwLjAgNjI5LjksMjI1LjAgNTAwLjAsMzAwLjAgMzcwLjEsMjI1LjAiIGZpbGw9InVybCgjZ3QpIiBzdHJva2U9InVybCgjZ3QpIi8+CiAgPC9nPgogIDxwb2x5Z29uIHBvaW50cz0iNTAwLjAsMTUwLjAgNjI5LjksMjI1LjAgNTAwLjAsMzAwLjAgMzcwLjEsMjI1LjAiIGZpbGw9InVybCgjZ2xvc3MpIiBvcGFjaXR5PSIuNiIvPgogIDwhLS0gdG9wOiBtZWRpY2FsIGNyb3NzIC0tPgogIDxnIHRyYW5zZm9ybT0ibWF0cml4KDEyOS45MDQgLTc1LjAwMCAxMjkuOTA0IDc1LjAwMCAzNzAuMSAyMjUuMCkiIGZpbHRlcj0idXJsKCNzb2Z0KSI+PHBhdGggZmlsbD0idXJsKCNndykiIGQ9Ik0uMzggLjE2aC4yNHYuMjJoLjIydi4yNGgtLjIydi4yMmgtLjI0di0uMjJoLS4yMnYtLjI0aC4yMnoiLz48L2c+CiAgPCEtLSBsZWZ0OiBwdWxzZSBsaW5lIC0tPgogIDxnIHRyYW5zZm9ybT0ibWF0cml4KDEyOS45MDQgNzUuMDAwIDAuMDAwIDE1MC4wMDAgMzcwLjEgMjI1LjApIj48cG9seWxpbmUgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9Ii4wNTUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgcG9pbnRzPSIuMSwuNSAuMywuNSAuNCwuMyAuNTMsLjc0IC42NCwuNDIgLjcyLC41IC45LC41IiBmaWx0ZXI9InVybCgjc29mdCkiLz48L2c+CiAgPCEtLSByaWdodDogaGVhcnQgLS0+CiAgPGcgdHJhbnNmb3JtPSJtYXRyaXgoMTI5LjkwNCAtNzUuMDAwIDAuMDAwIDE1MC4wMDAgNTAwLjAgMzAwLjApIj48cGF0aCBmaWxsPSJ1cmwoI2d3KSIgb3BhY2l0eT0iLjk1IiBmaWx0ZXI9InVybCgjc29mdCkiIGQ9Ik0uNSAuNzdDLjE0IC41NSAuMTcgLjI0IC4zNCAuMjRDLjQ0IC4yNCAuNSAuMzEgLjUgLjM3Qy41IC4zMSAuNTYgLjI0IC42NiAuMjRDLjgzIC4yNCAuODYgLjU1IC41IC43N1oiLz48L2c+CiAgPCEtLSBiZXZlbCBlZGdlcyAtLT4KICA8ZyBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiPgogICAgPHBvbHlsaW5lIHBvaW50cz0iMzcwLjEsMjI1LjAgNTAwLjAsMTUwLjAgNjI5LjksMjI1LjAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI0IiBvcGFjaXR5PSIuODUiLz4KICAgIDxwb2x5bGluZSBwb2ludHM9IjM3MC4xLDIyNS4wIDUwMC4wLDMwMC4wIDYyOS45LDIyNS4wIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iLjM1Ii8+CiAgICA8bGluZSB4MT0iNTAwIiB5MT0iMzAwIiB4Mj0iNTAwIiB5Mj0iNDUwIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iLjI1Ii8+CiAgICA8cG9seWxpbmUgcG9pbnRzPSIzNzAuMSwyMjUuMCAzNzAuMSwzNzUuMCA1MDAuMCw0NTAuMCA2MjkuOSwzNzUuMCA2MjkuOSwyMjUuMCIgc3Ryb2tlPSIjMDIyMDFlIiBzdHJva2Utd2lkdGg9IjMiIG9wYWNpdHk9Ii4yNSIvPgogIDwvZz4KCiAgPGRlZnM+CiAgICA8ZyBpZD0idyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTI3LjAsNzYwKSBzY2FsZSgwLjMwMDAsLTAuMzAwMCkiPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuMCwwKSIgZD0iTTYyMiAxOTFRNjIyIDEwMyA1NjAuNSA1MS41UTQ5OSAwIDM4OSAwSDYyVjcwMkgzNzhRNDg1IDcwMiA1NDUuNSA2NTMuMFE2MDYgNjA0IDYwNiA1MjBRNjA2IDQ1OCA1NzMuNSA0MTcuMFE1NDEgMzc2IDQ4NyAzNjBRNTQ4IDM0NyA1ODUuMCAyOTkuNVE2MjIgMjUyIDYyMiAxOTFaTTIzMyA0MThIMzQ1UTM4NyA0MTggNDA5LjUgNDM2LjVRNDMyIDQ1NSA0MzIgNDkxUTQzMiA1MjcgNDA5LjUgNTQ2LjBRMzg3IDU2NSAzNDUgNTY1SDIzM1pNNDQ5IDIxNFE0NDkgMjUxIDQyNC41IDI3Mi4wUTQwMCAyOTMgMzU3IDI5M0gyMzNWMTM4SDM1OVE0MDIgMTM4IDQyNS41IDE1Ny41UTQ0OSAxNzcgNDQ5IDIxNFoiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSg3MDUuNywwKSIgZD0iTTY3MCA3MDJWMEg0OTlWMjg5SDIzM1YwSDYyVjcwMkgyMzNWNDI3SDQ5OVY3MDJaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTQ4My4zLDApIiBkPSJNMjMzIDcwMlYwSDYyVjcwMloiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxODI1LjAsMCkiIGQ9Ik00MiAyMTBIMjI0UTIyOCAxNzEgMjUxLjAgMTUwLjVRMjc0IDEzMCAzMTEgMTMwUTM0OSAxMzAgMzcxLjAgMTQ3LjVRMzkzIDE2NSAzOTMgMTk2UTM5MyAyMjIgMzc1LjUgMjM5LjBRMzU4IDI1NiAzMzIuNSAyNjcuMFEzMDcgMjc4IDI2MCAyOTJRMTkyIDMxMyAxNDkuMCAzMzQuMFExMDYgMzU1IDc1LjAgMzk2LjBRNDQgNDM3IDQ0IDUwM1E0NCA2MDEgMTE1LjAgNjU2LjVRMTg2IDcxMiAzMDAgNzEyUTQxNiA3MTIgNDg3LjAgNjU2LjVRNTU4IDYwMSA1NjMgNTAySDM3OFEzNzYgNTM2IDM1My4wIDU1NS41UTMzMCA1NzUgMjk0IDU3NVEyNjMgNTc1IDI0NC4wIDU1OC41UTIyNSA1NDIgMjI1IDUxMVEyMjUgNDc3IDI1Ny4wIDQ1OC4wUTI4OSA0MzkgMzU3IDQxN1E0MjUgMzk0IDQ2Ny41IDM3My4wUTUxMCAzNTIgNTQxLjAgMzEyLjBRNTcyIDI3MiA1NzIgMjA5UTU3MiAxNDkgNTQxLjUgMTAwLjBRNTExIDUxIDQ1My4wIDIyLjBRMzk1IC03IDMxNiAtN1EyMzkgLTcgMTc4LjAgMTguMFExMTcgNDMgODAuNSA5Mi4wUTQ0IDE0MSA0MiAyMTBaIi8+PC9nPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnZmFjZSIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2Q0ZmZmOCIvPjxzdG9wIG9mZnNldD0iLjQ1IiBzdG9wLWNvbG9yPSIjNGZlMGNiIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMGY5NDg4Ii8+PC9saW5lYXJHcmFkaWVudD4KICAgIDxmaWx0ZXIgaWQ9IndzaCIgeD0iLTIwJSIgeT0iLTIwJSIgd2lkdGg9IjE0MCUiIGhlaWdodD0iMTYwJSI+PGZlR2F1c3NpYW5CbHVyIHN0ZERldmlhdGlvbj0iOSIvPjwvZmlsdGVyPgogICAgPGNsaXBQYXRoIGlkPSJmYWNlY2xpcCI+PHVzZSBocmVmPSIjdyIvPjwvY2xpcFBhdGg+CiAgPC9kZWZzPgogIDx1c2UgaHJlZj0iI3ciIHg9IjMwIiB5PSI0MCIgZmlsbD0iIzAyMzEyZSIgb3BhY2l0eT0iLjM1IiBmaWx0ZXI9InVybCgjd3NoKSIvPgogIDx1c2UgaHJlZj0iI3ciIHg9IjIyLjAiIHk9IjIyLjAiIGZpbGw9InJnYig2LDQyLDQwKSIvPjx1c2UgaHJlZj0iI3ciIHg9IjIxLjAiIHk9IjIxLjAiIGZpbGw9InJnYig2LDQ0LDQyKSIvPjx1c2UgaHJlZj0iI3ciIHg9IjIwLjAiIHk9IjIwLjAiIGZpbGw9InJnYig2LDQ2LDQ0KSIvPjx1c2UgaHJlZj0iI3ciIHg9IjE5LjAiIHk9IjE5LjAiIGZpbGw9InJnYig3LDQ5LDQ2KSIvPjx1c2UgaHJlZj0iI3ciIHg9IjE4LjAiIHk9IjE4LjAiIGZpbGw9InJnYig3LDUxLDQ4KSIvPjx1c2UgaHJlZj0iI3ciIHg9IjE3LjAiIHk9IjE3LjAiIGZpbGw9InJnYig3LDU0LDUxKSIvPjx1c2UgaHJlZj0iI3ciIHg9IjE2LjAiIHk9IjE2LjAiIGZpbGw9InJnYig4LDU2LDUzKSIvPjx1c2UgaHJlZj0iI3ciIHg9IjE1LjAiIHk9IjE1LjAiIGZpbGw9InJnYig4LDU4LDU1KSIvPjx1c2UgaHJlZj0iI3ciIHg9IjE0LjAiIHk9IjE0LjAiIGZpbGw9InJnYig4LDYxLDU3KSIvPjx1c2UgaHJlZj0iI3ciIHg9IjEzLjAiIHk9IjEzLjAiIGZpbGw9InJnYig5LDYzLDYwKSIvPjx1c2UgaHJlZj0iI3ciIHg9IjEyLjAiIHk9IjEyLjAiIGZpbGw9InJnYig5LDY2LDYyKSIvPjx1c2UgaHJlZj0iI3ciIHg9IjExLjAiIHk9IjExLjAiIGZpbGw9InJnYigxMCw2OCw2NCkiLz48dXNlIGhyZWY9IiN3IiB4PSIxMC4wIiB5PSIxMC4wIiBmaWxsPSJyZ2IoMTAsNzAsNjYpIi8+PHVzZSBocmVmPSIjdyIgeD0iOS4wIiB5PSI5LjAiIGZpbGw9InJnYigxMCw3Myw2OCkiLz48dXNlIGhyZWY9IiN3IiB4PSI4LjAiIHk9IjguMCIgZmlsbD0icmdiKDExLDc1LDcxKSIvPjx1c2UgaHJlZj0iI3ciIHg9IjcuMCIgeT0iNy4wIiBmaWxsPSJyZ2IoMTEsNzgsNzMpIi8+PHVzZSBocmVmPSIjdyIgeD0iNi4wIiB5PSI2LjAiIGZpbGw9InJnYigxMSw4MCw3NSkiLz48dXNlIGhyZWY9IiN3IiB4PSI1LjAiIHk9IjUuMCIgZmlsbD0icmdiKDEyLDgyLDc3KSIvPjx1c2UgaHJlZj0iI3ciIHg9IjQuMCIgeT0iNC4wIiBmaWxsPSJyZ2IoMTIsODUsODApIi8+PHVzZSBocmVmPSIjdyIgeD0iMy4wIiB5PSIzLjAiIGZpbGw9InJnYigxMiw4Nyw4MikiLz48dXNlIGhyZWY9IiN3IiB4PSIyLjAiIHk9IjIuMCIgZmlsbD0icmdiKDEzLDkwLDg0KSIvPjx1c2UgaHJlZj0iI3ciIHg9IjEuMCIgeT0iMS4wIiBmaWxsPSJyZ2IoMTMsOTIsODYpIi8+CiAgPHVzZSBocmVmPSIjdyIgZmlsbD0idXJsKCNnZmFjZSkiLz4KICA8ZyBjbGlwLXBhdGg9InVybCgjZmFjZWNsaXApIj48cmVjdCB4PSIwIiB5PSI1MzAiIHdpZHRoPSIxMDAwIiBoZWlnaHQ9IjExMCIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjI4Ii8+PC9nPgogIDx1c2UgaHJlZj0iI3ciIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2U4ZmZmYiIgc3Ryb2tlLXdpZHRoPSIyLjIiIG9wYWNpdHk9Ii44Ii8+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTAzLjMsOTA1KSBzY2FsZSgwLjAzNDAsLTAuMDM0MCkiIGZpbGw9IiMwYjRmNGEiPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuMCwwKSIgZD0iTTYyMiAxOTFRNjIyIDEwMyA1NjAuNSA1MS41UTQ5OSAwIDM4OSAwSDYyVjcwMkgzNzhRNDg1IDcwMiA1NDUuNSA2NTMuMFE2MDYgNjA0IDYwNiA1MjBRNjA2IDQ1OCA1NzMuNSA0MTcuMFE1NDEgMzc2IDQ4NyAzNjBRNTQ4IDM0NyA1ODUuMCAyOTkuNVE2MjIgMjUyIDYyMiAxOTFaTTIzMyA0MThIMzQ1UTM4NyA0MTggNDA5LjUgNDM2LjVRNDMyIDQ1NSA0MzIgNDkxUTQzMiA1MjcgNDA5LjUgNTQ2LjBRMzg3IDU2NSAzNDUgNTY1SDIzM1pNNDQ5IDIxNFE0NDkgMjUxIDQyNC41IDI3Mi4wUTQwMCAyOTMgMzU3IDI5M0gyMzNWMTM4SDM1OVE0MDIgMTM4IDQyNS41IDE1Ny41UTQ0OSAxNzcgNDQ5IDIxNFoiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSg4MzUuNSwwKSIgZD0iTTMzIDM1M1EzMyA0NTYgODEuNSA1MzguMFExMzAgNjIwIDIxMi41IDY2Ni4wUTI5NSA3MTIgMzk0IDcxMlE0OTMgNzEyIDU3NS41IDY2Ni4wUTY1OCA2MjAgNzA1LjUgNTM4LjBRNzUzIDQ1NiA3NTMgMzUzUTc1MyAyNTAgNzA1LjAgMTY3LjVRNjU3IDg1IDU3NS4wIDM5LjBRNDkzIC03IDM5NCAtN1EyOTUgLTcgMjEyLjUgMzkuMFExMzAgODUgODEuNSAxNjcuNVEzMyAyNTAgMzMgMzUzWk01NzkgMzUzUTU3OSA0NDYgNTI4LjUgNTAxLjVRNDc4IDU1NyAzOTQgNTU3UTMwOSA1NTcgMjU4LjUgNTAyLjBRMjA4IDQ0NyAyMDggMzUzUTIwOCAyNjAgMjU4LjUgMjA0LjVRMzA5IDE0OSAzOTQgMTQ5UTQ3OCAxNDkgNTI4LjUgMjA1LjBRNTc5IDI2MSA1NzkgMzUzWiIvPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE3OTcuOSwwKSIgZD0iTTY5MyAzNTFRNjkzIDI0OCA2NDcuNSAxNjguMFE2MDIgODggNTE4LjUgNDQuMFE0MzUgMCAzMjUgMEg2MlY3MDJIMzI1UTQzNiA3MDIgNTE5LjAgNjU4LjBRNjAyIDYxNCA2NDcuNSA1MzQuNVE2OTMgNDU1IDY5MyAzNTFaTTUxOSAzNTFRNTE5IDQ0OCA0NjUuMCA1MDIuMFE0MTEgNTU2IDMxNCA1NTZIMjMzVjE0OEgzMTRRNDExIDE0OCA0NjUuMCAyMDEuMFE1MTkgMjU0IDUxOSAzNTFaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjcwMS40LDApIiBkPSJNNjY0IDcwMiA0MjEgMjMyVjBIMjUwVjIzMkw3IDcwMkgyMDFMMzM3IDQwOEw0NzIgNzAyWiIvPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDM1NDguOSwwKSIgZD0iIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzkzNy40LDApIiBkPSJNNjcwIDcwMlYwSDQ5OVYyODlIMjMzVjBINjJWNzAySDIzM1Y0MjdINDk5VjcwMloiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0ODQ0LjgsMCkiIGQ9Ik0yMzMgNTY1VjQyM0g0NjJWMjkxSDIzM1YxMzdINDkyVjBINjJWNzAySDQ5MlY1NjVaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNTU2Mi4zLDApIiBkPSJNNDk5IDEyNEgyMzdMMTk1IDBIMTZMMjcwIDcwMkg0NjhMNzIyIDBINTQxWk00NTUgMjU2IDM2OCA1MTMgMjgyIDI1NloiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSg2NDc1LjgsMCkiIGQ9Ik0yMzMgMTMySDQ1N1YwSDYyVjcwMkgyMzNaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNzEyOS4yLDApIiBkPSJNNTY3IDcwMlY1NjVIMzgxVjBIMjEwVjU2NUgyNFY3MDJaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNzg5Ni43LDApIiBkPSJNNjcwIDcwMlYwSDQ5OVYyODlIMjMzVjBINjJWNzAySDIzM1Y0MjdINDk5VjcwMloiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSg4ODA0LjIsMCkiIGQ9IiIvPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDkxOTIuNiwwKSIgZD0iTTIzMyA3MDJWMEg2MlY3MDJaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoOTY2NC4xLDApIiBkPSJNNjkwIDBINTE5TDIzMyA0MzNWMEg2MlY3MDJIMjMzTDUxOSAyNjdWNzAySDY5MFoiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMDU5Mi42LDApIiBkPSJNNTY3IDcwMlY1NjVIMzgxVjBIMjEwVjU2NUgyNFY3MDJaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTEzNjAuMSwwKSIgZD0iTTIzMyA1NjVWNDIzSDQ2MlYyOTFIMjMzVjEzN0g0OTJWMEg2MlY3MDJINDkyVjU2NVoiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMjA3Ny41LDApIiBkPSJNNTI4IDQ4MFE1MDkgNTE1IDQ3My41IDUzMy41UTQzOCA1NTIgMzkwIDU1MlEzMDcgNTUyIDI1Ny4wIDQ5Ny41UTIwNyA0NDMgMjA3IDM1MlEyMDcgMjU1IDI1OS41IDIwMC41UTMxMiAxNDYgNDA0IDE0NlE0NjcgMTQ2IDUxMC41IDE3OC4wUTU1NCAyMTAgNTc0IDI3MEgzNTdWMzk2SDcyOVYyMzdRNzEwIDE3MyA2NjQuNSAxMTguMFE2MTkgNjMgNTQ5LjAgMjkuMFE0NzkgLTUgMzkxIC01UTI4NyAtNSAyMDUuNSA0MC41UTEyNCA4NiA3OC41IDE2Ny4wUTMzIDI0OCAzMyAzNTJRMzMgNDU2IDc4LjUgNTM3LjVRMTI0IDYxOSAyMDUuMCA2NjQuNVEyODYgNzEwIDM5MCA3MTBRNTE2IDcxMCA2MDIuNSA2NDkuMFE2ODkgNTg4IDcxNyA0ODBaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTMwMTYuMCwwKSIgZD0iTTQyMCAwIDI3NCAyNjVIMjMzVjBINjJWNzAySDM0OVE0MzIgNzAyIDQ5MC41IDY3My4wUTU0OSA2NDQgNTc4LjAgNTkzLjVRNjA3IDU0MyA2MDcgNDgxUTYwNyA0MTEgNTY3LjUgMzU2LjBRNTI4IDMwMSA0NTEgMjc4TDYxMyAwWk0yMzMgMzg2SDMzOVEzODYgMzg2IDQwOS41IDQwOS4wUTQzMyA0MzIgNDMzIDQ3NFE0MzMgNTE0IDQwOS41IDUzNy4wUTM4NiA1NjAgMzM5IDU2MEgyMzNaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTM4NDQuNSwwKSIgZD0iTTQ5OSAxMjRIMjM3TDE5NSAwSDE2TDI3MCA3MDJINDY4TDcyMiAwSDU0MVpNNDU1IDI1NiAzNjggNTEzIDI4MiAyNTZaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTQ3NTcuOSwwKSIgZD0iTTU2NyA3MDJWNTY1SDM4MVYwSDIxMFY1NjVIMjRWNzAyWiIvPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE1NTI1LjQsMCkiIGQ9Ik0yMzMgNTY1VjQyM0g0NjJWMjkxSDIzM1YxMzdINDkyVjBINjJWNzAySDQ5MlY1NjVaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTYyNDIuOSwwKSIgZD0iTTY5MyAzNTFRNjkzIDI0OCA2NDcuNSAxNjguMFE2MDIgODggNTE4LjUgNDQuMFE0MzUgMCAzMjUgMEg2MlY3MDJIMzI1UTQzNiA3MDIgNTE5LjAgNjU4LjBRNjAyIDYxNCA2NDcuNSA1MzQuNVE2OTMgNDU1IDY5MyAzNTFaTTUxOSAzNTFRNTE5IDQ0OCA0NjUuMCA1MDIuMFE0MTEgNTU2IDMxNCA1NTZIMjMzVjE0OEgzMTRRNDExIDE0OCA0NjUuMCAyMDEuMFE1MTkgMjU0IDUxOSAzNTFaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTcxNDYuNCwwKSIgZD0iIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTc1MzQuOCwwKSIgZD0iTTQyIDIxMEgyMjRRMjI4IDE3MSAyNTEuMCAxNTAuNVEyNzQgMTMwIDMxMSAxMzBRMzQ5IDEzMCAzNzEuMCAxNDcuNVEzOTMgMTY1IDM5MyAxOTZRMzkzIDIyMiAzNzUuNSAyMzkuMFEzNTggMjU2IDMzMi41IDI2Ny4wUTMwNyAyNzggMjYwIDI5MlExOTIgMzEzIDE0OS4wIDMzNC4wUTEwNiAzNTUgNzUuMCAzOTYuMFE0NCA0MzcgNDQgNTAzUTQ0IDYwMSAxMTUuMCA2NTYuNVExODYgNzEyIDMwMCA3MTJRNDE2IDcxMiA0ODcuMCA2NTYuNVE1NTggNjAxIDU2MyA1MDJIMzc4UTM3NiA1MzYgMzUzLjAgNTU1LjVRMzMwIDU3NSAyOTQgNTc1UTI2MyA1NzUgMjQ0LjAgNTU4LjVRMjI1IDU0MiAyMjUgNTExUTIyNSA0NzcgMjU3LjAgNDU4LjBRMjg5IDQzOSAzNTcgNDE3UTQyNSAzOTQgNDY3LjUgMzczLjBRNTEwIDM1MiA1NDEuMCAzMTIuMFE1NzIgMjcyIDU3MiAyMDlRNTcyIDE0OSA1NDEuNSAxMDAuMFE1MTEgNTEgNDUzLjAgMjIuMFEzOTUgLTcgMzE2IC03UTIzOSAtNyAxNzguMCAxOC4wUTExNyA0MyA4MC41IDkyLjBRNDQgMTQxIDQyIDIxMFoiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxODMyNi4zLDApIiBkPSJNNjY0IDcwMiA0MjEgMjMyVjBIMjUwVjIzMkw3IDcwMkgyMDFMMzM3IDQwOEw0NzIgNzAyWiIvPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE5MTczLjgsMCkiIGQ9Ik00MiAyMTBIMjI0UTIyOCAxNzEgMjUxLjAgMTUwLjVRMjc0IDEzMCAzMTEgMTMwUTM0OSAxMzAgMzcxLjAgMTQ3LjVRMzkzIDE2NSAzOTMgMTk2UTM5MyAyMjIgMzc1LjUgMjM5LjBRMzU4IDI1NiAzMzIuNSAyNjcuMFEzMDcgMjc4IDI2MCAyOTJRMTkyIDMxMyAxNDkuMCAzMzQuMFExMDYgMzU1IDc1LjAgMzk2LjBRNDQgNDM3IDQ0IDUwM1E0NCA2MDEgMTE1LjAgNjU2LjVRMTg2IDcxMiAzMDAgNzEyUTQxNiA3MTIgNDg3LjAgNjU2LjVRNTU4IDYwMSA1NjMgNTAySDM3OFEzNzYgNTM2IDM1My4wIDU1NS41UTMzMCA1NzUgMjk0IDU3NVEyNjMgNTc1IDI0NC4wIDU1OC41UTIyNSA1NDIgMjI1IDUxMVEyMjUgNDc3IDI1Ny4wIDQ1OC4wUTI4OSA0MzkgMzU3IDQxN1E0MjUgMzk0IDQ2Ny41IDM3My4wUTUxMCAzNTIgNTQxLjAgMzEyLjBRNTcyIDI3MiA1NzIgMjA5UTU3MiAxNDkgNTQxLjUgMTAwLjBRNTExIDUxIDQ1My4wIDIyLjBRMzk1IC03IDMxNiAtN1EyMzkgLTcgMTc4LjAgMTguMFExMTcgNDMgODAuNSA5Mi4wUTQ0IDE0MSA0MiAyMTBaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTk5NjUuMiwwKSIgZD0iTTU2NyA3MDJWNTY1SDM4MVYwSDIxMFY1NjVIMjRWNzAyWiIvPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIwNzMyLjcsMCkiIGQ9Ik0yMzMgNTY1VjQyM0g0NjJWMjkxSDIzM1YxMzdINDkyVjBINjJWNzAySDQ5MlY1NjVaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjE0NTAuMiwwKSIgZD0iTTg1NyA3MDJWMEg2ODZWNDIxTDUyOSAwSDM5MUwyMzMgNDIyVjBINjJWNzAySDI2NEw0NjEgMjE2TDY1NiA3MDJaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjI1NDQuNiwwKSIgZD0iTTQyIDIxMEgyMjRRMjI4IDE3MSAyNTEuMCAxNTAuNVEyNzQgMTMwIDMxMSAxMzBRMzQ5IDEzMCAzNzEuMCAxNDcuNVEzOTMgMTY1IDM5MyAxOTZRMzkzIDIyMiAzNzUuNSAyMzkuMFEzNTggMjU2IDMzMi41IDI2Ny4wUTMwNyAyNzggMjYwIDI5MlExOTIgMzEzIDE0OS4wIDMzNC4wUTEwNiAzNTUgNzUuMCAzOTYuMFE0NCA0MzcgNDQgNTAzUTQ0IDYwMSAxMTUuMCA2NTYuNVExODYgNzEyIDMwMCA3MTJRNDE2IDcxMiA0ODcuMCA2NTYuNVE1NTggNjAxIDU2MyA1MDJIMzc4UTM3NiA1MzYgMzUzLjAgNTU1LjVRMzMwIDU3NSAyOTQgNTc1UTI2MyA1NzUgMjQ0LjAgNTU4LjVRMjI1IDU0MiAyMjUgNTExUTIyNSA0NzcgMjU3LjAgNDU4LjBRMjg5IDQzOSAzNTcgNDE3UTQyNSAzOTQgNDY3LjUgMzczLjBRNTEwIDM1MiA1NDEuMCAzMTIuMFE1NzIgMjcyIDU3MiAyMDlRNTcyIDE0OSA1NDEuNSAxMDAuMFE1MTEgNTEgNDUzLjAgMjIuMFEzOTUgLTcgMzE2IC03UTIzOSAtNyAxNzguMCAxOC4wUTExNyA0MyA4MC41IDkyLjBRNDQgMTQxIDQyIDIxMFoiLz48L2c+CiAgPHJlY3QgeD0iMTAzLjMiIHk9IjkyNyIgd2lkdGg9Ijc5My40IiBoZWlnaHQ9IjQiIHJ4PSIyIiBmaWxsPSIjMTliM2EzIiBvcGFjaXR5PSIuNyIvPgo8L3N2Zz4=" alt="BHIS" style="display:block;width:130px;max-width:45%;margin:0 auto 6px">
+  <h2 id="licT" style="margin-top:0;text-align:center">Activate LabLens</h2>
+  <p id="licMsg"></p>
+  <label class="f" for="licCode" style="font-weight:600;font-size:14px">Access code</label>
+  <textarea id="licCode" rows="3" placeholder="Paste your access code here" autocomplete="off" autocapitalize="off" spellcheck="false" style="margin:4px 0 8px"></textarea>
+  <p class="err" id="licErr" hidden></p>
+  <button class="btn p" id="licGo" style="width:100%">Activate</button>
+  <div class="actions"><a class="btn s" id="licBuy" href="#" target="_blank" rel="noopener" hidden>Get an access code</a><a class="btn s" id="licWa" href="#" target="_blank" rel="noopener" hidden>Chat on WhatsApp</a></div>
+  <button class="back" id="licClose" type="button" style="width:100%">Close</button>
 </div></div>
 <div class="toast" id="toast" role="status"></div>
 
@@ -1494,7 +1512,7 @@ function renderResult(R) {
   var U = URGENCY[R.urgency], h = [];
   var today = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
   h.push('<button class="back noprint" data-act="edit">← Back to results entry</button>');
-  h.push('<div class="printhead"><img src="' + LOGO_SRC + '" alt="BHIS" style="height:70px"><h2>LabLens report by BHIS</h2><div>' + esc(today) + ' · Age ' + esc(R.prof.age) + ' · ' + (R.prof.sex === 'F' ? 'Female' : 'Male') + (R.prof.preg ? ' (pregnant)' : '') + '</div></div>');
+  h.push('<div class="printhead"><img src="' + LOGO_SRC + '" alt="BHIS" style="height:70px"><h2>LabLens report by BHIS</h2>' + (bizName() ? '<div><b>Prepared by ' + esc(bizName()) + '</b></div>' : '') + '<div>' + esc(today) + ' · Age ' + esc(R.prof.age) + ' · ' + (R.prof.sex === 'F' ? 'Female' : 'Male') + (R.prof.preg ? ' (pregnant)' : '') + '</div></div>');
   h.push('<div class="urg ' + U.cls + '" role="alert"><p class="uh">' + esc(U.label) + '</p><p>' + esc(U.text) + '</p></div>');
   if (R.critical.length) {
     h.push('<div class="alert"><b>⚠ Possibly dangerous value' + (R.critical.length > 1 ? 's' : '') + '</b><ul>' + R.critical.map(function (r) {
@@ -1553,7 +1571,7 @@ function renderResult(R) {
 
 function summaryText(R) {
   var L = [], U = URGENCY[R.urgency];
-  L.push('LabLens summary (' + new Date().toLocaleDateString() + ')');
+  L.push('LabLens summary (' + new Date().toLocaleDateString() + ')'); if (bizName()) L.push('Prepared by ' + bizName());
   L.push('Age ' + R.prof.age + ', ' + (R.prof.sex === 'F' ? 'female' : 'male') + (R.prof.preg ? ', pregnant' : ''));
   L.push('Urgency: ' + U.label);
   if (R.critical.length) L.push('Possibly dangerous: ' + R.critical.map(function (r) { return shortName(r.t) + ' ' + (r.type === 'q' ? r.sel : r.rawStr + ' ' + r.unit); }).join('; '));
@@ -1570,15 +1588,97 @@ function copyText(txt) {
   if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(function () { toast('Summary copied'); }, fallback); else fallback();
 }
 
+/* ---------- licensing (offline, signed access codes) ---------- */
+var LKEY = 'lablens_lic_v1', TKEY = 'lablens_trial_v1', SKEY = 'lablens_seen_v1';
+var LIC = { on: false, cfg: null, info: { status: 'none' } };
+function b64uToBytes(s) { s = s.replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; var b = atob(s), a = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return a; }
+function todayISO() {
+  var seen = store.get(SKEY) || 0, now = Date.now(), t = Math.max(now, seen);
+  if (now > seen) store.set(SKEY, now);
+  return new Date(t).toISOString().slice(0, 10);
+}
+function verifyCode(code) {
+  return new Promise(function (res) {
+    try {
+      code = String(code || '').trim().replace(/\s+/g, ''); if (code.indexOf('BHIS-') === 0) code = code.slice(5);
+      var parts = code.split('.'); if (parts.length !== 2) return res({ ok: false, reason: 'format' });
+      var payload = b64uToBytes(parts[0]), sig = b64uToBytes(parts[1]);
+      crypto.subtle.importKey('jwk', LIC.cfg.publicKey, { name: 'ECDSA', namedCurve: 'P-256' }, false, ['verify']).then(function (k) {
+        return crypto.subtle.verify({ name: 'ECDSA', hash: 'SHA-256' }, k, sig, payload);
+      }).then(function (ok) {
+        if (!ok) return res({ ok: false, reason: 'invalid' });
+        var p = JSON.parse(new TextDecoder().decode(payload));
+        res({ ok: true, p: p, expired: todayISO() > p.e });
+      }).catch(function () { res({ ok: false, reason: 'invalid' }); });
+    } catch (e) { res({ ok: false, reason: 'format' }); }
+  });
+}
+function refreshLicence() {
+  var code = store.get(LKEY);
+  if (!code) { LIC.info = { status: 'none' }; return Promise.resolve(); }
+  return verifyCode(code).then(function (r) {
+    LIC.info = !r.ok ? { status: 'none' } : r.expired ? { status: 'expired', p: r.p } : { status: 'licensed', p: r.p };
+  });
+}
+function trialMax() { return (LIC.cfg && LIC.cfg.trialRuns != null) ? LIC.cfg.trialRuns : 3; }
+function trialLeft() { return Math.max(0, trialMax() - (store.get(TKEY) || 0)); }
+function bizName() { return LIC.on && LIC.info.status === 'licensed' && LIC.info.p.t === 'B' ? LIC.info.p.n : ''; }
+function fmtDate(iso) { try { return new Date(iso + 'T00:00:00').toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }); } catch (e) { return iso; } }
+function licStatusText() {
+  if (!LIC.on) return '';
+  var i = LIC.info;
+  if (i.status === 'licensed') return (i.p.t === 'B' ? 'Business licence' : 'Personal licence') + ' – ' + i.p.n + ' – valid until ' + fmtDate(i.p.e);
+  if (i.status === 'expired') return 'Licence for ' + i.p.n + ' expired on ' + fmtDate(i.p.e) + '. Renew to continue.';
+  var l = trialLeft(); return l > 0 ? 'Free trial: ' + l + ' of ' + trialMax() + ' interpretations left' : 'Free trial finished. An access code is needed.';
+}
+function updateLicBanner() {
+  var b = $('#licBanner'); if (!b) return;
+  if (!LIC.on || LIC.info.status === 'licensed') { b.hidden = true; return; }
+  b.hidden = false; $('#licBannerText').textContent = licStatusText();
+}
+function openLic(msg) {
+  var i = LIC.info, cfg = LIC.cfg || {};
+  $('#licMsg').textContent = msg || (i.status === 'expired' ? 'Your licence has expired. Enter a renewal code to continue.' : trialLeft() > 0 ? 'Enter your access code to unlock unlimited use. You still have ' + trialLeft() + ' free interpretation' + (trialLeft() > 1 ? 's' : '') + '.' : 'Your free trial has ended. Enter your access code to continue.');
+  $('#licErr').hidden = true; $('#licCode').value = '';
+  var buy = $('#licBuy'), wa = $('#licWa');
+  buy.hidden = !cfg.buyUrl; if (cfg.buyUrl) buy.href = cfg.buyUrl;
+  var num = String(cfg.whatsapp || '').replace(/\D/g, '');
+  wa.hidden = !num; if (num) wa.href = 'https://wa.me/' + num + '?text=' + encodeURIComponent('Hello BHIS, I would like an access code for LabLens.');
+  $('#lic').hidden = false;
+}
+function activate() {
+  var code = $('#licCode').value, err = $('#licErr');
+  verifyCode(code).then(function (r) {
+    if (!r.ok) { err.textContent = r.reason === 'format' ? 'That does not look like a full access code. Paste the whole code you received.' : 'This code is not valid. Check that you copied all of it, or contact BHIS.'; err.hidden = false; return; }
+    if (r.expired) { err.textContent = 'This code expired on ' + fmtDate(r.p.e) + '. Please request a renewal.'; err.hidden = false; return; }
+    store.set(LKEY, code.trim().replace(/\s+/g, ''));
+    LIC.info = { status: 'licensed', p: r.p }; $('#lic').hidden = true; updateLicBanner();
+    toast('Activated for ' + r.p.n); if (!$('#view-about').hidden) renderAbout();
+  });
+}
+function gate(cb) {
+  if (!LIC.on || LIC.info.status === 'licensed') return cb();
+  if (LIC.info.status !== 'expired' && trialLeft() > 0) { store.set(TKEY, (store.get(TKEY) || 0) + 1); updateLicBanner(); toast('Free trial: ' + trialLeft() + ' left'); return cb(); }
+  openLic();
+}
+function loadLicence() {
+  if (location.protocol === 'file:' || !window.fetch || !window.crypto || !crypto.subtle) return Promise.resolve();
+  return fetch('licence-key.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (cfg) {
+    if (cfg && cfg.publicKey) { LIC.cfg = cfg; LIC.on = true; return refreshLicence(); }
+  }).catch(function () {}).then(updateLicBanner);
+}
+
 /* ---------- run ---------- */
 function run() {
   var p = normProfile(state.profile), err = $('#profErr');
   if (!(p.age > 0 && p.age < 121)) { err.textContent = 'Please enter your age (1–120) to continue.'; err.hidden = false; $('#age').focus(); $('#age').scrollIntoView({ block: 'center' }); return; }
   if (!p.sex) { err.textContent = 'Please choose your sex: normal ranges differ for men and women.'; err.hidden = false; $('#age').scrollIntoView({ block: 'center' }); return; }
   err.hidden = true;
-  lastResult = interpret(state);
-  renderResult(lastResult);
-  show('result');
+  gate(function () {
+    lastResult = interpret(state);
+    renderResult(lastResult);
+    show('result');
+  });
 }
 
 /* ---------- saved ---------- */
@@ -1593,11 +1693,11 @@ function renderSaved() {
 }
 function renderAbout() {
   $('#view-about').innerHTML = '<button class="back" data-act="edit">← Back</button><img class="aboutlogo" src="' + LOGO_SRC + '" alt="BHIS: Body Health Integrated Systems"><h2 style="margin-top:6px">About LabLens</h2><div class="card"><h3>Created by BHIS</h3><p>LabLens is created and owned by <b>BHIS \u2013 Body Health Integrated Systems</b>. \u00A9 2026 BHIS. All rights reserved.</p></div>' +
-    '<div class="card"><h3>What it does</h3><p>You type results from a lab report. LabLens flags values outside typical adult ranges, explains them in plain language, looks for <b>patterns</b> across tests (for example low haemoglobin with small red cells and low ferritin), suggests what <i>might</i> explain them, how urgent it is, and which type of specialist to ask for.</p></div>' +
+    (LIC.on ? '<div class="card"><h3>Your licence</h3><p>' + esc(licStatusText()) + '</p>' + (LIC.info.status === 'licensed' ? '' : '<button class="btn p" data-act="lic" style="width:100%">Enter access code</button>') + '</div>' : '') + '<div class="card"><h3>What it does</h3><p>You type results from a lab report. LabLens flags values outside typical adult ranges, explains them in plain language, looks for <b>patterns</b> across tests (for example low haemoglobin with small red cells and low ferritin), suggests what <i>might</i> explain them, how urgent it is, and which type of specialist to ask for.</p></div>' +
     '<div class="card"><h3>What it cannot do</h3><ul><li>It cannot diagnose. Only a doctor who examines you can.</li><li>It does not know your symptoms, medicines, history, or sample quality.</li><li>Ranges are typical adult values; labs and populations differ. Use “⋯” to enter your lab’s own range.</li><li>Children, pregnancy and older age change normal values. Only some pregnancy adjustments are built in.</li><li>Photos and PDFs are not read: entering numbers is safer than automatic scanning.</li></ul></div>' +
     '<div class="card"><h3>Privacy</h3><p>Everything runs on your device. No internet connection, accounts, ads or tracking. Entries are saved in this browser’s local storage only. “Clear” erases the current entries.</p></div>' +
     '<div class="card"><h3>Install on your phone</h3><p><b>Android (Chrome):</b> open the app link once while online, then menu ⋮ → “Install app” or “Add to Home screen”.<br><b>iPhone (Safari):</b> Share → “Add to Home Screen”.<br><b>Computer (Chrome/Edge):</b> click the install icon in the address bar. After the first visit it opens offline.</p></div>' +
-    '<div class="card"><h3>Reference sources</h3><p>Typical adult reference intervals from standard clinical laboratory references; CKD-EPI 2021 equation for eGFR (no race term); ADA criteria for glucose/HbA1c; WHO 2021 semen reference limits; WHO anaemia and pregnancy haemoglobin cut-offs. Version 1.1.</p></div>';
+    '<div class="card"><h3>Reference sources</h3><p>Typical adult reference intervals from standard clinical laboratory references; CKD-EPI 2021 equation for eGFR (no race term); ADA criteria for glucose/HbA1c; WHO 2021 semen reference limits; WHO anaemia and pregnancy haemoglobin cut-offs. Version 1.2.</p></div>';
 }
 
 /* ---------- click router ---------- */
@@ -1606,6 +1706,7 @@ function onClick(ev) {
   if (a) {
     var act = a.getAttribute('data-act');
     if (act === 'edit') { show('input'); return; }
+    if (act === 'lic') { openLic(); return; }
     if (act === 'print') { window.print(); return; }
     if (act === 'copy') { if (lastResult) copyText(summaryText(lastResult)); return; }
     if (act === 'save') {
@@ -1650,6 +1751,10 @@ function init() {
   if (!store.get(ACK)) { $('#ack').hidden = false; }
   $('#ackBtn').addEventListener('click', function () { store.set(ACK, 1); $('#ack').hidden = true; });
   show('input');
+  $('#licGo').addEventListener('click', activate);
+  $('#licClose').addEventListener('click', function () { $('#lic').hidden = true; });
+  $('#licBannerBtn').addEventListener('click', function () { openLic(); });
+  loadLicence();
 
   window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferredInstall = e; $('#btnInstall').hidden = false; });
   $('#btnInstall').addEventListener('click', function () { if (deferredInstall) { deferredInstall.prompt(); deferredInstall = null; $('#btnInstall').hidden = true; } });

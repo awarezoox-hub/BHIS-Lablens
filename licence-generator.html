@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BHIS Licence Generator (PRIVATE)</title>
+<style>
+:root{--acc:#0f766e;--bg:#f4f7f7;--line:#dbe5e4;--bad:#b91c1c}
+*{box-sizing:border-box}body{margin:0;font:16px/1.5 system-ui,Segoe UI,Roboto,sans-serif;background:var(--bg);color:#14282b;padding:16px}
+.w{max-width:760px;margin:0 auto}h1{margin:0 0 4px}h2{margin:0 0 8px;font-size:18px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0}
+.warn{background:#fff1d6;border:1px solid #b45309;border-radius:12px;padding:10px 14px}
+label{display:block;font-weight:600;font-size:14px;margin:10px 0 4px}
+input,select,textarea{font:inherit;width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;background:#fbfdfd}
+textarea{min-height:90px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px}
+button{font:inherit;font-weight:700;border:0;border-radius:10px;padding:11px 16px;background:var(--acc);color:#fff;cursor:pointer;margin:8px 8px 0 0}
+button.s{background:#fff;color:#14282b;border:1px solid var(--line)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:560px){.row{grid-template-columns:1fr}}
+.ok{color:var(--acc);font-weight:700}.err{color:var(--bad);font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{border-bottom:1px solid var(--line);padding:6px;text-align:left;vertical-align:top}
+small{color:#58706f}
+</style>
+</head>
+<body><div class="w">
+<h1>BHIS Licence Generator</h1>
+<p><small>For the owner of BHIS only. Keep this file on your own laptop. Do not upload it to GitHub.</small></p>
+<div class="warn"><b>Your private key never leaves this browser.</b> If you lose it, you cannot make new codes. Always download the backup file in Step 1 and keep it somewhere safe (email it to yourself, or a USB stick). Do not share it with anyone.</div>
+
+<div class="card"><h2>Step 1. Create your signing keys (once only)</h2>
+<p id="keyStatus">Checking…</p>
+<button id="mk">Create my keys</button><button class="s" id="bk">Download private-key backup</button>
+<label for="imp">Restore from a backup file</label><input type="file" id="imp" accept=".json">
+</div>
+
+<div class="card"><h2>Step 2. Settings file for the app (licence-key.json)</h2>
+<div class="row"><div><label for="buy">Payment link (Paystack or Flutterwave)</label><input id="buy" placeholder="https://paystack.com/pay/your-link"></div>
+<div><label for="wa">WhatsApp number (with country code)</label><input id="wa" placeholder="2348012345678"></div></div>
+<div class="row"><div><label for="trial">Free trial interpretations</label><input id="trial" type="number" min="0" max="20" value="3"></div></div>
+<button id="dl">Download licence-key.json</button>
+<p><small>Upload this file to your GitHub repository (same folder as index.html). Until you upload it, the app stays free and unlocked. Once uploaded, the app asks for an access code after the free trial.</small></p>
+</div>
+
+<div class="card"><h2>Step 3. Make an access code for a customer</h2>
+<div class="row"><div><label for="cn">Customer or business name</label><input id="cn" placeholder="e.g. Grace Clinic, Ikeja"></div>
+<div><label for="ct">Type</label><select id="ct"><option value="P">Personal</option><option value="B">Business (clinic, lab, pharmacy)</option></select></div></div>
+<div class="row"><div><label for="cm">Valid for</label><select id="cm"><option value="12" selected>12 months</option><option value="6">6 months</option><option value="3">3 months</option><option value="1">1 month (test)</option><option value="24">24 months</option></select></div>
+<div><label for="cs">Starts on</label><input id="cs" type="date"></div></div>
+<button id="gen">Make access code</button>
+<div id="out" hidden>
+<label for="code">Access code (send this to the customer)</label><textarea id="code" readonly></textarea>
+<button class="s" id="cp">Copy code</button><button class="s" id="cpm">Copy full message</button>
+<p id="msgNote"></p>
+</div></div>
+
+<div class="card"><h2>Your sales log</h2><p><small>Saved in this browser. Download it regularly as a CSV.</small></p>
+<table id="log"><thead><tr><th>Date</th><th>Customer</th><th>Type</th><th>Expires</th><th>ID</th></tr></thead><tbody></tbody></table>
+<button class="s" id="csv">Download log (CSV)</button>
+</div>
+</div>
+<script>
+(function(){
+'use strict';
+var PK='bhis_priv_v1', CF='bhis_cfg_v1', LG='bhis_log_v1';
+function $(s){return document.querySelector(s);}
+function jget(k){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}}
+function jset(k,v){localStorage.setItem(k,JSON.stringify(v));}
+function b64u(buf){var b=new Uint8Array(buf),s='';for(var i=0;i<b.length;i++)s+=String.fromCharCode(b[i]);return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
+function download(name,text,type){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:type||'application/json'}));a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);}
+function status(){var k=jget(PK);$('#keyStatus').innerHTML=k?'<span class="ok">Keys are ready on this browser.</span> Remember to keep your backup safe.':'<span class="err">No keys yet.</span> Click “Create my keys”.';}
+function pub(){var k=jget(PK);if(!k)return null;var p={kty:k.kty,crv:k.crv,x:k.x,y:k.y,ext:true,key_ops:['verify']};return p;}
+function createKeys(){
+  if(jget(PK)&&!confirm('You already have keys. Creating new ones will make ALL old customer codes stop working. Continue?'))return Promise.resolve();
+  return crypto.subtle.generateKey({name:'ECDSA',namedCurve:'P-256'},true,['sign','verify']).then(function(kp){return crypto.subtle.exportKey('jwk',kp.privateKey);}).then(function(jwk){jset(PK,jwk);status();download('BHIS-private-key-BACKUP.json',JSON.stringify(jwk));});
+}
+function buildConfig(){return {v:1,publicKey:pub(),buyUrl:$('#buy').value.trim(),whatsapp:$('#wa').value.replace(/\D/g,''),trialRuns:parseInt($('#trial').value,10)||0};}
+function addMonths(d,m){var x=new Date(d.getTime());var day=x.getUTCDate();x.setUTCMonth(x.getUTCMonth()+m);if(x.getUTCDate()!==day)x.setUTCDate(0);return x;}
+function issue(name,tier,months,startISO){
+  var k=jget(PK);if(!k)return Promise.reject(new Error('Create your keys first.'));
+  var start=new Date((startISO||new Date().toISOString().slice(0,10))+'T00:00:00Z');
+  var exp=addMonths(start,months).toISOString().slice(0,10);
+  var id=Math.random().toString(36).slice(2,8).toUpperCase();
+  var payload={v:1,n:name,t:tier,e:exp,i:id};
+  var bytes=new TextEncoder().encode(JSON.stringify(payload));
+  return crypto.subtle.importKey('jwk',k,{name:'ECDSA',namedCurve:'P-256'},false,['sign']).then(function(key){return crypto.subtle.sign({name:'ECDSA',hash:'SHA-256'},key,bytes);}).then(function(sig){
+    var code='BHIS-'+b64u(bytes)+'.'+b64u(sig);
+    var log=jget(LG)||[];log.unshift({d:new Date().toISOString().slice(0,10),n:name,t:tier,e:exp,i:id});jset(LG,log);renderLog();
+    return {code:code,exp:exp,id:id};
+  });
+}
+function renderLog(){var log=jget(LG)||[];$('#log tbody').innerHTML=log.map(function(r){return '<tr><td>'+r.d+'</td><td>'+esc(r.n)+'</td><td>'+(r.t==='B'?'Business':'Personal')+'</td><td>'+r.e+'</td><td>'+r.i+'</td></tr>';}).join('')||'<tr><td colspan="5"><small>No codes issued yet.</small></td></tr>';}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+var lastMsg='';
+$('#mk').onclick=function(){createKeys().catch(function(e){alert(e.message);});};
+$('#bk').onclick=function(){var k=jget(PK);if(!k)return alert('No keys yet.');download('BHIS-private-key-BACKUP.json',JSON.stringify(k));};
+$('#imp').onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var j=JSON.parse(r.result);if(!j.d||!j.x)throw 0;jset(PK,j);status();alert('Keys restored.');}catch(x){alert('That is not a valid backup file.');}};r.readAsText(f);};
+$('#dl').onclick=function(){if(!pub())return alert('Create your keys first (Step 1).');var c=buildConfig();jset(CF,c);download('licence-key.json',JSON.stringify(c,null,2));};
+$('#gen').onclick=function(){var n=$('#cn').value.trim();if(!n)return alert('Enter the customer name.');issue(n,$('#ct').value,parseInt($('#cm').value,10),$('#cs').value).then(function(r){
+  $('#code').value=r.code;$('#out').hidden=false;
+  lastMsg='Hello '+n+', thank you for your payment. Your LabLens access code is below. Open LabLens, tap "Enter code" (or About > Enter access code), paste the whole code and tap Activate.\n\n'+r.code+'\n\nValid until '+r.exp+'. Reference: '+r.id+'. LabLens by BHIS (Body Health Integrated Systems).';
+  $('#msgNote').innerHTML='<span class="ok">Done.</span> Valid until '+r.exp+'. Reference '+r.id+'.';
+}).catch(function(e){alert(e.message);});};
+function copy(t){if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){alert('Copied');},function(){alert('Select the text and copy it manually.');});else alert('Select the text and copy it manually.');}
+$('#cp').onclick=function(){copy($('#code').value);};
+$('#cpm').onclick=function(){copy(lastMsg);};
+$('#csv').onclick=function(){var log=jget(LG)||[];var rows=['Date,Customer,Type,Expires,ID'].concat(log.map(function(r){return [r.d,'"'+r.n.replace(/"/g,'""')+'"',r.t==='B'?'Business':'Personal',r.e,r.i].join(',');}));download('BHIS-sales-log.csv',rows.join('\n'),'text/csv');};
+var s=jget(CF);if(s){$('#buy').value=s.buyUrl||'';$('#wa').value=s.whatsapp||'';$('#trial').value=s.trialRuns!=null?s.trialRuns:3;}
+$('#cs').value=new Date().toISOString().slice(0,10);
+status();renderLog();
+window.LG={createKeys:createKeys,buildConfig:buildConfig,issue:issue,pub:pub};
+})();
+</script>
+</body></html>
