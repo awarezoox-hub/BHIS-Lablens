@@ -1,0 +1,16 @@
+{
+  "v": 1,
+  "publicKey": {
+    "kty": "EC",
+    "crv": "P-256",
+    "x": "Q1ts31zpRKiAV3S3k5o4uv3rk3gGMfxLnOlIhcuhcjA",
+    "y": "0QrSH9Qmf0LcqNy8Z8OHxrvIrWO-N8a6wFWTkfQa-70",
+    "ext": true,
+    "key_ops": [
+      "verify"
+    ]
+  },
+  "buyUrl": "https://paystack.shop/pay/7ucxahiieu",
+  "whatsapp": "2349016764762",
+  "trialRuns": 5
+}
