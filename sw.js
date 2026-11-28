@@ -1,5 +1,5 @@
 /* LabLens service worker: caches the app so it works with no internet. */
-const VERSION = 'lablens-v1.4.0';
+const VERSION = 'lablens-v1.4.1';
 const FILES = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 const FRESH = ['licence-key.json'];
 

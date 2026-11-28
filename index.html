@@ -2381,6 +2381,7 @@ function verifyCode(code) {
       }).then(function (ok) {
         if (!ok) return res({ ok: false, reason: 'invalid' });
         var p = JSON.parse(new TextDecoder().decode(payload));
+        if (p.p && p.p !== 'L') return res({ ok: false, reason: 'product' });
         res({ ok: true, p: p, expired: todayISO() > p.e });
       }).catch(function () { res({ ok: false, reason: 'invalid' }); });
     } catch (e) { res({ ok: false, reason: 'format' }); }
@@ -2422,7 +2423,7 @@ function openLic(msg) {
 function activate() {
   var code = $('#licCode').value, err = $('#licErr');
   verifyCode(code).then(function (r) {
-    if (!r.ok) { err.textContent = r.reason === 'format' ? 'That does not look like a full access code. Paste the whole code you received.' : 'This code is not valid. Check that you copied all of it, or contact BHIS.'; err.hidden = false; return; }
+    if (!r.ok) { err.textContent = r.reason === 'product' ? 'This code is for a different BHIS product. Use the LabLens code you received for LabLens, or contact BHIS.' : r.reason === 'format' ? 'That does not look like a full access code. Paste the whole code you received.' : 'This code is not valid. Check that you copied all of it, or contact BHIS.'; err.hidden = false; return; }
     if (r.expired) { err.textContent = 'This code expired on ' + fmtDate(r.p.e) + '. Please request a renewal.'; err.hidden = false; return; }
     store.set(LKEY, code.trim().replace(/\s+/g, ''));
     LIC.info = { status: 'licensed', p: r.p }; $('#lic').hidden = true; updateLicBanner();
