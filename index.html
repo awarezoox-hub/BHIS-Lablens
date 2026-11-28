@@ -145,6 +145,17 @@ textarea{resize:vertical}
 .hideAdult{display:none!important}
 #heightBox,.preg{margin-top:2px}
 
+/* v1.4 women's health + technical view */
+.womenbox{grid-column:1/-1}
+.womenbox select{width:100%}
+.techonly{display:none;border-top:1px dashed var(--line);margin-top:8px;padding-top:2px;font-size:13px}
+.techonly h4{color:var(--cor2)}
+#view-result.tech .techonly{display:block}
+.modebar{display:flex;gap:6px;align-items:center;margin:4px 0 10px;font-size:13px}
+.modebar span{color:var(--mute);margin-right:2px}
+.modebar .mb{border:1.5px solid var(--acc2);background:transparent;color:var(--acc2);border-radius:999px;padding:5px 14px;font:inherit;font-weight:600;cursor:pointer}
+.modebar .mb.on{background:linear-gradient(135deg,#0a6f69,#10958c);color:#fff;border-color:transparent}
+
 </style>
 </head>
 <body>
@@ -167,6 +178,12 @@ textarea{resize:vertical}
           <div class="seg" role="radiogroup" aria-label="Sex"><label><input type="radio" name="sex" value="F"><span>Female</span></label><label><input type="radio" name="sex" value="M"><span>Male</span></label></div></div>
         <div class="preg" id="pregBox" hidden><span class="f" style="display:block;font-weight:600;font-size:14px;margin-bottom:4px">Are you pregnant?</span>
           <div class="seg" role="radiogroup" aria-label="Pregnant"><label><input type="radio" name="preg" value="No"><span>No / not sure</span></label><label><input type="radio" name="preg" value="Yes"><span>Yes</span></label></div></div>
+        <div class="womenbox" id="gaBox" hidden><span class="f" style="display:block;font-weight:600;font-size:14px;margin-bottom:4px">How many weeks pregnant?</span>
+          <div class="agebox"><input id="gaw" inputmode="numeric" autocomplete="off" placeholder="weeks, e.g. 20" aria-label="Weeks pregnant"><input id="gad" inputmode="numeric" autocomplete="off" placeholder="days (0–6)" aria-label="Extra days"></div>
+          <small class="hint">From your scan report or antenatal card. Needed for pregnancy ranges and baby scan measurements.</small></div>
+        <div class="womenbox" id="cycBox" hidden><label class="f" for="meno">Your periods</label>
+          <select id="meno" aria-label="Periods status"><option value="">I still have periods</option><option value="Y">My periods have stopped (menopause)</option><option value="YB">Menopause, with bleeding since</option></select>
+          <div id="cdayBox" style="margin-top:8px"><label class="f" for="cday">Day of your cycle today (optional)</label><div class="agebox"><input id="cday" inputmode="numeric" autocomplete="off" placeholder="day 1 = first day of period"></div><small class="hint">Hormone and womb-lining ranges change through the month.</small></div></div>
       </div>
       <p class="err" id="profErr" hidden></p>
     </div>
@@ -227,7 +244,7 @@ textarea{resize:vertical}
    Reference ranges are typical ADULT ranges; labs differ, so users can enter their own lab's range. */
 const PANELS = [], TESTS = {};
 let CUR = null;
-function P(name, icon, note) { CUR = { name, icon, note: note || '', ids: [] }; PANELS.push(CUR); }
+function P(name, icon, note, only) { CUR = { name, icon, note: note || '', only: only || '', ids: [] }; PANELS.push(CUR); }
 function N(id, name, unit, range, o) {
   o = o || {};
   TESTS[id] = Object.assign({ id, name, type: 'n', unit, range, panel: CUR ? CUR.name : null }, o);
@@ -334,9 +351,10 @@ N('ua', 'Uric acid', 'mg/dL', { m: [3.4, 7], f: [2.4, 6] }, { alts: [{ u: 'µmol
 
 /* ---------- 6. Sugar ---------- */
 P('Blood Sugar & Diabetes', '🍬');
-N('fpg', 'Fasting blood glucose', 'mg/dL', [70, 99], { alts: [{ u: 'mmol/L', f: 0.0555 }], cl: 54, ch: 400, dp: 0, lo: 'Low blood sugar can cause shakiness, sweating, confusion and collapse. Causes: skipped meals, diabetes medicines, alcohol, hormone problems.', hi: 'Above the normal fasting range. 100–125 mg/dL suggests prediabetes; 126 or more (on two occasions) suggests diabetes.' });
+N('fpg', 'Fasting blood glucose', 'mg/dL', [70, 99], { p: [65, 91], alts: [{ u: 'mmol/L', f: 0.0555 }], cl: 54, ch: 400, dp: 0, lo: 'Low blood sugar can cause shakiness, sweating, confusion and collapse. Causes: skipped meals, diabetes medicines, alcohol, hormone problems.', hi: 'Above the normal fasting range. 100–125 mg/dL suggests prediabetes; 126 or more (on two occasions) suggests diabetes.' });
 N('rpg', 'Random blood glucose', 'mg/dL', [70, 139], { alts: [{ u: 'mmol/L', f: 0.0555 }], cl: 54, ch: 400, dp: 0, lo: 'Low blood sugar can cause shakiness, sweating, confusion and collapse.', hi: 'Raised random glucose. 200 mg/dL or more with symptoms suggests diabetes.' });
-N('ogtt2', '2-hour OGTT glucose', 'mg/dL', [null, 139], { alts: [{ u: 'mmol/L', f: 0.0555 }], ch: 400, dp: 0, hi: '140–199 mg/dL suggests impaired glucose tolerance (prediabetes); 200 or more suggests diabetes.' });
+N('ogtt1', '1-hour OGTT glucose (pregnancy test)', 'mg/dL', [null, 179], { p: [null, 179], alts: [{ u: 'mmol/L', f: 0.0555 }], ch: 400, dp: 0, hint: 'Used in the 75 g glucose test in pregnancy (24–28 weeks).', hi: 'In pregnancy a 1-hour value of 180 mg/dL (10.0 mmol/L) or more meets the criterion for gestational diabetes.' });
+N('ogtt2', '2-hour OGTT glucose', 'mg/dL', [null, 139], { p: [null, 152], alts: [{ u: 'mmol/L', f: 0.0555 }], ch: 400, dp: 0, hi: '140–199 mg/dL suggests impaired glucose tolerance (prediabetes); 200 or more suggests diabetes.' });
 N('hba1c', 'HbA1c', '%', [4, 5.6], { alts: [{ u: 'mmol/mol', from: function (p) { return (p - 2.15) * 10.929; }, to: function (m) { return m / 10.929 + 2.15; } }], dp: 1,
   hint: 'HbA1c can be unreliable with anaemia, sickle cell or recent transfusion.', hi: 'HbA1c shows the average sugar over about 3 months. 5.7–6.4% suggests prediabetes; 6.5% or more suggests diabetes.' });
 
@@ -456,6 +474,146 @@ CUR = null;
 N('egfr', 'eGFR (calculated, CKD-EPI 2021)', 'mL/min/1.73m²', [60, null], { calc: true, cl: 15, dp: 0, lo: 'Estimated kidney filtering rate below 60 suggests reduced kidney function.' });
 N('cca', 'Albumin-corrected calcium (calculated)', 'mg/dL', [8.6, 10.2], { calc: true, cl: 6.5, ch: 13, dp: 1, lo: 'Corrected calcium is low.', hi: 'Corrected calcium is high.' });
 N('ag', 'Anion gap (calculated)', 'mmol/L', [8, 16], { calc: true, dp: 0, hi: 'A high anion gap points to acids building up (ketones, lactate, kidney failure, toxins).', lo: 'A low anion gap can be a lab artefact or very low albumin.' });
+
+'use strict';
+/* ===== LabLens obstetrics & gynaecology catalogue =====
+   Loaded after data.js. Ranges that depend on weeks of pregnancy, cycle day or menopause use rf(prof) functions.
+   prof.gaW = weeks of pregnancy (decimal), prof.tri = trimester (1-3), prof.meno = '' | 'Y' | 'YB' (postmenopausal / with bleeding),
+   prof.cday = day of cycle, prof.phase = 'm' (menstrual) | 'ep' (early follicular) | 'lp' (late follicular) | 'lut' (luteal).
+   Values are typical published reference intervals and standard clinical cut-offs; a doctor must confirm them. */
+const NEED_GA = 'Enter your weeks of pregnancy above to see the normal range';
+const NEED_CYCLE = 'Enter the day of your cycle above to see the normal range';
+const mm2cm = [{ u: 'cm', f: 0.1 }];
+
+/* ---------- Pregnancy: dating and baby scan ---------- */
+P('Pregnancy: Dating & Baby Scan', '🤰', 'Type the measurements printed on the scan report. First enter how many weeks pregnant you are under “About you”.', 'preg');
+N('crl', 'Crown–rump length (CRL, early scan)', 'mm', null, { noref: true, alts: mm2cm, dp: 1, hint: 'Measured at about 6–14 weeks. LabLens works out the age of the pregnancy from it.' });
+N('fhr', 'Baby’s heart rate', 'bpm', null, { rf: function (p) { const g = p.gaW; if (g == null) return null; return g < 6 ? [90, 170] : g < 9 ? [100, 180] : g < 14 ? [120, 180] : [110, 160]; }, need: NEED_GA, dp: 0,
+  lo: 'A slow baby heart rate needs same-day review by an obstetrician.', hi: 'A fast baby heart rate needs prompt review by an obstetrician.' });
+N('nt', 'Nuchal translucency (NT)', 'mm', [null, 3.0], { dp: 1, hint: 'Measured at 11–14 weeks when the CRL is 45–84 mm.', hi: 'A thick fluid space at the back of the baby’s neck is a marker for chromosome conditions (such as Down syndrome) and some heart or other problems. Most babies with a mildly raised NT are healthy, but a detailed scan and counselling are advised.' });
+N('bpd', 'Biparietal diameter (BPD, head width)', 'mm', null, { noref: true, alts: mm2cm, dp: 1 });
+N('hc', 'Head circumference (HC)', 'mm', null, { noref: true, alts: mm2cm, dp: 1 });
+N('ac', 'Abdominal circumference (AC)', 'mm', null, { noref: true, alts: mm2cm, dp: 1 });
+N('fl', 'Femur length (FL, thigh bone)', 'mm', null, { noref: true, alts: mm2cm, dp: 1 });
+N('efw', 'Estimated baby weight (as printed on your report)', 'g', null, { noref: true, alts: [{ u: 'kg', f: 0.001 }], dp: 0, hint: 'Optional. If you leave it blank, LabLens calculates it from the measurements above.' });
+N('afi', 'Amniotic fluid index (AFI)', 'cm', [5, 24], { dp: 1, alts: [{ u: 'mm', f: 10 }],
+  lo: 'Low fluid around the baby (oligohydramnios). Causes include leaking membranes, placental or baby kidney problems, and going past the due date.', hi: 'Too much fluid (polyhydramnios). Causes include diabetes in pregnancy, some baby conditions, and infections; sometimes no cause is found.' });
+N('sdp', 'Deepest pool of fluid (single deepest pocket)', 'cm', [2, 8], { dp: 1, alts: [{ u: 'mm', f: 10 }],
+  lo: 'A deepest pool below 2 cm means low fluid.', hi: 'A deepest pool of 8 cm or more means extra fluid.' });
+N('cervix', 'Cervical length', 'mm', [25, null], { dp: 0, alts: [{ u: 'cm', f: 0.1 }], hint: 'Usually measured at 18–24 weeks by vaginal scan.',
+  lo: 'A short cervix (under 25 mm) before 37 weeks raises the risk of early labour.' });
+Q('psite', 'Where the pregnancy is on the scan', ['Inside the womb (normal)', 'Not seen yet (pregnancy of unknown location)', 'Outside the womb (ectopic pregnancy)', 'Miscarriage (incomplete or complete)'], ['Inside the womb (normal)'],
+  { crit: ['Outside the womb (ectopic pregnancy)'], say: 'This scan finding needs medical follow-up. An ectopic pregnancy can cause life-threatening bleeding.' });
+Q('hbseen', 'Baby’s heartbeat on an early scan', ['Heartbeat seen', 'No heartbeat seen'], ['Heartbeat seen'], { say: 'No heartbeat seen can mean the scan is too early or that the pregnancy is not growing. A doctor will decide whether to repeat the scan.' });
+Q('plac', 'Placenta position', ['Normal (upper part of the womb)', 'Low-lying', 'Placenta praevia (covers the exit of the womb)'], ['Normal (upper part of the womb)'],
+  { say: 'A low placenta can cause bleeding. Many low-lying placentas move up as the womb grows.' });
+Q('pres', 'Baby’s position (presentation)', ['Head down (cephalic)', 'Breech (bottom or feet down)', 'Lying sideways (transverse / oblique)', 'Not yet fixed / not stated'], ['Head down (cephalic)', 'Not yet fixed / not stated'],
+  { say: 'The baby is not head down. Before about 36 weeks many babies still turn.' });
+Q('plural', 'Number of babies', ['One baby', 'Twins or more'], ['One baby', 'Twins or more'], { say: '' });
+
+/* ---------- Pregnancy: mother's checks ---------- */
+P('Pregnancy: Mother’s Checks', '🩺', 'Blood pressure, weight and belly measurement from your antenatal card.', 'preg');
+N('sbp', 'Blood pressure: top number (systolic)', 'mmHg', [90, 139], { ch: 160, dp: 0, hi: 'Raised blood pressure in pregnancy needs a doctor’s review: 140 or above can be pre-eclampsia or pregnancy-related hypertension.', lo: 'A low reading can cause dizziness; discuss with your midwife or doctor if you feel faint.' });
+N('dbp', 'Blood pressure: bottom number (diastolic)', 'mmHg', [60, 89], { ch: 110, dp: 0, hi: 'A bottom number of 90 or above in pregnancy needs a doctor’s review.' });
+N('ht', 'Height', 'cm', null, { noref: true, alts: [{ u: 'm', f: 0.01 }], dp: 0 });
+N('wt_pre', 'Weight before pregnancy (or at first visit)', 'kg', null, { noref: true, alts: [{ u: 'lb', f: 2.2046 }], dp: 1 });
+N('wt_now', 'Weight now', 'kg', null, { noref: true, alts: [{ u: 'lb', f: 2.2046 }], dp: 1 });
+N('fh', 'Fundal height (belly measurement)', 'cm', null, { rf: function (p) { const g = p.gaW; return g != null && g >= 20 && g <= 36 ? [g - 2, g + 2] : null; }, need: 'Used from 20 to 36 weeks: the cm should be within 2 of the weeks', dp: 0,
+  lo: 'Smaller than expected for the weeks: can mean slow growth, low fluid or wrong dates.', hi: 'Bigger than expected: can mean a large baby, extra fluid, twins or wrong dates.' });
+
+/* ---------- Pregnancy: special blood tests ---------- */
+P('Pregnancy: Special Blood Tests', '🧪', 'Early pregnancy hormone levels and blood group. Blood count, thyroid, sugar and infection tests are in their usual sections and are adjusted for pregnancy.', 'preg');
+function hcgRange(p) {
+  const g = p.gaW; if (g == null) return null; const w = Math.floor(g);
+  if (w < 3) return null; if (w === 3) return [5, 50]; if (w === 4) return [5, 426]; if (w === 5) return [18, 7340]; if (w === 6) return [1080, 56500];
+  if (w <= 8) return [7650, 229000]; if (w <= 12) return [25700, 288000]; if (w <= 16) return [13300, 254000]; if (w <= 24) return [4060, 165400]; return [3640, 117000];
+}
+N('hcg1', 'hCG pregnancy hormone (blood level)', 'mIU/mL', null, { rf: hcgRange, need: NEED_GA, dp: 0, hint: 'Ranges are very wide and depend on exact dates. A second test 48 hours later tells more than one value.',
+  lo: 'Lower than usual for the stage of pregnancy: can mean dates are earlier than thought, a failing pregnancy, or an ectopic pregnancy.', hi: 'Higher than usual for the stage: can mean dates are later than thought, twins, or (rarely) a molar pregnancy.' });
+N('hcg2', 'hCG 48 hours later (second test)', 'mIU/mL', null, { noref: true, dp: 0, hint: 'Only if your doctor repeated the test after about 48 hours.' });
+N('prog', 'Progesterone (early pregnancy)', 'ng/mL', [10, null], { dp: 1, alts: [{ u: 'nmol/L', f: 3.18 }], hint: 'Used mainly before 10 weeks.',
+  lo: 'A low progesterone in early pregnancy goes with a higher chance that the pregnancy is not viable (miscarriage or ectopic).' });
+Q('rhd', 'Rhesus (Rh) D blood group', ['Rh positive', 'Rh negative'], ['Rh positive', 'Rh negative'], { say: '' });
+
+/* ---------- Gynaecology: pelvic scan ---------- */
+P('Gynaecology: Pelvic Scan', '🩻', 'Measurements from a womb and ovary ultrasound. Tell LabLens about your periods under “About you” so the right range is used.', 'female');
+N('et', 'Endometrial thickness (womb lining)', 'mm', null, { dp: 1, alts: [{ u: 'cm', f: 0.1 }],
+  rf: function (p) { if (p.meno === 'YB') return [null, 4]; if (p.meno) return [null, 11]; if (p.phase === 'm') return [1, 5]; if (p.phase === 'ep') return [4, 9]; if (p.phase === 'lp') return [6, 13]; if (p.phase === 'lut') return [7, 16]; return [1, 16]; },
+  hint: 'The normal lining changes through the month. Enter your cycle day for a more exact range.',
+  lo: 'A thin lining: common before ovulation, on contraception, or after menopause. If trying to conceive, a lining under 7 mm at mid-cycle may reduce implantation.',
+  hi: 'A thick lining can be normal late in the cycle. After menopause (over 4 mm with bleeding, or 11 mm or more without), or with irregular or heavy bleeding, a thick lining needs a doctor’s review (polyp, hyperplasia, and rarely cancer).' });
+N('ovvol', 'Ovary volume (larger ovary)', 'mL', null, { dp: 1, rf: function (p) { return p.meno ? [null, 5] : [null, 10]; },
+  hi: 'A large ovary can be due to a cyst, polycystic ovaries (volume over 10 mL), or other growths. After menopause an enlarged ovary needs specialist review.' });
+N('afc', 'Antral follicle count (both ovaries together)', 'count', [7, 24], { dp: 0, hint: 'Small follicles of 2–9 mm counted early in the cycle.',
+  lo: 'A low follicle count suggests fewer eggs remaining (reduced ovarian reserve).', hi: 'A high follicle count goes with polycystic ovaries (PCOS) and a strong response to fertility medicines.' });
+N('afc1', 'Follicles in the busier ovary', 'count', [null, 19], { dp: 0, hint: '20 or more in one ovary is one of the signs of polycystic-type ovaries.', hi: '20 or more follicles in one ovary is one of the criteria for polycystic ovaries.' });
+N('uter', 'Uterus (womb) length', 'cm', null, { dp: 1, rf: function (p) { return p.meno ? [3.5, 6.5] : [6, 10]; }, alts: [{ u: 'mm', f: 10 }],
+  hi: 'A womb bigger than usual can be due to fibroids, adenomyosis, or an early pregnancy.', lo: 'A small womb is expected after menopause, and can be normal in a girl or a very slim woman.' });
+N('fibroid', 'Largest fibroid (diameter)', 'cm', null, { noref: true, dp: 1, alts: [{ u: 'mm', f: 10 }], hint: 'Leave blank if no fibroid was seen.' });
+N('cyst', 'Largest ovarian cyst (diameter)', 'cm', null, { noref: true, dp: 1, alts: [{ u: 'mm', f: 10 }], hint: 'Leave blank if no cyst was seen.' });
+Q('cysttype', 'Type of cyst (if one was seen)', ['Simple (clear fluid)', 'Haemorrhagic (blood-filled)', 'Endometrioma (“chocolate” cyst)', 'Dermoid (teratoma)', 'Complex or solid parts'], ['Simple (clear fluid)'], { say: 'A cyst with these features needs follow-up by a gynaecologist.' });
+Q('ffluid', 'Free fluid in the pelvis', ['None', 'Small amount (often normal)', 'Moderate amount', 'Large amount'], ['None', 'Small amount (often normal)'], { crit: ['Large amount'], say: 'A larger amount of free fluid can come from infection, a burst cyst or internal bleeding and needs prompt review, especially with pain.' });
+
+/* ---------- Gynaecology: hormones and cycle ---------- */
+P('Gynaecology: Hormones & Cycle', '🌙', 'FSH, LH, prolactin, testosterone and thyroid tests are in their own sections. Enter the day of your cycle and whether you still have periods under “About you”.', 'female');
+N('amh', 'Anti-Müllerian hormone (AMH, egg reserve)', 'ng/mL', [1.0, 3.5], { dp: 2, alts: [{ u: 'pmol/L', f: 7.14 }], hint: 'Can be taken on any day of the cycle. It falls naturally with age.',
+  lo: 'A low AMH suggests fewer eggs remaining. It does not by itself predict whether you can conceive, especially in younger women.', hi: 'A high AMH is common in polycystic ovary syndrome (PCOS).' });
+N('e2', 'Oestradiol (estradiol, E2)', 'pg/mL', null, { dp: 0, alts: [{ u: 'pmol/L', f: 3.67 }], need: NEED_CYCLE,
+  rf: function (p) { if (p.meno) return [null, 30]; if (p.phase === 'm' || p.phase === 'ep') return [12, 166]; if (p.phase === 'lp') return [85, 498]; if (p.phase === 'lut') return [44, 211]; return null; },
+  lo: 'Low oestradiol can mean low ovarian activity, menopause, very low body weight, or a pituitary or hypothalamus cause.', hi: 'A raised oestradiol early in the cycle can point to reduced ovarian reserve, a cyst, or hormone treatment.' });
+N('prog_l', 'Progesterone (mid-luteal, to check ovulation)', 'ng/mL', null, { dp: 1, alts: [{ u: 'nmol/L', f: 3.18 }], need: 'Best measured about 7 days before the next period. Enter the cycle day above.',
+  hint: 'Taken about 7 days before the next period (day 21 of a 28-day cycle).',
+  rf: function (p) { if (p.cday == null || p.meno) return null; return p.cday >= 18 ? [10, null] : p.cday <= 10 ? [null, 1.5] : null; },
+  lo: 'A low mid-luteal progesterone suggests that ovulation did not happen in this cycle (or the test was taken at the wrong time).' });
+N('cyc_len', 'Usual cycle length', 'days', [21, 35], { dp: 0, hint: 'From the first day of one period to the first day of the next.', lo: 'Periods closer than 21 days apart are frequent (polymenorrhoea).', hi: 'Periods more than 35 days apart are infrequent, which can mean irregular or no ovulation.' });
+N('per_len', 'Length of your period', 'days', [2, 7], { dp: 0, hi: 'Bleeding lasting more than 7 days is prolonged and can cause anaemia.' });
+N('mslp', 'Months since your last period', 'months', [0, 3], { dp: 0, hint: 'Leave blank if you have regular periods.', hi: 'No period for more than 3 months (when not pregnant) is called secondary amenorrhoea and has several treatable causes.' });
+
+/* ---------- Calculated values (never typed) ---------- */
+CUR = null;
+N('ga_crl', 'Age of pregnancy by CRL (calculated)', '', null, { calc: true, nf: true, noref: true });
+N('ga_bpd', 'Age of pregnancy by head width (BPD)', '', null, { calc: true, nf: true, noref: true });
+N('ga_hc', 'Age of pregnancy by head circumference', '', null, { calc: true, nf: true, noref: true });
+N('ga_ac', 'Age of pregnancy by abdominal circumference', '', null, { calc: true, nf: true, noref: true });
+N('ga_fl', 'Age of pregnancy by femur length', '', null, { calc: true, nf: true, noref: true });
+N('ga_comp', 'Age of pregnancy by all measurements together', '', null, { calc: true, nf: true, noref: true });
+N('efw_c', 'Estimated baby weight (calculated, Hadlock)', 'g', null, { calc: true, nf: true, noref: true, dp: 0 });
+N('efw_pct', 'Baby’s weight compared with others of the same age (approx.)', '', null, { calc: true, nf: true, noref: true });
+N('bmi', 'Body mass index (BMI, calculated)', 'kg/m²', [18.5, 24.9], { calc: true, dp: 1, lo: 'BMI below 18.5 is underweight.', hi: 'BMI of 25 or more is overweight; 30 or more is obesity.' });
+N('wtgain', 'Weight gained in pregnancy so far (calculated)', 'kg', null, { calc: true, nf: true, noref: true, dp: 1 });
+N('hcg_rise', 'hCG change over 48 hours (calculated)', '%', null, { calc: true, nf: true, noref: true, dp: 0 });
+N('lhfsh', 'LH : FSH ratio (calculated)', '', [null, 2], { calc: true, dp: 1, hi: 'An LH-to-FSH ratio above 2 is seen in many women with polycystic ovary syndrome (it is not enough on its own).' });
+
+/* ---------- pregnancy-adjusted ranges by trimester (used when weeks of pregnancy are known) ---------- */
+const PREG = {
+  hb: { 1: [11, 15], 2: [10.5, 14.5], 3: [11, 15] },
+  tsh: { 1: [0.1, 4.0], 2: [0.2, 4.0], 3: [0.3, 4.0] },
+  fib: { 1: [244, 510], 2: [291, 538], 3: [373, 619] },
+  ddimer: { 1: [0, 0.5], 2: [0, 1.0], 3: [0, 1.7] },
+  alp: { 1: [35, 130], 2: [40, 190], 3: [45, 250] }
+};
+function pregRange(t, prof) {
+  const o = PREG[t.id]; if (!o || !prof.tri) return null;
+  return o[prof.tri] || null;
+}
+
+/* which panels apply to the person's answers under "About you" */
+const PANELS_BY_NAME = {};
+PANELS.forEach(function (p) { PANELS_BY_NAME[p.name] = p; });
+function panelOn(p, prof) {
+  if (!p.only) return true;
+  if (p.only === 'preg') return !!prof.preg && prof.sex === 'F';
+  if (p.only === 'female') return prof.sex === 'F' && prof.ageY >= 10 && !prof.preg;
+  return true;
+}
+
+/* weeks as a decimal to "20 w 3 d" */
+function fmtGA(w) {
+  if (w == null || !isFinite(w)) return '';
+  let wk = Math.floor(w + 1e-9), d = Math.round((w - wk) * 7);
+  if (d >= 7) { wk += 1; d = 0; }
+  return wk + ' w ' + d + ' d';
+}
 
 'use strict';
 /* ===== LabLens paediatric reference intervals =====
@@ -642,6 +800,8 @@ function shortName(t) {
   return m && m[1].length <= 12 ? m[1] : t.name.replace(/ \(.*\)$/, '');
 }
 function rangeFor(t, prof) {
+  if (t.rf) return t.rf(prof);
+  if (prof.preg) { const gr = pregRange(t, prof); if (gr) return gr; }
   if (prof.preg && t.p) return t.p;
   const pr = pedRange(t, prof);
   if (pr) return pr;
@@ -694,15 +854,17 @@ function evalQ(t, e) {
 }
 function pseudo(id, val, prof) {
   const t = TESTS[id];
-  const r = rangeFor(t, prof) || t.range;
+  const r = rangeFor(t, prof) || t.range || [null, null];
   const lo = r[0], hi = r[1];
-  const flag = (lo != null && val < lo) ? 'L' : (hi != null && val > hi) ? 'H' : 'N';
+  const flag = t.nf ? null : (lo != null && val < lo) ? 'L' : (hi != null && val > hi) ? 'H' : 'N';
   let crit = null;
   if (t.cl != null && val < t.cl) crit = 'L';
   if (t.ch != null && val > t.ch) crit = 'H';
   return { id, t, type: 'n', rawStr: fmt(val, t.dp), raw: val, val, lo, hi, flag, crit, sev: 0, unit: t.unit, custom: false, derived: true };
 }
 
+const DERIVE_HOOKS = [];
+const CALC_IDS = ['egfr', 'cca', 'ag', 'neuta', 'lyma', 'eosa', 'tsat'];
 function derive(res, prof) {
   const v = function (id) { return res[id] ? res[id].val : null; };
   // absolute counts from % and WBC
@@ -723,6 +885,7 @@ function derive(res, prof) {
   if (v('ca') != null && v('alb') != null && v('alb') < 4) res.cca = pseudo('cca', v('ca') + 0.8 * (4 - v('alb')), prof);
   if (v('na') != null && v('chl') != null && v('hco3') != null) res.ag = pseudo('ag', v('na') - v('chl') - v('hco3'), prof);
   if (!res.tsat && v('iron') != null && v('tibc') != null && v('tibc') > 0) res.tsat = pseudo('tsat', v('iron') / v('tibc') * 100, prof);
+  DERIVE_HOOKS.forEach(function (h) { h(res, prof, v, pseudo); });
 }
 
 function makeCtx(res, prof) {
@@ -741,7 +904,7 @@ function makeCtx(res, prof) {
       if (c._used) c._used[id] = 1;
       const nm = shortName(r.t);
       if (r.type === 'q') return nm + ': ' + r.sel;
-      return nm + ' ' + (r.derived ? fmt(r.val, r.t.dp) : r.rawStr) + (r.unit ? ' ' + r.unit : '') + (r.flag === 'H' ? ' (high)' : r.flag === 'L' ? ' (low)' : '');
+      return nm + ' ' + (r.disp ? r.disp : r.derived ? fmt(r.val, r.t.dp) : r.rawStr) + (r.unit && !r.disp ? ' ' + r.unit : '') + (r.flag === 'H' ? ' (high)' : r.flag === 'L' ? ' (low)' : '');
     },
     max: function () { let m = null; for (let i = 0; i < arguments.length; i++) { const x = c.v(arguments[i]); if (x != null && (m == null || x > m)) m = x; } return m; },
     min: function () { let m = null; for (let i = 0; i < arguments.length; i++) { const x = c.v(arguments[i]); if (x != null && (m == null || x < m)) m = x; } return m; }
@@ -1123,7 +1286,7 @@ R('prediabetes', 'Prediabetes range blood sugar', [GP, ENDO, DIET], 1,
   'Blood sugar is higher than normal but below the diabetes range. This is a warning stage, and it can often be reversed with weight loss, regular exercise and diet changes.',
   'Repeat the test in 3–6 months, review diet and weight, and check blood pressure and cholesterol.',
   function (c) {
-    if (c.v('fpg') >= 126 || c.v('rpg') >= 200 || c.v('ogtt2') >= 200 || c.v('hba1c') >= 6.5) return null;
+    if (c.preg || c.v('fpg') >= 126 || c.v('rpg') >= 200 || c.v('ogtt2') >= 200 || c.v('hba1c') >= 6.5) return null;
     const e = []; let s = 0;
     if (c.v('fpg') >= 100) { e.push(c.d('fpg')); s++; }
     if (c.v('ogtt2') >= 140) { e.push(c.d('ogtt2')); s++; }
@@ -1320,17 +1483,6 @@ R('hypogonad', 'Low testosterone (male)', [ENDO, URO], 1,
     if (c.hi('lh') || c.hi('fsh')) { if (c.hi('lh')) e.push(c.d('lh')); if (c.hi('fsh')) e.push(c.d('fsh')); s += 1; }
     return { ev: e, conf: s >= 2 ? 2 : 1 };
   });
-R('pcos', 'Polycystic ovary syndrome (PCOS) pattern', [OBG, ENDO], 1,
-  'A raised LH-to-FSH ratio and/or raised testosterone in a woman can fit PCOS, a common condition that may cause irregular periods, acne, excess hair and difficulty conceiving. It is diagnosed with symptoms and a pelvic ultrasound, not blood tests alone.',
-  'A gynaecology or endocrine review, pelvic ultrasound, blood sugar and lipid checks. Lifestyle changes and weight management help.',
-  function (c) {
-    if (c.sex !== 'F') return null;
-    const e = []; let s = 0;
-    if (c.has('lh') && c.has('fsh') && c.v('fsh') > 0 && c.v('lh') / c.v('fsh') >= 2) { e.push('LH:FSH ratio about ' + fmt(c.v('lh') / c.v('fsh'), 1) + ' (2 or above)'); s++; }
-    if (c.hi('testo')) { e.push(c.d('testo')); s++; }
-    if (s && (c.hi('fpg') || c.hi('hba1c'))) e.push(c.hi('fpg') ? c.d('fpg') : c.d('hba1c'));
-    return s ? { ev: e, conf: s >= 2 ? 2 : 1 } : null;
-  });
 R('prolactin', 'Raised prolactin', [ENDO, OBG], 1,
   'Prolactin can be raised by pregnancy, breastfeeding, stress, a recent meal or exercise, an underactive thyroid, medicines (some antipsychotics, anti-sickness drugs, antidepressants) and by a prolactin-producing pituitary growth (prolactinoma, usually benign and treatable).',
   'Repeat the test rested, with thyroid tests and a pregnancy test. Pituitary MRI if persistently high. May cause irregular periods, milk discharge or low libido.',
@@ -1496,8 +1648,19 @@ function normProfile(p) {
   const sex = p && (p.sex === 'F' || p.sex === 'M') ? p.sex : '';
   const child = a.years != null && a.years < 18;
   const h = num(p && p.height);
-  return { age: years, ageY: years, ageDays: a.days == null ? 0 : a.days, ageText: a.text, unit: a.unit, band: a.band, child: child, neo: a.days != null && a.days < 28,
+  const nz = { age: years, ageY: years, ageDays: a.days == null ? 0 : a.days, ageText: a.text, unit: a.unit, band: a.band, child: child, neo: a.days != null && a.days < 28,
     sex: sex, preg: !!(p && sex === 'F' && p.preg === 'Yes' && years >= 10), height: h != null && child ? h : null };
+  const o = nz;
+  o.gaW = null; o.tri = 0;
+  if (o.preg) {
+    const w = num(p.gaw), d = num(p.gad);
+    if (w != null && w >= 3 && w <= 44) { o.gaW = w + (d != null && d >= 0 && d < 7 ? d / 7 : 0); o.tri = o.gaW < 14 ? 1 : o.gaW < 28 ? 2 : 3; }
+  }
+  o.meno = (!o.preg && sex === 'F' && years >= 10 && (p.meno === 'Y' || p.meno === 'YB')) ? p.meno : '';
+  const cd = num(p && p.cday);
+  o.cday = (!o.preg && sex === 'F' && cd != null && cd >= 1 && cd <= 60) ? cd : null;
+  o.phase = o.meno || o.cday == null ? '' : o.cday <= 5 ? 'm' : o.cday <= 10 ? 'ep' : o.cday <= 14 ? 'lp' : 'lut';
+  return o;
 }
 function refText(t, prof, e) {
   if (t.type === 'q') return 'Normal: ' + t.normal.join(' / ');
@@ -1505,7 +1668,7 @@ function refText(t, prof, e) {
   const u = e && e.u ? unitLabel(t, e.u) : t.unit;
   if (cl != null || ch != null) return 'Your lab: ' + (cl != null && ch != null ? fmt(cl) + '–' + fmt(ch) : cl != null ? '≥ ' + fmt(cl) : '≤ ' + fmt(ch)) + ' ' + u;
   const r = rangeFor(t, prof);
-  if (!r) return 'Select your sex above';
+  if (!r) return t.need || (t.noref ? '' : 'Select your sex above');
   let lo = r[0], hi = r[1];
   if (e && e.u) { const a = t.alts[e.u - 1]; const f = function (x) { return x == null ? null : a.from ? a.from(x) : x * a.f; }; lo = f(lo); hi = f(hi); }
   const dp = t.dp != null ? (e && e.u ? undefined : t.dp) : undefined;
@@ -1523,10 +1686,12 @@ function meaning(r) {
 
 function interpret(state) {
   const prof = normProfile(state.profile);
-  const res = {}, skipped = [];
+  const res = {}, skipped = [], wrongPanel = [];
   Object.keys(state.vals || {}).forEach(function (id) {
     const t = TESTS[id]; if (!t || t.calc) return;
     const e = state.vals[id];
+    const pn = PANELS_BY_NAME[t.panel];
+    if (pn && !panelOn(pn, prof)) { if ((t.type === 'n' && num(e.v) != null) || (t.type === 'q' && e.s)) wrongPanel.push(shortName(t)); return; }
     const why = pedSkip(t, prof);
     if (why) { if ((t.type === 'n' && num(e.v) != null) || (t.type === 'q' && e.s)) skipped.push({ t: t, why: why }); return; }
     const r = t.type === 'n' ? evalNum(t, e, prof) : evalQ(t, e);
@@ -1544,8 +1709,9 @@ function interpret(state) {
     if (o && o.ev && o.ev.length) Object.keys(c._used).forEach(function (k) { explained[k] = 1; });
     if (o && o.ev && o.ev.length) {
       let note = o.note || '';
+      if (prof.preg && PREG_NOTE[rule.id]) { const gn = typeof PREG_NOTE[rule.id] === 'function' ? PREG_NOTE[rule.id](c) : PREG_NOTE[rule.id]; if (gn) note = note ? note + ' ' + gn : gn; }
       if (prof.child && PED_NOTE[rule.id]) { const pn = typeof PED_NOTE[rule.id] === 'function' ? PED_NOTE[rule.id](c) : PED_NOTE[rule.id]; if (pn) note = note ? note + ' ' + pn : pn; }
-      fired.push({ id: rule.id, name: rule.name, spec: rule.spec, what: rule.what, next: rule.next, ev: o.ev, conf: o.conf || 1, urg: o.urg != null ? o.urg : rule.urg, note: note });
+      fired.push({ id: rule.id, name: rule.name, spec: rule.spec, what: rule.what, next: rule.next, ev: o.ev, conf: o.conf || 1, urg: o.urg != null ? o.urg : rule.urg, note: note, tech: o.tech || '' });
     }
   });
   fired.sort(function (a, b) { return b.urg - a.urg || b.conf - a.conf; });
@@ -1589,12 +1755,13 @@ function interpret(state) {
     ids.forEach(function (id) { const r = res[id]; if (r.flag !== 'N') allNormal = false; rows.push({ panel: p.name, r: r, ref: refText(r.t, prof, state.vals[id]), meaning: meaning(r), value: r.type === 'q' ? r.sel : r.rawStr + (r.unit ? ' ' + r.unit : '') }); });
     (allNormal ? normalPanels : abnormalPanels).push(p.name);
   });
-  const calc = ['egfr', 'cca', 'ag', 'neuta', 'lyma', 'eosa', 'tsat'].filter(function (id) { return res[id] && res[id].derived; }).map(function (id) { const r = res[id]; return { r: r, ref: refText(r.t, prof), value: fmt(r.val, r.t.dp) + (r.unit ? ' ' + r.unit : ''), meaning: meaning(r) }; });
+  const calc = CALC_IDS.filter(function (id) { return res[id] && res[id].derived; }).map(function (id) { const r = res[id]; return { r: r, ref: r.refOverride != null ? r.refOverride : refText(r.t, prof), value: r.disp ? r.disp : fmt(r.val, r.t.dp) + (r.unit ? ' ' + r.unit : ''), meaning: meaning(r) }; });
   const count = Object.keys(res).filter(function (id) { return !res[id].derived; }).length;
   const abnormalCount = Object.keys(res).filter(function (id) { return !res[id].derived && res[id].flag !== 'N'; }).length;
 
-  const other = Object.keys(res).filter(function (id) { return res[id].flag !== 'N' && !explained[id]; }).map(function (id) { const r = res[id]; return { r: r, value: r.type === 'q' ? r.sel : (r.derived ? fmt(r.val, r.t.dp) : r.rawStr) + (r.unit ? ' ' + r.unit : ''), meaning: meaning(r) }; });
+  const other = Object.keys(res).filter(function (id) { return res[id].flag !== 'N' && !explained[id]; }).map(function (id) { const r = res[id]; return { r: r, value: r.type === 'q' ? r.sel : (r.disp ? r.disp : (r.derived ? fmt(r.val, r.t.dp) : r.rawStr) + (r.unit ? ' ' + r.unit : '')), meaning: meaning(r) }; });
   const warnings = [];
+  if (wrongPanel.length) warnings.push('Some results were not used because they apply only to ' + (prof.sex === 'F' ? 'pregnancy (or to a different stage of life)' : 'women') + ' and your “About you” answers do not match: ' + wrongPanel.slice(0, 8).join(', ') + '. Change “About you” if this is wrong.');
   if (prof.child) {
     warnings.push('Child profile: ' + prof.ageText + ' old, ' + BAND_NAME[prof.band] + '. Age-specific ranges are used where the app has them. These are typical term-baby and child ranges, so premature babies and sick children can differ. A paediatrician should interpret every result.');
     const adultTests = Object.keys(res).filter(function (id) { return res[id].adultUsed && !res[id].derived; }).map(function (id) { return shortName(res[id].t); });
@@ -1603,20 +1770,362 @@ function interpret(state) {
     skipped.forEach(function (x, i) { if (!i || skipped[i - 1].why !== x.why) warnings.push(x.why + ' Not interpreted: ' + skipped.filter(function (y) { return y.why === x.why; }).map(function (y) { return shortName(y.t); }).join(', ') + '.'); });
     if (prof.ageY >= 1 && !prof.height && res.cr) warnings.push('Tip: add your child’s height under “About you” and LabLens will estimate kidney function (eGFR) for children.');
   }
-  if (prof.preg) warnings.push('You indicated pregnancy. Pregnancy changes many normal ranges (this app adjusts only haemoglobin, PCV, white cells and creatinine). Review all results with your antenatal doctor.');
+  if (prof.preg && prof.gaW == null) warnings.push('Enter how many weeks pregnant you are (under “About you”) so pregnancy ranges and baby scan measurements can be interpreted.');
+  if (prof.preg) warnings.push('You indicated pregnancy. Pregnancy changes many normal ranges (this app adjusts haemoglobin, PCV, white cells, creatinine, thyroid, blood sugar and a few others for pregnancy, and uses the weeks of pregnancy you enter). Many other tests have no pregnancy range yet, so review all results with your antenatal doctor.');
   if (prof.age >= 65) warnings.push('Several normal ranges shift with older age (for example kidney function, PSA and some blood counts). Your doctor will interpret them in that context.');
 
   return { prof, res, fired, critical, urgency, specs, rows, calc, other, normalPanels, abnormalPanels, count, abnormalCount, warnings, skipped };
 }
 
-if (typeof module !== 'undefined') module.exports = { PANELS, TESTS, RULES, PED, ageProfile, pedRange, interpret, refText, fmt, num, URGENCY, CONF, SPEC_INFO, normProfile, rangeFor, toDef, unitLabel };
+if (typeof module !== 'undefined') module.exports = { PANELS, TESTS, RULES, PED, PREG, panelOn, ageProfile, pedRange, interpret, refText, fmt, num, URGENCY, CONF, SPEC_INFO, normProfile, rangeFor, toDef, unitLabel };
+
+'use strict';
+/* ===== LabLens obstetrics & gynaecology: calculations and rules =====
+   Loaded after engine.js and ob_data.js. Formulas: Hadlock (dating and weight), IADPSG (pregnancy diabetes), ACOG (hCG rise, blood pressure),
+   Rotterdam / 2023 international guideline (PCOS), IOM (weight gain). A specialist doctor must verify all thresholds. */
+const MFM = 'Maternal–Fetal Medicine specialist (high-risk pregnancy)';
+SPEC_INFO[MFM] = 'An obstetrician with extra training in complicated pregnancies and in scans of the baby. Often shared care with your own obstetrician.';
+SPEC_INFO[OBG] = 'Pregnancy, childbirth and women’s reproductive health (periods, hormones, cysts, fibroids, fertility).';
+Object.assign(SHORT, { hcg1: 'hCG', hcg2: 'hCG at 48 h', fhr: 'Baby heart rate', nt: 'NT', afi: 'AFI', sdp: 'Deepest pool', cervix: 'Cervical length', sbp: 'Systolic BP', dbp: 'Diastolic BP', fh: 'Fundal height', efw_pct: 'Baby weight percentile', efw_c: 'Estimated baby weight', efw: 'Estimated baby weight', ga_comp: 'Scan age of pregnancy', ga_crl: 'CRL age', hcg_rise: 'hCG rise', prog: 'Progesterone', prog_l: 'Luteal progesterone', et: 'Womb lining', ovvol: 'Ovary volume', afc: 'Follicle count', afc1: 'Follicles in one ovary', amh: 'AMH', e2: 'Oestradiol', cyc_len: 'Cycle length', per_len: 'Period length', mslp: 'Months without a period', uter: 'Womb length', lhfsh: 'LH:FSH ratio', bmi: 'BMI', wtgain: 'Weight gain', fibroid: 'Fibroid', cyst: 'Ovarian cyst', ogtt1: '1-hour glucose', ogtt2: '2-hour glucose', fpg: 'Fasting glucose' });
+
+/* ---------- calculators ---------- */
+function gaFromCRL(mm) { return mm >= 5 && mm <= 95 ? 5.2876 + 0.1584 * mm - 0.0007 * mm * mm : null; }   // weeks
+function gaFromBPD(c) { return 9.54 + 1.482 * c + 0.1676 * c * c; }
+function gaFromHC(c) { return 8.96 + 0.540 * c + 0.0003 * c * c * c; }
+function gaFromAC(c) { return 8.14 + 0.753 * c + 0.0036 * c * c; }
+function gaFromFL(c) { return 10.35 + 2.460 * c + 0.170 * c * c; }
+function efwHadlock(bpd, hc, ac, fl) {                                                                  // grams, inputs in cm
+  if (hc != null && ac != null && fl != null) {
+    if (bpd != null) return Math.pow(10, 1.3596 - 0.00386 * ac * fl + 0.0064 * hc + 0.00061 * bpd * ac + 0.0424 * ac + 0.174 * fl);
+    return Math.pow(10, 1.326 - 0.00326 * ac * fl + 0.0107 * hc + 0.0438 * ac + 0.158 * fl);
+  }
+  return null;
+}
+function normCdf(z) { const t = 1 / (1 + 0.2316419 * Math.abs(z)); const d = 0.3989423 * Math.exp(-z * z / 2); const p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274)))); return z > 0 ? 1 - p : p; }
+function efwPercentile(g, ga) {                                                                         // approx., ga in weeks (22–42)
+  if (ga == null || ga < 22 || ga > 42 || !(g > 0)) return null;
+  const mu = 0.578 + 0.332 * ga - 0.00354 * ga * ga;
+  return Math.max(0.1, Math.min(99.9, 100 * normCdf((Math.log(g) - mu) / 0.135)));
+}
+function hcgMinRise(h) { return h < 1500 ? 49 : h <= 3000 ? 40 : 33; }
+function tw(res, id, val, prof, extra) { const r = pseudo(id, val, prof); Object.assign(r, extra || {}); res[id] = r; return r; }
+
+DERIVE_HOOKS.push(function (res, prof, v, pseudo2) {
+  const mm = function (id) { const x = v(id); return x == null ? null : x / 10; };           // mm → cm
+  if (prof.preg) {
+    const gs = [];
+    if (v('crl') != null) { const g = gaFromCRL(v('crl')); if (g != null) tw(res, 'ga_crl', g, prof, { disp: fmtGA(g), unit: '', refOverride: 'Compare with the weeks you entered' }); }
+    [['bpd', gaFromBPD], ['hc', gaFromHC], ['ac', gaFromAC], ['fl', gaFromFL]].forEach(function (p) {
+      const x = mm(p[0]); if (x == null || x <= 0) return;
+      const g = p[1](x); if (!(g >= 12 && g <= 42)) return;
+      gs.push(g);
+      tw(res, 'ga_' + p[0], g, prof, { disp: fmtGA(g), unit: '', refOverride: 'Compare with the weeks you entered' });
+    });
+    if (gs.length >= 2) {
+      const g = gs.reduce(function (a, b) { return a + b; }, 0) / gs.length;
+      tw(res, 'ga_comp', g, prof, { disp: fmtGA(g), unit: '', refOverride: 'Average of the ' + gs.length + ' measurements; compare with the weeks you entered', n: gs.length });
+    }
+    let efw = v('efw'), src = 'report';
+    if (efw == null) { const e = efwHadlock(mm('bpd'), mm('hc'), mm('ac'), mm('fl')); if (e != null && e > 100 && e < 6500) { efw = e; src = 'calc'; tw(res, 'efw_c', e, prof, { refOverride: 'Hadlock formula, ± 15%' }); } }
+    const gaRef = prof.gaW != null ? prof.gaW : (res.ga_comp ? res.ga_comp.val : null);
+    if (efw != null && gaRef != null) {
+      const pc = efwPercentile(efw, gaRef);
+      if (pc != null) tw(res, 'efw_pct', pc, prof, { disp: pc < 1 ? 'below the 1st percentile' : pc > 99 ? 'above the 99th percentile' : 'about the ' + Math.round(pc) + 'th percentile', unit: '', refOverride: 'Between the 10th and 90th is the usual range (approximate)', pct: pc, efw: efw, src: src });
+    }
+    if (v('hcg1') != null && v('hcg2') != null && v('hcg1') > 0) {
+      const rise = (v('hcg2') - v('hcg1')) / v('hcg1') * 100, need = hcgMinRise(v('hcg1'));
+      tw(res, 'hcg_rise', rise, prof, { disp: (rise >= 0 ? '+' : '') + Math.round(rise) + '% in 48 h', unit: '', refOverride: 'Expected rise: at least ' + need + '% in 48 hours (early, wanted pregnancy)', rise: rise, need: need });
+    }
+    if (v('ht') > 100 && v('wt_pre') > 20) {
+      const m = v('ht') / 100; tw(res, 'bmi', v('wt_pre') / (m * m), prof);
+    }
+    if (v('wt_pre') != null && v('wt_now') != null) tw(res, 'wtgain', v('wt_now') - v('wt_pre'), prof, { disp: (v('wt_now') - v('wt_pre') >= 0 ? '+' : '') + fmt(v('wt_now') - v('wt_pre'), 1) + ' kg', unit: '', refOverride: '' });
+  } else if (prof.sex === 'F' && v('lh') != null && v('fsh') != null && v('fsh') > 0) {
+    tw(res, 'lhfsh', v('lh') / v('fsh'), prof);
+  }
+});
+['ga_crl', 'ga_bpd', 'ga_hc', 'ga_ac', 'ga_fl', 'ga_comp', 'efw_c', 'efw_pct', 'hcg_rise', 'bmi', 'wtgain', 'lhfsh'].forEach(function (id) { if (CALC_IDS.indexOf(id) < 0) CALC_IDS.push(id); });
+
+/* extra notes added to ordinary rules when the woman is pregnant */
+const PREG_NOTE = {
+  iron: 'In pregnancy the body needs about twice as much iron, so anaemia is common. Ranges used here are the pregnancy ones for your trimester. Iron tablets and the antenatal clinic are the usual route.',
+  hypothyroid: 'An underactive thyroid in pregnancy can affect the baby’s brain development and needs treatment and close monitoring. Ranges used here are for your trimester.',
+  hyperthyroid: 'A low TSH can be normal in early pregnancy because hCG stimulates the thyroid. Your doctor will check free T4 before deciding.',
+  uti: 'A urine infection (even without symptoms) is always treated in pregnancy because it can reach the kidneys and cause early labour.',
+  hiv: 'Treatment in pregnancy almost removes the chance of passing HIV to the baby, so confirm quickly.',
+  hbv: 'Tell your antenatal team: the baby is given hepatitis B vaccine and sometimes antibody injection at birth.',
+  syphilis: 'Syphilis in pregnancy can harm the baby, but one course of penicillin usually prevents this; treat early.',
+  diabetes: 'Diabetes in pregnancy needs a combined diabetes and antenatal plan to protect you and the baby.',
+  thrombocytopenia: 'Mild low platelets are common in late pregnancy (gestational thrombocytopenia), but a falling count with high blood pressure can be a warning sign of pre-eclampsia.',
+  pregnant: ''
+};
+
+/* ======== PREGNANCY RULES ======== */
+R('ectopic', 'Possible ectopic or failing early pregnancy', [OBG, ER], 3,
+  'An early pregnancy that cannot be seen in the womb, an hCG that rises too slowly or falls, or a very low progesterone can mean an ectopic pregnancy (outside the womb) or a pregnancy that is failing. An ectopic pregnancy can burst and cause life-threatening bleeding.',
+  'Go to a hospital with an early-pregnancy or emergency unit today, especially with one-sided lower belly pain, shoulder-tip pain, bleeding, dizziness or fainting. Repeat hCG after 48 hours and a vaginal scan are the usual next steps.',
+  function (c) {
+    const e = [], k = { s: 0 }, tech = [];
+    if (c.sel('psite') === 'Outside the womb (ectopic pregnancy)') { e.push(c.d('psite')); k.s += 4; }
+    else if (c.sel('psite') === 'Not seen yet (pregnancy of unknown location)') { e.push(c.d('psite')); k.s += 2; }
+    const hr = c.res.hcg_rise;
+    if (hr && hr.rise < hr.need && c.sel('psite') !== 'Inside the womb (normal)') { e.push('hCG rose ' + hr.disp.replace(' in 48 h', '') + ' in 48 hours (expected at least ' + hr.need + '%)'); k.s += 2; tech.push('Minimum expected 48-hour rise (ACOG): 49% if first hCG < 1500, 40% if 1500–3000, 33% if > 3000 mIU/mL.'); }
+    if (hr && hr.rise < -15 && c.sel('psite') !== 'Inside the womb (normal)') k.s += 1;
+    if (c.lo('prog') && c.v('prog') < 5 && c.sel('psite') !== 'Inside the womb (normal)') { e.push(c.d('prog')); k.s += 1; }
+    if (k.s < 2) return null;
+    return { ev: e, conf: k.s >= 4 ? 3 : 2, urg: 3, tech: tech.join(' ') };
+  });
+R('earlyloss', 'Pregnancy not progressing (miscarriage) pattern', [OBG], 2,
+  'No heartbeat seen at a stage where one is expected, a pregnancy sac without a growing baby, or a visible miscarriage on scan suggests that the pregnancy is not continuing. This is very common (about 1 in 5 known pregnancies) and is rarely caused by anything the mother did.',
+  'See your early-pregnancy clinic or obstetrician. Often the scan is repeated in 7–14 days to be sure. Heavy bleeding, fever, or severe pain needs same-day care. Emotional support matters too.',
+  function (c) {
+    const e = [];
+    if (c.sel('psite') === 'Miscarriage (incomplete or complete)') e.push(c.d('psite'));
+    if (c.sel('hbseen') === 'No heartbeat seen' && ((c.v('crl') != null && c.v('crl') >= 7) || (c.prof.gaW != null && c.prof.gaW >= 7))) e.push(c.d('hbseen'));
+    if (!e.length) return null;
+    return { ev: e, conf: 2, tech: 'A CRL of 7 mm or more with no heartbeat is diagnostic of failed pregnancy (RCOG/ACOG); a repeat scan is advised if the findings are borderline or the dates are uncertain.' };
+  });
+R('nthick', 'Raised nuchal translucency', [MFM, OBG, GEN], 2,
+  'A raised nuchal translucency on the 11–14 week scan is a marker that the baby has a higher chance of chromosome conditions (such as Down syndrome), heart differences or other genetic problems. Most babies with a mildly raised measurement are healthy.',
+  'Ask for counselling with a maternal–fetal medicine specialist or genetic counsellor. Options include blood screening of the baby’s DNA (NIPT), diagnostic tests (CVS or amniocentesis) and a detailed scan at about 20 weeks with a heart scan.',
+  function (c) { if (!c.hi('nt')) return null; const e = [c.d('nt')]; return { ev: e, conf: 2, urg: c.v('nt') >= 3.5 ? 2 : 1, tech: 'NT ≥ 3.0 mm (or above 95th/99th percentile for CRL) is abnormal; risk rises steeply above 3.5 mm. Combine with maternal age, free β-hCG and PAPP-A for combined screening.' }; });
+R('fetalhr', 'Baby’s heart rate outside the usual range', [OBG, MFM], 2,
+  'The baby’s heart rate is outside the usual range for the stage of pregnancy. A slow rate in early pregnancy goes with a higher chance of loss; a very fast or slow rate later can mean the baby is stressed or has a heart rhythm problem.',
+  'Same-day review by an obstetrician or early-pregnancy unit. If the baby is moving less than usual, go straight to a labour ward.',
+  function (c) { if (!(c.hi('fhr') || c.lo('fhr'))) return null; return { ev: [c.d('fhr')], conf: 2, urg: c.lo('fhr') && c.v('fhr') < 100 ? 3 : 2, tech: 'Normal fetal heart rate approx. 90–170 bpm at 5–6 weeks, rising to a peak near 9–10 weeks, then 110–160 bpm; bradycardia < 100 bpm before 8 weeks has a poor prognosis.' }; });
+R('fgr', 'Baby smaller than expected (possible slow growth)', [MFM, OBG], 2,
+  'Your baby’s estimated weight is in the lowest 10% for the age of the pregnancy. Many of these babies are simply small and healthy, but a smaller baby can also mean the placenta is not supplying enough, high blood pressure, infection or a chromosome problem. Wrong dates are another cause.',
+  'Your obstetrician will check dates, fluid, blood pressure and the baby’s blood flow with a Doppler scan, and repeat growth scans every 2 weeks. Do not skip checks; count and report the baby’s movements daily.',
+  function (c) {
+    const r = c.res.efw_pct; if (!r || r.pct >= 10) return null;
+    const e = ['Estimated baby weight ' + fmt(r.efw, 0) + ' g, ' + (r.pct < 1 ? 'below the 1st percentile' : 'about the ' + Math.round(r.pct) + 'th percentile')];
+    if (c.lo('fh')) e.push(c.d('fh')); if (c.lo('afi')) e.push(c.d('afi'));
+    return { ev: e, conf: r.pct < 3 ? 3 : 2, urg: r.pct < 3 || c.lo('afi') ? 3 : 2, tech: 'EFW < 10th percentile = small for gestational age; EFW or AC < 3rd percentile, or abnormal umbilical artery Doppler, = fetal growth restriction (FGR). Hadlock EFW has an error of about ±15%; percentile here uses a simplified curve (approximate).' };
+  });
+R('lga', 'Baby larger than expected', [MFM, OBG, ENDO], 1,
+  'Your baby’s estimated weight is in the highest 10% for the age of the pregnancy. Common causes: diabetes in pregnancy, a big mother or father, a previous large baby, or wrong dates.',
+  'Ask for a sugar test (OGTT) if not already done, and a discussion about the best way and time of delivery with your obstetrician. Scans are less accurate for big babies.',
+  function (c) { const r = c.res.efw_pct; if (!r || r.pct <= 90) return null; const e = ['Estimated baby weight ' + fmt(r.efw, 0) + ' g, ' + (r.pct > 99 ? 'above the 99th percentile' : 'about the ' + Math.round(r.pct) + 'th percentile')]; if (c.hi('afi')) e.push(c.d('afi')); if (c.hi('fh')) e.push(c.d('fh')); return { ev: e, conf: 2, urg: r.pct > 97 ? 2 : 1, tech: 'EFW > 90th percentile = large for gestational age; > 4000–4500 g = macrosomia. Ultrasound EFW error is higher at the extremes.' }; });
+R('dating', 'Scan measurements differ from your dates', [OBG], 0,
+  'The age of the baby by scan is different from the weeks you entered. A difference can mean the dates of your last period were not exact, a late ovulation, or a baby growing slower or faster than usual.',
+  'Your doctor will decide which dates to use. Before about 14 weeks the scan dates are normally used if they differ by more than a week. Later in pregnancy a difference is more often about growth than dates.',
+  function (c) {
+    const g = c.prof.gaW; if (g == null) return null;
+    let sc = null, lab = '', lim;
+    if (c.res.ga_crl && g < 14) { sc = c.res.ga_crl.val; lab = 'CRL'; lim = g < 9 ? 5 : 7; }
+    else if (c.res.ga_comp && g >= 14) { sc = c.res.ga_comp.val; lab = 'combined measurements'; lim = g < 16 ? 7 : g < 22 ? 10 : g < 28 ? 14 : 21; }
+    if (sc == null) return null;
+    const diff = (sc - g) * 7;
+    if (Math.abs(diff) <= lim) return null;
+    return { ev: ['Scan age by ' + lab + ': ' + fmtGA(sc) + '; you entered ' + fmtGA(g) + ' (difference about ' + Math.round(Math.abs(diff)) + ' days)'], conf: 2, urg: 0,
+      tech: 'ACOG re-dating thresholds: < 9 w 0 d: > 5 days; 9 w 0 d–13 w 6 d: > 7 days; 14 w 0 d–15 w 6 d: > 7 days; 16 w 0 d–21 w 6 d: > 10 days; 22 w 0 d–27 w 6 d: > 14 days; ≥ 28 w 0 d: > 21 days.' };
+  });
+R('oligo', 'Low fluid around the baby (oligohydramnios)', [OBG, MFM], 2,
+  'The fluid around the baby is low. This can happen if the waters are leaking, if the placenta is not working well, if the baby’s kidneys or urine passage are not normal, or in late pregnancy past the due date.',
+  'Same-day review by your obstetrician or labour ward, especially if you have leaked fluid or the baby is moving less. Drinking water and resting are not a substitute for being checked.',
+  function (c) {
+    const e = []; if (c.lo('afi')) e.push(c.d('afi')); if (c.lo('sdp')) e.push(c.d('sdp'));
+    if (!e.length) return null;
+    return { ev: e, conf: 2, urg: (c.v('afi') != null && c.v('afi') < 5) || (c.v('sdp') != null && c.v('sdp') < 1) ? 3 : 2, tech: 'Oligohydramnios: AFI < 5 cm or single deepest pocket < 2 cm; severe: SDP < 1 cm. Look for PPROM, FGR, renal agenesis, outlet obstruction, post-term, ACE inhibitors / NSAIDs.' };
+  });
+R('poly', 'Too much fluid around the baby (polyhydramnios)', [OBG, MFM, ENDO], 1,
+  'The fluid around the baby is more than usual. The commonest known cause is diabetes in the mother. Others are some baby conditions (swallowing problems, heart or chromosome conditions), infections and twins; in many cases no cause is found.',
+  'Ask for a sugar test (OGTT), a detailed baby scan and possibly infection tests. Sudden breathlessness, fast belly growth or early contractions need same-day care.',
+  function (c) {
+    const e = []; if (c.hi('afi')) e.push(c.d('afi')); if (c.hi('sdp')) e.push(c.d('sdp'));
+    if (!e.length) return null;
+    return { ev: e, conf: 2, urg: (c.v('afi') != null && c.v('afi') >= 35) || (c.v('sdp') != null && c.v('sdp') >= 12) ? 2 : 1, tech: 'Polyhydramnios: AFI > 24 cm (or SDP ≥ 8 cm); severe: AFI ≥ 35 or SDP ≥ 12 cm. Check OGTT, TORCH/parvovirus serology, anomaly scan, fetal swallowing, Rh antibodies.' };
+  });
+R('shortcx', 'Short cervix (risk of early labour)', [MFM, OBG], 2,
+  'A short cervix before 37 weeks means a higher chance of delivering early. Many women with a short cervix go to term when they are treated early.',
+  'Ask your obstetrician about vaginal progesterone, a cervical stitch (cerclage) and how often to repeat the cervical scan. Report fluid leak, regular tightenings, bleeding, or back or pelvic pressure at once.',
+  function (c) {
+    if (!c.lo('cervix')) return null; if (c.prof.gaW != null && c.prof.gaW >= 37) return null;
+    return { ev: [c.d('cervix')], conf: 2, urg: c.v('cervix') < 15 ? 3 : 2, tech: 'Cervical length < 25 mm at 16–24 weeks = short cervix (risk of preterm birth); ≤ 10–15 mm is a high-risk (urgent) finding. Options: vaginal progesterone (singleton, no prior PTB), cerclage (history + short cervix), pessary.' };
+  });
+R('placenta', 'Low-lying placenta or placenta praevia', [OBG, MFM], 2,
+  'When the placenta lies low or covers the opening of the womb it can bleed, especially in late pregnancy or labour. Many low placentas move up as the womb grows, so a scan is usually repeated at 32–36 weeks.',
+  'Do not have sex or put anything in the vagina. Tell your obstetrician and go to hospital at once for any bleeding, even painless. Delivery by caesarean is usually planned if the placenta still covers the opening near the due date.',
+  function (c) {
+    const p = c.sel('plac'); if (!p || p === 'Normal (upper part of the womb)') return null;
+    const praevia = p.indexOf('praevia') >= 0;
+    if (c.prof.gaW != null && c.prof.gaW < 18 && !praevia) return null;
+    return { ev: [c.d('plac')], conf: 3, urg: praevia && (c.prof.gaW == null || c.prof.gaW >= 28) ? 2 : 1, tech: 'Placenta praevia: placenta covers the internal os; low-lying: edge within 20 mm of os after 16–20 weeks. Rescan at 32 weeks; assess for accreta if prior caesarean.' };
+  });
+R('malpres', 'Baby not head-down', [OBG], 1,
+  'The baby is lying bottom-first (breech) or sideways. Many babies are still turning before 36 weeks, so this matters most after about 36 weeks.',
+  'Your obstetrician can discuss turning the baby by hand (external cephalic version) at about 36–37 weeks, or planning the safest delivery. Seek care urgently if your waters break and the baby is not head-down.',
+  function (c) {
+    const p = c.sel('pres'); if (!p || p.indexOf('Head down') === 0 || p.indexOf('Not yet') === 0) return null;
+    if (c.prof.gaW != null && c.prof.gaW < 34) return null;
+    return { ev: [c.d('pres')], conf: 3, urg: p.indexOf('sideways') >= 0 && c.prof.gaW != null && c.prof.gaW >= 37 ? 2 : 1, tech: 'Breech/transverse at ≥ 36 weeks: offer ECV at 36–37 weeks (nulliparous) / 37 weeks (parous) unless contraindicated; transverse lie in labour = emergency (cord prolapse risk).' };
+  });
+R('gdm', 'Diabetes in pregnancy (gestational diabetes)', [OBG, ENDO, DIET], 2,
+  'Blood sugar values in pregnancy are higher than the pregnancy limits. Gestational diabetes happens when the hormones of pregnancy make the body less able to handle sugar. It usually settles after delivery, but treatment protects you and the baby (large baby, birth injury, low sugar in the newborn).',
+  'See your antenatal clinic and a dietitian. Treatment is meal planning, daily walking, home sugar checks and, if needed, metformin or insulin. A repeat sugar test is advised 6–12 weeks after delivery.',
+  function (c) {
+    const e = [];
+    if (c.v('fpg') >= 92) e.push(c.d('fpg'));
+    if (c.v('ogtt1') >= 180) e.push(c.d('ogtt1'));
+    if (c.v('ogtt2') >= 153) e.push(c.d('ogtt2'));
+    if (!e.length) return null;
+    const overt = c.v('fpg') >= 126 || c.v('ogtt2') >= 200 || c.v('hba1c') >= 6.5;
+    return { ev: e, conf: 3, urg: overt ? 3 : 2, note: overt ? 'These values are in the range of diabetes that was already present (not only gestational). It needs same-week review.' : '', tech: 'IADPSG/WHO 2013 75-g OGTT: fasting ≥ 92 mg/dL (5.1 mmol/L), 1 h ≥ 180 (10.0), 2 h ≥ 153 (8.5): one value is enough. Overt diabetes: fasting ≥ 126, 2 h ≥ 200 or HbA1c ≥ 6.5%.' };
+  });
+R('gesthtn', 'High blood pressure in pregnancy', [OBG, MFM, ER], 2,
+  'Blood pressure of 140/90 or higher in pregnancy needs checking. After 20 weeks it can be gestational hypertension or pre-eclampsia, which can harm mother and baby. Before 20 weeks it more often means high blood pressure that was already there.',
+  'Contact your antenatal clinic or go to a hospital today for a repeat blood pressure, urine protein and blood tests. Severe headache, blurred vision, pain under the right ribs, sudden swelling of the face or hands, vomiting, or reduced baby movements need emergency care.',
+  function (c) {
+    const sbp = c.v('sbp'), dbp = c.v('dbp');
+    const hi = (sbp != null && sbp >= 140) || (dbp != null && dbp >= 90);
+    if (!hi) return null;
+    const e = []; if (c.hi('sbp')) e.push(c.d('sbp')); if (c.hi('dbp')) e.push(c.d('dbp'));
+    const sev = (sbp != null && sbp >= 160) || (dbp != null && dbp >= 110);
+    let feat = 0;
+    if (c.lvl('ur_pro') >= 2) { e.push(c.d('ur_pro')); feat++; }
+    if (c.v('plt') != null && c.v('plt') < 100) { e.push(c.d('plt')); feat++; }
+    if (c.v('cr') != null && c.v('cr') > 1.1) { e.push(c.d('cr')); feat++; }
+    if ((c.v('alt') != null && c.v('alt') >= 70) || (c.v('ast') != null && c.v('ast') >= 70)) { e.push(c.has('alt') ? c.d('alt') : c.d('ast')); feat++; }
+    const late = c.prof.gaW == null || c.prof.gaW >= 20;
+    return { ev: e, conf: late && feat ? 3 : 2, urg: sev || feat ? 3 : 2,
+      note: late && feat ? 'With these other findings, pre-eclampsia (with severe features) is possible; this needs hospital assessment today.' : '',
+      tech: 'ACOG: BP ≥ 140/90 on two occasions 4 h apart after 20 weeks = gestational hypertension; with proteinuria (≥ 300 mg/24 h or P:C ≥ 0.3) or severe features (platelets < 100, creatinine > 1.1 or doubled, transaminases twice normal, headache, visual symptoms, pulmonary oedema) = pre-eclampsia. Severe range ≥ 160/110 needs treatment within 30–60 min.' };
+  });
+R('bpow', 'Low blood pressure in pregnancy', [OBG, GP], 1,
+  'A low blood pressure reading can make you dizzy or faint. It is common in the middle of pregnancy and is usually harmless, especially when lying on the back (the womb presses on a large vein).',
+  'Lie on your left side, stand up slowly, drink enough water and eat regularly. Tell your midwife or doctor if you faint or have palpitations or chest pain.',
+  function (c) { return c.lo('sbp') ? { ev: [c.d('sbp')], conf: 1, urg: 0 } : null; });
+R('rhneg', 'Rhesus-negative blood group in pregnancy', [OBG], 1,
+  'If you are Rhesus (Rh) negative and your baby may be Rh positive, your body can make antibodies that harm this or later babies. A simple injection (anti-D) prevents this.',
+  'Tell your antenatal team. You will usually have a check of antibodies at the start and at 28 weeks, and an anti-D injection at about 28 weeks, after bleeding or any procedure, and after delivery of an Rh-positive baby.',
+  function (c) { return c.sel('rhd') === 'Rh negative' ? { ev: [c.d('rhd')], conf: 3, tech: 'Routine antenatal anti-D prophylaxis (RAADP) at 28 weeks (± 34 weeks) and within 72 h of sensitising events; check indirect Coombs test at booking and 28 weeks.' } : null; });
+R('wtgain', 'Weight gain different from the usual pregnancy guide', [OBG, DIET], 1,
+  'Your weight gain so far is different from the usual guide for your weight before pregnancy. Too little gain can go with a smaller baby; too much gain goes with diabetes, high blood pressure and a larger baby.',
+  'Ask your midwife or doctor to review your food, activity and growth scans. Do not diet in pregnancy without advice.',
+  function (c) {
+    const gw = c.res.wtgain, bmi = c.res.bmi, g = c.prof.gaW;
+    if (!gw || !bmi || g == null) return null;
+    const b = bmi.val, rate = b < 18.5 ? 0.51 : b < 25 ? 0.42 : b < 30 ? 0.28 : 0.22;
+    const lo = g <= 13 ? 0 : 0.5 + (g - 13) * rate * 0.75 - 1.5, hi = g <= 13 ? 3 : 2 + (g - 13) * rate * 1.25 + 1.5;
+    if (gw.val >= lo && gw.val <= hi) return null;
+    const less = gw.val < lo;
+    return { ev: ['Weight gained ' + gw.disp + ' at ' + fmtGA(g) + ' (about ' + fmt(Math.max(lo, 0), 1) + ' to ' + fmt(hi, 1) + ' kg usual)', c.d('bmi')], conf: 1, urg: 0, note: less ? 'Low gain is more worrying if your baby also measures small.' : '',
+      tech: 'IOM 2009 guide: first trimester 0.5–2 kg; then about ' + rate + ' kg/week (BMI ' + fmt(b, 1) + '); total 12.5–18 kg (BMI < 18.5), 11.5–16 (18.5–24.9), 7–11.5 (25–29.9), 5–9 kg (≥ 30). The range shown is an approximate band around that guide.' };
+  });
+
+/* ======== GYNAECOLOGY RULES ======== */
+R('pcos', 'Polycystic ovary syndrome (PCOS) pattern', [OBG, ENDO, FERT], 1,
+  'PCOS is a common hormone condition in women of child-bearing age. It causes irregular or absent periods, higher male-type hormones (acne, extra hair), and ovaries with many small follicles. It raises the long-term chance of diabetes, high cholesterol and womb-lining thickening, and it is a leading and treatable cause of difficulty conceiving.',
+  'See a gynaecologist or endocrinologist. Usual tests: other causes excluded (thyroid, prolactin), glucose and cholesterol, and a pelvic scan. Treatment includes weight and activity changes, medicines for periods or ovulation, and managing sugar.',
+  function (c) {
+    if (c.sex !== 'F' || c.preg || c.prof.meno || c.prof.ageY < 10) return null;
+    const e = [], tech = [];
+    let oli = 0, hyp = 0, pco = 0;
+    if (c.v('cyc_len') > 35) { e.push(c.d('cyc_len')); oli = 1; }
+    if (c.v('mslp') > 3) { e.push(c.d('mslp')); oli = 1; }
+    if (c.hi('testo')) { e.push(c.d('testo')); hyp = 1; }
+    if (c.v('afc1') >= 20) { e.push(c.d('afc1')); pco = 1; }
+    if (c.v('ovvol') > 10) { e.push(c.d('ovvol')); pco = 1; }
+    if (!pco && c.hi('amh') && c.prof.ageY >= 18) { e.push(c.d('amh')); pco = 1; tech.push('AMH may replace ultrasound in adults under the 2023 international guideline.'); }
+    const n = oli + hyp + pco;
+    const adolescent = c.prof.ageY < 18;
+    if (adolescent ? !(oli && hyp) : n < 2) return null;
+    if (c.hi('lhfsh')) e.push('LH:FSH ratio ' + fmt(c.v('lhfsh'), 1));
+    const excl = [];
+    if (c.hi('prl')) excl.push('prolactin'); if (c.hi('tsh') || c.lo('tsh')) excl.push('thyroid');
+    return { ev: e, conf: n >= 3 ? 3 : 2, note: excl.length ? 'Your ' + excl.join(' and ') + ' result is also abnormal; this can mimic PCOS and must be treated or excluded first.' : '', urg: 1,
+      tech: 'Rotterdam 2003 / 2023 international guideline: 2 of 3 (oligo-/anovulation; clinical or biochemical hyperandrogenism; polycystic ovarian morphology: ≥ 20 follicles per ovary or volume ≥ 10 mL, or raised AMH in adults) after excluding thyroid disease, hyperprolactinaemia and non-classical CAH. In adolescents (< 8 years after menarche) both oligo-anovulation and hyperandrogenism are required and ultrasound is not used. ' + tech.join(' ') };
+  });
+R('amenorrhoea', 'No periods for three months or more (secondary amenorrhoea)', [OBG, ENDO], 1,
+  'When you have had periods and then none for 3 months or more (and you are not pregnant, breastfeeding or past menopause) there is a cause to find. Common causes: pregnancy, PCOS, thyroid or prolactin problems, very low body weight or heavy exercise, stress, early menopause, and some medicines or contraception.',
+  'Do a pregnancy test first. A doctor will usually check TSH, prolactin, FSH, LH, oestradiol and testosterone, and do a pelvic scan.',
+  function (c) {
+    if (c.sex !== 'F' || c.preg || c.prof.meno || !(c.v('mslp') > 3)) return null;
+    if (c.sel('preg') === 'Positive') return null;
+    const e = [c.d('mslp')]; ['prl', 'tsh', 'fsh', 'lh', 'e2', 'testo'].forEach(function (id) { if (c.has(id) && (c.hi(id) || c.lo(id))) e.push(c.d(id)); });
+    return { ev: e, conf: 2, urg: 1, tech: 'WHO groups: I hypothalamic (low FSH/LH/E2), II normogonadotropic (PCOS), III ovarian failure (FSH > 25 IU/L), plus hyperprolactinaemia and thyroid disease. Always exclude pregnancy first.' };
+  });
+R('cycleirreg', 'Period pattern outside the usual range', [OBG], 0,
+  'Normal cycles are 21–35 days apart (counting from the first day of one period to the first day of the next) and a period lasts about 2–7 days. Periods outside this range are common, particularly in the first years after periods start, after having a baby, and in the years before menopause. They can also point to ovulation, thyroid or hormone problems.',
+  'Keep a period diary for 3 months. See a doctor if the pattern lasts, if bleeding is very heavy (soaking a pad every hour, or large clots), or if you feel tired or breathless (possible anaemia).',
+  function (c) {
+    if (c.sex !== 'F' || c.preg || c.prof.meno) return null;
+    const e = []; if (c.lo('cyc_len') || c.hi('cyc_len')) e.push(c.d('cyc_len')); if (c.hi('per_len')) e.push(c.d('per_len'));
+    if (!e.length) return null;
+    if (c.v('mslp') > 3) return null;
+    if (c.hi('per_len') && c.lo('hb')) e.push(c.d('hb'));
+    return { ev: e, conf: 1, urg: c.hi('per_len') && c.lo('hb') ? 1 : 0, tech: 'FIGO AUB (PALM-COEIN) definitions: frequency < 24 or > 38 days, duration > 8 days, or heavy flow. In adolescents, cycles 21–45 days are normal in the first 3 years after menarche.' };
+  });
+R('noovul', 'Sign that ovulation may not have happened', [OBG, FERT], 1,
+  'A low progesterone about 7 days before the next period suggests that an egg was not released in that cycle. Occasional cycles without ovulation are normal, but repeated ones reduce the chance of pregnancy and are often linked to PCOS, thyroid or prolactin problems.',
+  'Repeat the test in the correct week of another cycle (7 days before the expected period). If it stays low, a gynaecologist or fertility specialist can test thyroid, prolactin and androgen hormones and offer ovulation treatment.',
+  function (c) { if (c.sex !== 'F' || c.preg || !c.lo('prog_l') || !(c.prof.cday >= 18)) return null; return { ev: [c.d('prog_l')], conf: 2, urg: 0, tech: 'Mid-luteal progesterone < 3 ng/mL (≈ 10 nmol/L) suggests anovulation; 3–10 ng/mL is inconclusive (repeat); > 10 ng/mL (> 30 nmol/L) confirms ovulation. Timing must be 7 days before the expected period, adjusted for cycle length.' }; });
+R('ovreserve', 'Low egg reserve (diminished ovarian reserve)', [FERT, OBG], 1,
+  'A low AMH and/or few antral follicles suggest fewer eggs remaining than is usual for the age. It does not by itself mean you cannot conceive, but it can shorten the time window, so it is useful for planning if you want children.',
+  'If you hope to conceive, see a fertility specialist early rather than waiting. Egg-freezing and quicker treatment plans are discussed at this stage. If you are not planning pregnancy, no treatment is needed.',
+  function (c) {
+    if (c.sex !== 'F' || c.preg || c.prof.meno) return null;
+    const e = []; if (c.lo('amh')) e.push(c.d('amh')); if (c.lo('afc')) e.push(c.d('afc'));
+    if (!e.length) return null;
+    const v = c.v('amh');
+    return { ev: e, conf: e.length > 1 ? 3 : 2, urg: 0, tech: 'AMH < 1.0 ng/mL (7 pmol/L) or AFC < 5–7 = reduced reserve (Bologna criteria: AFC < 5–7 or AMH < 0.5–1.1 ng/mL); AMH ≤ 0.3 = very low. These predict ovarian response, not fertility; interpret with age and FSH.' + (v != null && v < 0.3 ? ' AMH is very low.' : '') };
+  });
+R('pmb', 'Thick womb lining after menopause', [OBG, ONC], 2,
+  'After menopause the womb lining is normally thin. A thicker lining, especially with any bleeding, needs checking because it can be caused by a polyp, thickening of the lining (hyperplasia) or, less often, cancer of the womb. Most causes are benign and treatable.',
+  'See a gynaecologist within 2 weeks. A sample of the lining (biopsy) or a camera test (hysteroscopy) is usually needed. Any bleeding after menopause should be reported even if the scan looks normal.',
+  function (c) {
+    if (!c.prof.meno || !c.hi('et')) return null;
+    return { ev: [c.d('et')], conf: 3, urg: c.prof.meno === 'YB' ? 2 : 1, tech: 'Postmenopausal bleeding: endometrial thickness (ET) ≤ 4 mm has a < 1% risk of cancer; > 4 mm needs endometrial sampling. Asymptomatic: threshold 11 mm (ACOG/SRU). Tamoxifen and HRT change risk; use clinical judgement.' };
+  });
+R('fibroid', 'Fibroid (benign muscle growth in the womb)', [OBG], 0,
+  'Fibroids are non-cancerous growths in the muscle of the womb. They are very common (especially in women of African descent), often cause nothing, and can cause heavy or long periods, pressure on the bladder or bowel, pain, and sometimes miscarriage or difficulty conceiving.',
+  'Small fibroids without symptoms are usually only watched. If you have heavy periods, pelvic pressure or fertility problems, discuss medicines, the coil, procedures to shrink the fibroid, or surgery with a gynaecologist. Rapid growth or growth after menopause needs a specialist opinion.',
+  function (c) {
+    if (c.sex !== 'F' || !(c.v('fibroid') > 0)) return null;
+    const big = c.v('fibroid') >= 5, e = [c.d('fibroid')]; if (c.hi('uter')) e.push(c.d('uter')); if (c.lo('hb')) e.push(c.d('hb'));
+    return { ev: e, conf: 3, urg: c.prof.meno ? 1 : 0, note: big ? 'A fibroid 5 cm or larger more often causes symptoms and is worth a specialist discussion.' : '', tech: 'FIGO leiomyoma classification (submucosal types 0–2 matter most for bleeding and fertility). Growth after menopause or rapid growth warrants sarcoma exclusion (MRI).' };
+  });
+R('ovcyst', 'Ovarian cyst', [OBG, ONC], 1,
+  'Most ovarian cysts in women who still have periods are harmless fluid-filled or blood-filled cysts that shrink by themselves over 1–3 months. Some types (dermoid, endometrioma) or cysts with solid parts need follow-up, and a new cyst after menopause always needs specialist review.',
+  'Repeat the scan in 6–12 weeks if the cyst is simple and under 5 cm. Sudden severe lower belly pain, vomiting or fainting can mean a twisted or burst cyst and is an emergency. Cysts with solid parts, those over 7 cm, or any cyst after menopause should be seen by a gynaecologist, sometimes with a CA-125 blood test.',
+  function (c) {
+    if (c.sex !== 'F' || c.preg) return null;
+    const sz = c.v('cyst'), typ = c.sel('cysttype');
+    if (!(sz > 0) && !(typ && typ !== 'Simple (clear fluid)')) return null;
+    const e = []; if (sz > 0) e.push(c.d('cyst')); if (typ && (sz > 0 || typ !== 'Simple (clear fluid)')) e.push(c.d('cysttype'));
+    if (c.has('ca125') && c.hi('ca125')) e.push(c.d('ca125'));
+    const complex = typ === 'Complex or solid parts', fl = c.lvl('ffluid') >= 2;
+    const urg = (sz >= 5 && fl) ? 3 : (complex || c.prof.meno || sz >= 7 || (c.has('ca125') && c.hi('ca125'))) ? 2 : 1;
+    return { ev: e, conf: 2, urg: urg, note: (sz >= 5 && fl) ? 'A larger cyst with free fluid in the pelvis can mean a twisted or burst cyst; this needs urgent assessment, particularly if you have pain.' : '',
+      tech: 'IOTA/O-RADS: simple cysts < 5 cm (premenopausal) and < 3 cm (postmenopausal) are almost always benign; solid components, papillary projections, ascites or high colour score increase risk. Use CA-125 only with imaging; it is raised in endometriosis, fibroids, menstruation and pregnancy.' };
+  });
+R('endometrioma', 'Endometrioma (“chocolate” cyst) – possible endometriosis', [OBG, FERT], 1,
+  'An endometrioma is a cyst filled with old blood, caused by womb-lining-type tissue growing on the ovary. It goes with endometriosis, which can cause painful periods, pain with sex, and difficulty conceiving.',
+  'Gynaecology review. Treatment options are medicines to calm the disease, surgery for large or painful cysts, and fertility planning (surgery on the ovary can lower egg reserve, so decisions are made together with a fertility specialist).',
+  function (c) { return c.sel('cysttype') === 'Endometrioma (“chocolate” cyst)' ? { ev: [c.d('cysttype')], conf: 3, urg: 1, tech: 'Typical ground-glass echoes on ultrasound; consider AMH before surgery and discuss ovarian-sparing management.' } : null; });
+R('freefluid', 'Free fluid in the pelvis', [OBG, ER], 3,
+  'A moderate or large amount of free fluid in the pelvis can come from infection, a burst cyst, a ruptured ectopic pregnancy or internal bleeding.',
+  'Get urgent medical assessment, especially if there is pain, dizziness, fever or a positive pregnancy test.',
+  function (c) { return c.lvl('ffluid') >= 2 ? { ev: [c.d('ffluid')], conf: 2, urg: c.lvl('ffluid') >= 3 ? 3 : 2 } : null; });
+R('thinlining', 'Thin womb lining', [OBG, FERT], 0,
+  'A womb lining that is thin for the day of the cycle can follow hormonal contraception, low oestrogen, past womb surgery or infection, or scarring. If you are trying to conceive, a thin lining around ovulation can make implantation harder.',
+  'If you are trying to conceive, ask a fertility specialist to look for scarring or hormone causes. If you are on contraception or have no symptoms, no action is needed.',
+  function (c) {
+    if (c.sex !== 'F' || c.preg || c.prof.meno || !c.lo('et')) return null;
+    if (c.prof.phase !== 'lp' && c.prof.phase !== 'lut') return null;
+    return { ev: [c.d('et')], conf: 1, urg: 0, tech: 'Endometrial thickness < 7 mm at the late follicular / peri-ovulatory phase is associated with lower implantation rates.' };
+  });
+R('hyperE2', 'Raised oestradiol early in the cycle', [FERT, OBG], 0,
+  'An oestradiol that is high on cycle days 2–5 is sometimes seen with a lower egg reserve or an ovarian cyst, and is usually read together with FSH and AMH.',
+  'A fertility specialist reads this with FSH, AMH and a follicle count scan.',
+  function (c) { return c.prof.phase === 'ep' || c.prof.phase === 'm' ? (c.hi('e2') && c.v('e2') > 80 ? { ev: [c.d('e2')], conf: 1, urg: 0 } : null) : null; });
 
 </script>
 <script>
 (function () {
 'use strict';
 var KEY = 'lablens_state_v1', SAVED = 'lablens_saved_v1', ACK = 'lablens_ack_v1';
-var state = { profile: { age: '', unit: 'y', height: '', sex: '', preg: '' }, vals: {} };
+var state = { profile: { age: '', unit: 'y', height: '', sex: '', preg: '', gaw: '', gad: '', meno: '', cday: '' }, vals: {} };
 var lastResult = null;
 var deferredInstall = null;
 var LOGO_SRC = document.querySelector('#ack img').getAttribute('src');
@@ -1660,6 +2169,7 @@ function applyStateToForm() {
   $('#age').value = state.profile.age || '';
   $('#ageUnit').value = state.profile.unit || 'y';
   $('#height').value = state.profile.height || '';
+  $('#gaw').value = state.profile.gaw || ''; $('#gad').value = state.profile.gad || ''; $('#meno').value = state.profile.meno || ''; $('#cday').value = state.profile.cday || '';
   $$('input[name=sex]').forEach(function (r) { r.checked = r.value === state.profile.sex; });
   $$('input[name=preg]').forEach(function (r) { r.checked = r.value === (state.profile.preg || 'No') && state.profile.sex === 'F'; });
   $$('.row').forEach(function (row) {
@@ -1678,10 +2188,14 @@ function syncPreg() {
   var p = normProfile(state.profile);
   $('#pregBox').hidden = !(state.profile.sex === 'F' && p.ageY >= 10);
   $('#heightBox').hidden = !(p.child && p.ageY >= 1);
+  var fem = state.profile.sex === 'F' && p.ageY >= 10;
+  $('#gaBox').hidden = !(fem && p.preg);
+  $('#cycBox').hidden = !(fem && !p.preg);
+  $('#cdayBox').hidden = !!state.profile.meno;
   $$('.row, details.panel').forEach(function (el) {
     var id = el.getAttribute('data-id'), pn = el.getAttribute('data-panel');
     if (id) el.classList.toggle('hideAdult', !!pedSkip(TESTS[id], p));
-    else if (pn) { var P0 = PANELS.filter(function (x) { return x.name === pn; })[0]; el.classList.toggle('hideAdult', p.child && P0.ids.every(function (i) { return !!pedSkip(TESTS[i], p); })); }
+    else if (pn) { var P0 = PANELS.filter(function (x) { return x.name === pn; })[0]; el.classList.toggle('hideAdult', !panelOn(P0, p) || (p.child && P0.ids.every(function (i) { return !!pedSkip(TESTS[i], p); }))); }
   });
 }
 function persist() { store.set(KEY, state); }
@@ -1730,8 +2244,10 @@ function onField(ev) {
   if (t.id === 'age') { state.profile.age = t.value; syncPreg(); }
   else if (t.id === 'ageUnit') { state.profile.unit = t.value; syncPreg(); }
   else if (t.id === 'height') { state.profile.height = t.value; }
-  else if (t.name === 'sex') { state.profile.sex = t.value; if (t.value !== 'F') state.profile.preg = ''; else if (!state.profile.preg) state.profile.preg = 'No'; syncPreg(); applyPregRadios(); }
-  else if (t.name === 'preg') { state.profile.preg = t.value; }
+  else if (t.name === 'sex') { state.profile.sex = t.value; if (t.value !== 'F') state.profile.preg = ''; else if (!state.profile.preg) state.profile.preg = 'No'; if (t.value !== 'F') { state.profile.gaw = ''; state.profile.gad = ''; state.profile.meno = ''; state.profile.cday = ''; applyStateToForm(); } syncPreg(); applyPregRadios(); }
+  else if (t.name === 'preg') { state.profile.preg = t.value; syncPreg(); }
+  else if (t.id === 'gaw' || t.id === 'gad' || t.id === 'cday') { state.profile[t.id] = t.value; }
+  else if (t.id === 'meno') { state.profile.meno = t.value; syncPreg(); }
   else return;
   $('#profErr').hidden = true; refreshAll(); persist();
 }
@@ -1757,15 +2273,18 @@ function show(view) {
 
 /* ---------- results rendering ---------- */
 function flagChip(r) {
+  if (r.flag == null) return '';
   var label = r.crit ? 'Critical' : r.flag === 'N' ? 'Normal' : r.flag === 'L' ? 'Low' : r.flag === 'H' ? 'High' : 'Abnormal';
   if (r.sev >= 3 && !r.crit && (r.flag === 'L' || r.flag === 'H')) label = r.flag === 'L' ? 'Very low' : 'Very high';
   return '<span class="chip ' + (r.crit ? 'c-X' : 'c-' + r.flag) + '">' + label + '</span>';
 }
+function techMode() { return store.get('lablens_mode') === 't'; }
 function renderResult(R) {
   var U = URGENCY[R.urgency], h = [];
   var today = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
   h.push('<button class="back noprint" data-act="edit">← Back to results entry</button>');
   h.push('<div class="printhead"><img src="' + LOGO_SRC + '" alt="BHIS" style="height:70px"><h2>LabLens report by BHIS</h2>' + (bizName() ? '<div><b>Prepared by ' + esc(bizName()) + '</b></div>' : '') + '<div>' + esc(today) + ' · Age ' + esc(R.prof.ageText) + ' · ' + (R.prof.sex === 'F' ? 'Female' : 'Male') + (R.prof.preg ? ' (pregnant)' : '') + '</div></div>');
+  h.push('<div class="modebar noprint" role="group" aria-label="Explanation level"><span>Explanation:</span><button type="button" class="mb' + (techMode() ? '' : ' on') + '" data-act="mode" data-m="s">Simple</button><button type="button" class="mb' + (techMode() ? ' on' : '') + '" data-act="mode" data-m="t">Technical</button></div>');
   h.push('<div class="urg ' + U.cls + '" role="alert"><p class="uh">' + esc(U.label) + '</p><p>' + esc(U.text) + '</p></div>');
   if (R.critical.length) {
     h.push('<div class="alert"><b>⚠ Possibly dangerous value' + (R.critical.length > 1 ? 's' : '') + '</b><ul>' + R.critical.map(function (r) {
@@ -1783,7 +2302,7 @@ function renderResult(R) {
     h.push('<div class="card cond c' + f.urg + '"><h3>' + esc(f.name) + '</h3><div class="meta"><span class="tag ' + (f.conf === 3 ? 's3' : '') + '">' + esc(CONF[f.conf]) + '</span><span class="tag">' + (['Routine info', 'Routine review', 'See doctor soon', 'Urgent'][f.urg]) + '</span></div>' +
       '<h4>Why it was flagged</h4><ul>' + f.ev.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' +
       '<h4>What it can mean</h4><p>' + esc(f.what) + '</p>' + (f.note ? '<div class="note">' + esc(f.note) + '</div>' : '') +
-      '<h4>Usual next steps</h4><p>' + esc(f.next) + '</p>' +
+      '<h4>Usual next steps</h4><p>' + esc(f.next) + '</p>' + (f.tech ? '<div class="techonly"><h4>For clinicians</h4><p>' + esc(f.tech) + '</p></div>' : '') +
       '<div class="specs">' + f.spec.map(function (s) { return '<span class="spec">' + esc(s) + '</span>'; }).join('') + '</div></div>');
   });
   if (R.other.length) {
@@ -1820,6 +2339,7 @@ function renderResult(R) {
   h.push('<div class="card noprint"><h3>Save this report on this device</h3><div class="savebox"><input id="saveName" placeholder="Name, e.g. Mum – Nov 2026" aria-label="Report name" maxlength="60"><button class="btn p" style="flex:0 0 auto" data-act="save">Save</button></div></div>');
   h.push('<div class="actions noprint"><button class="btn s" data-act="print">Print / save as PDF</button><button class="btn s" data-act="copy">Copy summary</button><button class="btn s" data-act="edit">Edit results</button></div>');
   $('#view-result').innerHTML = h.join('');
+  $('#view-result').classList.toggle('tech', techMode());
 }
 
 function summaryText(R) {
@@ -1948,10 +2468,10 @@ function renderSaved() {
 function renderAbout() {
   $('#view-about').innerHTML = '<button class="back" data-act="edit">← Back</button><img class="aboutlogo" src="' + LOGO_SRC + '" alt="BHIS: Body Health Integrated Systems"><h2 style="margin-top:6px">About LabLens</h2><div class="card"><h3>Created by BHIS</h3><p>LabLens is created and owned by <b>BHIS \u2013 Body Health Integrated Systems</b>. \u00A9 2026 BHIS. All rights reserved.</p></div>' +
     (LIC.on ? '<div class="card"><h3>Your licence</h3><p>' + esc(licStatusText()) + '</p>' + (LIC.info.status === 'licensed' ? '' : '<button class="btn p" data-act="lic" style="width:100%">Enter access code</button>') + '</div>' : '') + '<div class="card"><h3>What it does</h3><p>You type results from a lab report. LabLens flags values outside typical adult ranges, explains them in plain language, looks for <b>patterns</b> across tests (for example low haemoglobin with small red cells and low ferritin), suggests what <i>might</i> explain them, how urgent it is, and which type of specialist to ask for.</p></div>' +
-    '<div class="card"><h3>What it cannot do</h3><ul><li>It cannot diagnose. Only a doctor who examines you can.</li><li>It does not know your symptoms, medicines, history, or sample quality.</li><li>Ranges are typical adult and child values; labs and populations differ. Use “⋯” to enter your lab’s own range.</li><li>Child ranges follow age bands from newborn to 17 years and suit term babies; premature babies and unwell children can differ. Pregnancy and older age also change normal values, and only some pregnancy adjustments are built in.</li><li>Photos and PDFs are not read: entering numbers is safer than automatic scanning.</li></ul></div>' +
+    '<div class="card"><h3>What it cannot do</h3><ul><li>It cannot diagnose. Only a doctor who examines you can.</li><li>It does not know your symptoms, medicines, history, or sample quality.</li><li>Ranges are typical adult and child values; labs and populations differ. Use “⋯” to enter your lab’s own range.</li><li>Child ranges follow age bands from newborn to 17 years and suit term babies; premature babies and unwell children can differ. Older age also changes normal values. Pregnancy ranges are built in for the main blood, thyroid and sugar tests, baby scan measurements are compared with the weeks you enter, and hormone and womb-lining ranges use your cycle day, but scan and hormone readings always need a doctor (obstetrician or gynaecologist) to interpret them with your examination and history.</li><li>Photos and PDFs are not read: entering numbers is safer than automatic scanning.</li></ul></div>' +
     '<div class="card"><h3>Privacy</h3><p>Everything runs on your device. No internet connection, accounts, ads or tracking. Entries are saved in this browser’s local storage only. “Clear” erases the current entries.</p></div>' +
     '<div class="card"><h3>Install on your phone</h3><p><b>Android (Chrome):</b> open the app link once while online, then menu ⋮ → “Install app” or “Add to Home screen”.<br><b>iPhone (Safari):</b> Share → “Add to Home Screen”.<br><b>Computer (Chrome/Edge):</b> click the install icon in the address bar. After the first visit it opens offline.</p></div>' +
-    '<div class="card"><h3>Reference sources</h3><p>Typical adult reference intervals from standard clinical laboratory references; typical paediatric intervals by age band (newborn to 17 years) compiled from standard paediatric references, with the bedside Schwartz equation for children’s eGFR; CKD-EPI 2021 equation for eGFR (no race term); ADA criteria for glucose/HbA1c; WHO 2021 semen reference limits; WHO anaemia and pregnancy haemoglobin cut-offs. Version 1.3.</p></div>';
+    '<div class="card"><h3>Reference sources</h3><p>Typical adult reference intervals from standard clinical laboratory references; typical paediatric intervals by age band (newborn to 17 years) compiled from standard paediatric references, with the bedside Schwartz equation for children’s eGFR; CKD-EPI 2021 equation for eGFR (no race term); ADA criteria for glucose/HbA1c; WHO 2021 semen reference limits; WHO anaemia and pregnancy haemoglobin cut-offs; Hadlock formulas for scan dating and baby weight; IADPSG criteria for diabetes in pregnancy; ACOG hCG and blood-pressure guidance; Rotterdam / 2023 international criteria for PCOS; IOM pregnancy weight-gain guide. Version 1.4.</p></div>';
 }
 
 /* ---------- click router ---------- */
@@ -1959,6 +2479,7 @@ function onClick(ev) {
   var a = ev.target.closest && ev.target.closest('[data-act]');
   if (a) {
     var act = a.getAttribute('data-act');
+    if (act === 'mode') { store.set('lablens_mode', a.getAttribute('data-m')); if (lastResult) { renderResult(lastResult); } return; }
     if (act === 'edit') { show('input'); return; }
     if (act === 'lic') { openLic(); return; }
     if (act === 'print') { window.print(); return; }
@@ -1998,7 +2519,7 @@ function init() {
   $('#btnGo').addEventListener('click', run);
   $('#btnClear').addEventListener('click', function () {
     if (!confirm('Clear all entered results and your age/sex?')) return;
-    state = { profile: { age: '', unit: 'y', height: '', sex: '', preg: '' }, vals: {} }; store.del(KEY); applyStateToForm(); toast('Cleared');
+    state = { profile: { age: '', unit: 'y', height: '', sex: '', preg: '', gaw: '', gad: '', meno: '', cday: '' }, vals: {} }; store.del(KEY); applyStateToForm(); toast('Cleared');
   });
   $('#btnSaved').addEventListener('click', function () { renderSaved(); show('saved'); });
   $('#btnAbout').addEventListener('click', function () { renderAbout(); show('about'); });

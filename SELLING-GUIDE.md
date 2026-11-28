@@ -62,7 +62,7 @@ Do **not** say: "diagnoses you", "replaces your doctor", or "100% accurate". Kee
 
 ## G. Legal and safety checklist (do before wide selling)
 I am not a lawyer; please confirm these locally.
-- [ ] A **licensed doctor or pharmacist reviews** the wording, ranges and urgency advice, and signs off. Since version 1.3, ask a **paediatrician** to check the newborn and child ranges and advice too.
+- [ ] A **licensed doctor or pharmacist reviews** the wording, ranges and urgency advice, and signs off. Since version 1.3, ask a **paediatrician** to check the newborn and child ranges and advice too. Since version 1.4, ask an **obstetrician/gynaecologist** to check the pregnancy ranges, baby-scan rules (dating, weight, fluid, cervix), diabetes-in-pregnancy and blood-pressure thresholds, hCG guidance, and the PCOS, cyst, fibroid and womb-lining advice.
 - [ ] Check with **NAFDAC or a Nigerian lawyer** whether software that suggests possible conditions counts as a regulated medical device.
 - [ ] Put **Terms of Use and a Privacy Notice** on a page and link them in your payment page. The app stores nothing off the device, which makes the privacy notice simple. Mention the Nigeria Data Protection Act (NDPA).
 - [ ] State a **refund policy** (for example, no refunds after the code is activated).
