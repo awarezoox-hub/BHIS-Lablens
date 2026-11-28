@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#115e59">
+<meta name="theme-color" content="#0a6f69">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="LabLens">
@@ -14,13 +14,13 @@
 <link rel="icon" href="icon-192.png">
 <title>LabLens by BHIS: Lab Result Guide (works offline)</title>
 <style>
-:root{--bg:#f4f7f7;--card:#fff;--ink:#14282b;--mute:#58706f;--line:#dbe5e4;--acc:#0f766e;--acc2:#115e59;--accbg:#e1f4f1;--ok:#15803d;--okbg:#e3f6e8;--warn:#b45309;--warnbg:#fff1d6;--orange:#c2410c;--orangebg:#ffe7d6;--bad:#b91c1c;--badbg:#fde4e4;--info:#1d4ed8;--infobg:#e4edff;--r:14px;--sh:0 1px 2px rgba(10,40,40,.06),0 4px 14px rgba(10,40,40,.05)}
-@media (prefers-color-scheme:dark){:root{--bg:#0d1718;--card:#142224;--ink:#e6f0ef;--mute:#9bb3b1;--line:#27403f;--acc:#2dd4bf;--acc2:#5eead4;--accbg:#12403d;--ok:#4ade80;--okbg:#12361f;--warn:#fbbf24;--warnbg:#3b2d0c;--orange:#fb923c;--orangebg:#3d2410;--bad:#f87171;--badbg:#431616;--info:#93b4ff;--infobg:#172a55;--sh:none}}
+:root{--bg:#f2f8f7;--card:#fff;--ink:#14282b;--mute:#58706f;--line:#dbe5e4;--acc:#0b7f77;--acc2:#0a6f69;--accbg:#dff5f2;--cor:#ff6a3d;--cor2:#d6381a;--corbg:#ffe9df;--sun:#ffb020;--sunbg:#fff3d1;--cyan:#06b6d4;--cyanbg:#dcf6fb;--ok:#15803d;--okbg:#e3f6e8;--warn:#b45309;--warnbg:#fff1d6;--orange:#c2410c;--orangebg:#ffe7d6;--bad:#b91c1c;--badbg:#fde4e4;--info:#1d4ed8;--infobg:#e4edff;--r:14px;--sh:0 1px 2px rgba(10,40,40,.06),0 4px 14px rgba(10,40,40,.05)}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1718;--card:#142224;--ink:#e6f0ef;--mute:#9bb3b1;--line:#27403f;--acc:#2dd4bf;--acc2:#5eead4;--accbg:#12403d;--cor:#ff8a65;--cor2:#ff9b7a;--corbg:#43241a;--sun:#fbbf24;--sunbg:#3a2d0e;--cyan:#22d3ee;--cyanbg:#0f3640;--ok:#4ade80;--okbg:#12361f;--warn:#fbbf24;--warnbg:#3b2d0c;--orange:#fb923c;--orangebg:#3d2410;--bad:#f87171;--badbg:#431616;--info:#93b4ff;--infobg:#172a55;--sh:none}}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;padding-bottom:96px}
+body{margin:0;background:radial-gradient(760px 260px at 105% -30px,rgba(255,106,61,.16),transparent 70%),radial-gradient(700px 300px at -8% 20px,rgba(6,182,212,.14),transparent 70%),var(--bg);background-attachment:fixed;color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;padding-bottom:96px}
 .wrap{max-width:860px;margin:0 auto;padding:0 14px}
-.top{background:var(--acc2);color:#fff;position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top)}
-@media (prefers-color-scheme:dark){.top{background:#0b2b29}}
+.top{background:linear-gradient(115deg,#053f3c 0%,#0a6f69 55%,#0b8a80 100%);color:#fff;position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top);border-bottom:4px solid transparent;border-image:linear-gradient(90deg,#ff6a3d,#ffb020,#ff6a3d) 1;box-shadow:0 4px 16px rgba(6,60,56,.25)}
+@media (prefers-color-scheme:dark){.top{background:linear-gradient(115deg,#04201f,#0a3f3b 60%,#0b5a54)}}
 .top .wrap{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:10px;padding-bottom:10px}
 .brand{display:flex;align-items:center;gap:10px;min-width:0}.logo{background:#fff;border-radius:10px;padding:3px 4px;height:46px;width:auto;box-shadow:0 2px 6px rgba(0,0,0,.25)}
 .brand h1{margin:0;font-size:19px;line-height:1.1}.brand p{margin:0;font-size:12px;opacity:.9;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -30,7 +30,7 @@ button{font:inherit;cursor:pointer}
 .ghost:hover{background:rgba(255,255,255,.24)}
 .pill{display:inline-block;font-size:11px;background:rgba(255,255,255,.18);color:#fff;border-radius:999px;padding:1px 7px}
 main{padding-top:14px}
-h2{font-size:19px;margin:26px 0 10px}h3{margin:0 0 6px;font-size:17px}
+h2{font-size:19px;margin:26px 0 10px;display:flex;align-items:center;gap:8px}h2::before{content:'';width:6px;height:20px;border-radius:3px;background:linear-gradient(180deg,var(--cor),var(--sun))}h3{margin:0 0 6px;font-size:17px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:14px;margin:12px 0}
 .lead{color:var(--mute);margin:6px 0 0}
 .profile{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -39,7 +39,8 @@ input[type=text],input[type=search],input:not([type]),select,textarea{font:inher
 input:focus,select:focus,button:focus-visible,summary:focus-visible{outline:2px solid var(--acc);outline-offset:1px}
 .seg{display:flex;gap:8px}.seg label{flex:1;position:relative}.seg input{position:absolute;opacity:0;inset:0}
 .seg span{display:block;text-align:center;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);min-height:44px}
-.seg input:checked+span{background:var(--accbg);border-color:var(--acc);color:var(--acc2);font-weight:700}
+.seg input:checked+span{background:linear-gradient(135deg,var(--acc2),var(--acc));border-color:var(--acc);color:#fff;font-weight:700}
+@media (prefers-color-scheme:dark){.seg input:checked+span{color:#042f2c;background:linear-gradient(135deg,#2dd4bf,#5eead4)}}
 .seg input:focus-visible+span{outline:2px solid var(--acc)}
 .preg{grid-column:1/-1}
 .err{color:var(--bad);font-weight:600;margin:8px 0 0}
@@ -49,8 +50,10 @@ details.panel>summary{list-style:none;display:flex;align-items:center;gap:10px;p
 details.panel>summary::-webkit-details-marker{display:none}
 details.panel>summary::after{content:"";width:9px;height:9px;border-right:2.5px solid var(--mute);border-bottom:2.5px solid var(--mute);transform:rotate(-45deg);margin-left:auto;margin-right:4px;transition:transform .15s}
 details.panel[open]>summary::after{transform:rotate(45deg)}
-.pi{font-size:20px}.pn{flex:1}
-.badge{background:var(--acc);color:#fff;border-radius:999px;font-size:12px;padding:1px 9px;font-weight:700}
+.pi{font-size:20px;width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:var(--accbg);flex:0 0 auto}.pn{flex:1}
+details.panel:nth-of-type(3n+2) .pi{background:var(--corbg)}details.panel:nth-of-type(3n+3) .pi{background:var(--sunbg)}details.panel:nth-of-type(4n) .pi{background:var(--cyanbg)}
+details.panel[open]{border-color:var(--acc);box-shadow:0 6px 20px rgba(11,127,119,.15)}
+.badge{background:linear-gradient(135deg,#d6381a,#c42f15);color:#fff;border-radius:999px;font-size:12px;padding:1px 9px;font-weight:700}
 .pnote{margin:0;padding:0 14px 8px;color:var(--mute);font-size:14px}
 .rows{border-top:1px solid var(--line)}
 .row{padding:11px 14px;border-bottom:1px solid var(--line)}.row:last-child{border-bottom:0}
@@ -72,8 +75,8 @@ details.panel[open]>summary::after{transform:rotate(45deg)}
 .bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));z-index:30;box-shadow:0 -4px 14px rgba(0,0,0,.08)}
 .bar .wrap{display:flex;gap:10px;padding:0}
 .btn{border:0;border-radius:12px;padding:13px 18px;font-weight:700;min-height:48px}
-.btn.p{background:var(--acc);color:#fff;flex:1}.btn.p:disabled{opacity:.5}
-@media (prefers-color-scheme:dark){.btn.p{color:#032;}}
+.btn.p{background:linear-gradient(135deg,#d6381a,#c42f15);color:#fff;flex:1;box-shadow:0 4px 12px rgba(214,56,26,.35);transition:transform .08s,box-shadow .15s}.btn.p:active{transform:scale(.98)}.btn.p:disabled{opacity:.5;box-shadow:none;background:var(--mute)}
+@media (prefers-color-scheme:dark){.btn.p{background:linear-gradient(135deg,#ff8a65,#ff6a3d);color:#2a0d04;box-shadow:0 4px 14px rgba(255,106,61,.3)}}
 .btn.s{background:var(--bg);color:var(--ink);border:1px solid var(--line)}
 .btn.d{background:var(--badbg);color:var(--bad)}
 .urg{border-radius:var(--r);padding:14px 16px;border:2px solid;margin:8px 0}
@@ -83,7 +86,8 @@ details.panel[open]>summary::after{transform:rotate(45deg)}
 .alert{background:var(--badbg);border:1px solid var(--bad);border-radius:var(--r);padding:12px 14px;margin:10px 0}
 .alert ul{margin:6px 0 0;padding-left:20px}
 .warn{background:var(--warnbg);border:1px solid var(--warn);border-radius:var(--r);padding:10px 14px;margin:10px 0;font-size:15px}
-.stat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}.stat div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px}.stat b{display:block;font-size:22px;line-height:1.2}.stat span{color:var(--mute);font-size:12.5px;line-height:1.2;display:block}
+.stat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}.stat div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px}.stat b{display:block;font-size:24px;line-height:1.2;color:var(--acc)}.stat div:nth-child(2) b{color:var(--cor2)}.stat div:nth-child(3) b{color:#b45309}
+@media (prefers-color-scheme:dark){.stat div:nth-child(3) b{color:var(--sun)}}.stat span{color:var(--mute);font-size:12.5px;line-height:1.2;display:block}
 .cond{border-left:6px solid var(--line)}.cond.c3{border-left-color:var(--bad)}.cond.c2{border-left-color:var(--orange)}.cond.c1{border-left-color:var(--info)}.cond.c0{border-left-color:var(--ok)}
 .cond .meta{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 8px}
 .tag{font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;background:var(--bg);border:1px solid var(--line);color:var(--mute)}
@@ -92,9 +96,10 @@ details.panel[open]>summary::after{transform:rotate(45deg)}
 .cond p,.cond ul{margin:0}.cond ul{padding-left:20px}
 .note{background:var(--infobg);color:var(--ink);border-radius:10px;padding:8px 10px;margin-top:8px;font-size:15px}
 .specs{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.spec{background:var(--accbg);color:var(--acc2);border-radius:999px;padding:3px 10px;font-size:13px;font-weight:600}
+.spec{background:var(--accbg);color:var(--acc2);border-radius:999px;padding:3px 10px;font-size:13px;font-weight:600}.spec:nth-child(2n){background:var(--corbg);color:#9a3412}.spec:nth-child(3n){background:var(--cyanbg);color:#0e6a7d}
+@media (prefers-color-scheme:dark){.spec:nth-child(2n){color:var(--cor)}.spec:nth-child(3n){color:var(--cyan)}}
 .drs .card h3{margin:0}.drs .card p{margin:2px 0 0;color:var(--mute);font-size:15px}.drs .card small{display:block;margin-top:6px}
-.res-panel{margin:14px 0 4px;font-weight:800;color:var(--acc2);font-size:15px}
+.res-panel{margin:14px 0 4px;font-weight:800;color:var(--acc2);font-size:15px;border-left:4px solid var(--cor);padding-left:8px}
 .res{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:9px 0;border-bottom:1px solid var(--line)}
 .res:last-child{border-bottom:0}
 .res .n{font-weight:600}.res .v{font-weight:800;text-align:right}.res .r{color:var(--mute);font-size:13px}.res .f{text-align:right}
@@ -130,10 +135,15 @@ details.panel[open]>summary::after{transform:rotate(45deg)}
 .aboutlogo{display:block;width:min(320px,80%);margin:4px auto 10px;background:#fff;border-radius:18px;padding:8px}
 
 a.btn{display:flex;align-items:center;justify-content:center;text-decoration:none;text-align:center}
-.licb{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--accbg);border-color:var(--acc)}
+.licb{display:flex;align-items:center;justify-content:space-between;gap:10px;background:linear-gradient(100deg,var(--accbg),var(--cyanbg));border-color:var(--acc)}
 .licb span{font-weight:600;color:var(--acc2)}
 .licb .btn{padding:8px 12px;min-height:40px;flex:0 0 auto}
 textarea{resize:vertical}
+.agebox{display:flex;gap:8px;align-items:center}
+.agebox input{flex:1 1 90px;min-width:0}
+.agebox select{flex:0 0 auto;width:auto;min-width:96px}
+.hideAdult{display:none!important}
+#heightBox,.preg{margin-top:2px}
 
 </style>
 </head>
@@ -149,9 +159,10 @@ textarea{resize:vertical}
     <div class="card licb" id="licBanner" hidden><span id="licBannerText"></span><button class="btn s" id="licBannerBtn" type="button">Enter code</button></div>
     <div class="card">
       <h3>1. About you</h3>
-      <p class="lead">Normal ranges depend on age and sex. Nothing you enter leaves this device.</p>
+      <p class="lead">Normal ranges depend on age and sex, and are different for babies and children. Nothing you enter leaves this device.</p>
       <div class="profile" style="margin-top:12px">
-        <div><label class="f" for="age">Age (years)</label><input id="age" inputmode="numeric" autocomplete="off" placeholder="e.g. 34"></div>
+        <div><label class="f" for="age">Age</label><div class="agebox"><input id="age" inputmode="decimal" autocomplete="off" placeholder="e.g. 34"><select id="ageUnit" aria-label="Age unit"><option value="y">years</option><option value="m">months</option><option value="w">weeks</option><option value="d">days</option></select></div><small class="hint" id="ageHint">Baby or child? Choose days, weeks or months so the right normal ranges are used.</small></div>
+        <div id="heightBox" hidden><label class="f" for="height">Child’s height (optional)</label><div class="agebox"><input id="height" inputmode="decimal" autocomplete="off" placeholder="e.g. 110"><span class="unit-s">cm</span></div><small class="hint">Lets LabLens estimate your child’s kidney function.</small></div>
         <div><span class="f" style="display:block;font-weight:600;font-size:14px;margin-bottom:4px">Sex</span>
           <div class="seg" role="radiogroup" aria-label="Sex"><label><input type="radio" name="sex" value="F"><span>Female</span></label><label><input type="radio" name="sex" value="M"><span>Male</span></label></div></div>
         <div class="preg" id="pregBox" hidden><span class="f" style="display:block;font-weight:600;font-size:14px;margin-bottom:4px">Are you pregnant?</span>
@@ -187,7 +198,7 @@ textarea{resize:vertical}
 
 <div class="modal" id="ack" hidden><div class="box" role="dialog" aria-modal="true" aria-labelledby="ackT">
   <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAwIDEwMDAiIHdpZHRoPSIxMDAwIiBoZWlnaHQ9IjEwMDAiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iQkhJUzogQm9keSBIZWFsdGggSW50ZWdyYXRlZCBTeXN0ZW1zIj4KCiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9Imd0IiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjYjZmZmYyIi8+PHN0b3Agb2Zmc2V0PSIuNTUiIHN0b3AtY29sb3I9IiM0ZmUwY2IiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMxOWIzYTMiLz48L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnbCIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iIzE0OTQ4YSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzBhNGY0YiIvPjwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImdyIiB4MT0iMCIgeTE9IjAiIHgyPSIxIiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMGY3NjZlIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMDYyZjJkIi8+PC9saW5lYXJHcmFkaWVudD4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZ3ciIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZmZmZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNjZGVlZWEiLz48L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnbG9zcyIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2ZmZiIgc3RvcC1vcGFjaXR5PSIuNTUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNmZmYiIHN0b3Atb3BhY2l0eT0iMCIvPjwvbGluZWFyR3JhZGllbnQ+CiAgICA8ZmlsdGVyIGlkPSJibHVyIiB4PSItNTAlIiB5PSItMzAwJSIgd2lkdGg9IjIwMCUiIGhlaWdodD0iNzAwJSI+PGZlR2F1c3NpYW5CbHVyIHN0ZERldmlhdGlvbj0iMTQiLz48L2ZpbHRlcj4KICAgIDxmaWx0ZXIgaWQ9InNvZnQiIHg9Ii0yMCUiIHk9Ii0yMCUiIHdpZHRoPSIxNDAlIiBoZWlnaHQ9IjE0MCUiPjxmZURyb3BTaGFkb3cgZHg9IjIiIGR5PSI0IiBzdGREZXZpYXRpb249IjMiIGZsb29kLWNvbG9yPSIjMDQzMDJkIiBmbG9vZC1vcGFjaXR5PSIuNDUiLz48L2ZpbHRlcj4KICA8L2RlZnM+CiAgPGVsbGlwc2UgY3g9IjUwMCIgY3k9IjQ4NCIgcng9IjE1OCIgcnk9IjI2IiBmaWxsPSIjMDIzMTJlIiBvcGFjaXR5PSIuMzUiIGZpbHRlcj0idXJsKCNibHVyKSIvPgogIDxnIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHN0cm9rZS13aWR0aD0iMyI+CiAgICA8cG9seWdvbiBwb2ludHM9IjM3MC4xLDIyNS4wIDUwMC4wLDMwMC4wIDUwMC4wLDQ1MC4wIDM3MC4xLDM3NS4wIiBmaWxsPSJ1cmwoI2dsKSIgc3Ryb2tlPSJ1cmwoI2dsKSIvPgogICAgPHBvbHlnb24gcG9pbnRzPSI1MDAuMCwzMDAuMCA2MjkuOSwyMjUuMCA2MjkuOSwzNzUuMCA1MDAuMCw0NTAuMCIgZmlsbD0idXJsKCNncikiIHN0cm9rZT0idXJsKCNncikiLz4KICAgIDxwb2x5Z29uIHBvaW50cz0iNTAwLjAsMTUwLjAgNjI5LjksMjI1LjAgNTAwLjAsMzAwLjAgMzcwLjEsMjI1LjAiIGZpbGw9InVybCgjZ3QpIiBzdHJva2U9InVybCgjZ3QpIi8+CiAgPC9nPgogIDxwb2x5Z29uIHBvaW50cz0iNTAwLjAsMTUwLjAgNjI5LjksMjI1LjAgNTAwLjAsMzAwLjAgMzcwLjEsMjI1LjAiIGZpbGw9InVybCgjZ2xvc3MpIiBvcGFjaXR5PSIuNiIvPgogIDwhLS0gdG9wOiBtZWRpY2FsIGNyb3NzIC0tPgogIDxnIHRyYW5zZm9ybT0ibWF0cml4KDEyOS45MDQgLTc1LjAwMCAxMjkuOTA0IDc1LjAwMCAzNzAuMSAyMjUuMCkiIGZpbHRlcj0idXJsKCNzb2Z0KSI+PHBhdGggZmlsbD0idXJsKCNndykiIGQ9Ik0uMzggLjE2aC4yNHYuMjJoLjIydi4yNGgtLjIydi4yMmgtLjI0di0uMjJoLS4yMnYtLjI0aC4yMnoiLz48L2c+CiAgPCEtLSBsZWZ0OiBwdWxzZSBsaW5lIC0tPgogIDxnIHRyYW5zZm9ybT0ibWF0cml4KDEyOS45MDQgNzUuMDAwIDAuMDAwIDE1MC4wMDAgMzcwLjEgMjI1LjApIj48cG9seWxpbmUgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9Ii4wNTUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgcG9pbnRzPSIuMSwuNSAuMywuNSAuNCwuMyAuNTMsLjc0IC42NCwuNDIgLjcyLC41IC45LC41IiBmaWx0ZXI9InVybCgjc29mdCkiLz48L2c+CiAgPCEtLSByaWdodDogaGVhcnQgLS0+CiAgPGcgdHJhbnNmb3JtPSJtYXRyaXgoMTI5LjkwNCAtNzUuMDAwIDAuMDAwIDE1MC4wMDAgNTAwLjAgMzAwLjApIj48cGF0aCBmaWxsPSJ1cmwoI2d3KSIgb3BhY2l0eT0iLjk1IiBmaWx0ZXI9InVybCgjc29mdCkiIGQ9Ik0uNSAuNzdDLjE0IC41NSAuMTcgLjI0IC4zNCAuMjRDLjQ0IC4yNCAuNSAuMzEgLjUgLjM3Qy41IC4zMSAuNTYgLjI0IC42NiAuMjRDLjgzIC4yNCAuODYgLjU1IC41IC43N1oiLz48L2c+CiAgPCEtLSBiZXZlbCBlZGdlcyAtLT4KICA8ZyBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiPgogICAgPHBvbHlsaW5lIHBvaW50cz0iMzcwLjEsMjI1LjAgNTAwLjAsMTUwLjAgNjI5LjksMjI1LjAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSI0IiBvcGFjaXR5PSIuODUiLz4KICAgIDxwb2x5bGluZSBwb2ludHM9IjM3MC4xLDIyNS4wIDUwMC4wLDMwMC4wIDYyOS45LDIyNS4wIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iLjM1Ii8+CiAgICA8bGluZSB4MT0iNTAwIiB5MT0iMzAwIiB4Mj0iNTAwIiB5Mj0iNDUwIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIgb3BhY2l0eT0iLjI1Ii8+CiAgICA8cG9seWxpbmUgcG9pbnRzPSIzNzAuMSwyMjUuMCAzNzAuMSwzNzUuMCA1MDAuMCw0NTAuMCA2MjkuOSwzNzUuMCA2MjkuOSwyMjUuMCIgc3Ryb2tlPSIjMDIyMDFlIiBzdHJva2Utd2lkdGg9IjMiIG9wYWNpdHk9Ii4yNSIvPgogIDwvZz4KCiAgPGRlZnM+CiAgICA8ZyBpZD0idyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTI3LjAsNzYwKSBzY2FsZSgwLjMwMDAsLTAuMzAwMCkiPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuMCwwKSIgZD0iTTYyMiAxOTFRNjIyIDEwMyA1NjAuNSA1MS41UTQ5OSAwIDM4OSAwSDYyVjcwMkgzNzhRNDg1IDcwMiA1NDUuNSA2NTMuMFE2MDYgNjA0IDYwNiA1MjBRNjA2IDQ1OCA1NzMuNSA0MTcuMFE1NDEgMzc2IDQ4NyAzNjBRNTQ4IDM0NyA1ODUuMCAyOTkuNVE2MjIgMjUyIDYyMiAxOTFaTTIzMyA0MThIMzQ1UTM4NyA0MTggNDA5LjUgNDM2LjVRNDMyIDQ1NSA0MzIgNDkxUTQzMiA1MjcgNDA5LjUgNTQ2LjBRMzg3IDU2NSAzNDUgNTY1SDIzM1pNNDQ5IDIxNFE0NDkgMjUxIDQyNC41IDI3Mi4wUTQwMCAyOTMgMzU3IDI5M0gyMzNWMTM4SDM1OVE0MDIgMTM4IDQyNS41IDE1Ny41UTQ0OSAxNzcgNDQ5IDIxNFoiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSg3MDUuNywwKSIgZD0iTTY3MCA3MDJWMEg0OTlWMjg5SDIzM1YwSDYyVjcwMkgyMzNWNDI3SDQ5OVY3MDJaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTQ4My4zLDApIiBkPSJNMjMzIDcwMlYwSDYyVjcwMloiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxODI1LjAsMCkiIGQ9Ik00MiAyMTBIMjI0UTIyOCAxNzEgMjUxLjAgMTUwLjVRMjc0IDEzMCAzMTEgMTMwUTM0OSAxMzAgMzcxLjAgMTQ3LjVRMzkzIDE2NSAzOTMgMTk2UTM5MyAyMjIgMzc1LjUgMjM5LjBRMzU4IDI1NiAzMzIuNSAyNjcuMFEzMDcgMjc4IDI2MCAyOTJRMTkyIDMxMyAxNDkuMCAzMzQuMFExMDYgMzU1IDc1LjAgMzk2LjBRNDQgNDM3IDQ0IDUwM1E0NCA2MDEgMTE1LjAgNjU2LjVRMTg2IDcxMiAzMDAgNzEyUTQxNiA3MTIgNDg3LjAgNjU2LjVRNTU4IDYwMSA1NjMgNTAySDM3OFEzNzYgNTM2IDM1My4wIDU1NS41UTMzMCA1NzUgMjk0IDU3NVEyNjMgNTc1IDI0NC4wIDU1OC41UTIyNSA1NDIgMjI1IDUxMVEyMjUgNDc3IDI1Ny4wIDQ1OC4wUTI4OSA0MzkgMzU3IDQxN1E0MjUgMzk0IDQ2Ny41IDM3My4wUTUxMCAzNTIgNTQxLjAgMzEyLjBRNTcyIDI3MiA1NzIgMjA5UTU3MiAxNDkgNTQxLjUgMTAwLjBRNTExIDUxIDQ1My4wIDIyLjBRMzk1IC03IDMxNiAtN1EyMzkgLTcgMTc4LjAgMTguMFExMTcgNDMgODAuNSA5Mi4wUTQ0IDE0MSA0MiAyMTBaIi8+PC9nPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJnZmFjZSIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI2Q0ZmZmOCIvPjxzdG9wIG9mZnNldD0iLjQ1IiBzdG9wLWNvbG9yPSIjNGZlMGNiIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMGY5NDg4Ii8+PC9saW5lYXJHcmFkaWVudD4KICAgIDxmaWx0ZXIgaWQ9IndzaCIgeD0iLTIwJSIgeT0iLTIwJSIgd2lkdGg9IjE0MCUiIGhlaWdodD0iMTYwJSI+PGZlR2F1c3NpYW5CbHVyIHN0ZERldmlhdGlvbj0iOSIvPjwvZmlsdGVyPgogICAgPGNsaXBQYXRoIGlkPSJmYWNlY2xpcCI+PHVzZSBocmVmPSIjdyIvPjwvY2xpcFBhdGg+CiAgPC9kZWZzPgogIDx1c2UgaHJlZj0iI3ciIHg9IjMwIiB5PSI0MCIgZmlsbD0iIzAyMzEyZSIgb3BhY2l0eT0iLjM1IiBmaWx0ZXI9InVybCgjd3NoKSIvPgogIDx1c2UgaHJlZj0iI3ciIHg9IjIyLjAiIHk9IjIyLjAiIGZpbGw9InJnYig2LDQyLDQwKSIvPjx1c2UgaHJlZj0iI3ciIHg9IjIxLjAiIHk9IjIxLjAiIGZpbGw9InJnYig2LDQ0LDQyKSIvPjx1c2UgaHJlZj0iI3ciIHg9IjIwLjAiIHk9IjIwLjAiIGZpbGw9InJnYig2LDQ2LDQ0KSIvPjx1c2UgaHJlZj0iI3ciIHg9IjE5LjAiIHk9IjE5LjAiIGZpbGw9InJnYig3LDQ5LDQ2KSIvPjx1c2UgaHJlZj0iI3ciIHg9IjE4LjAiIHk9IjE4LjAiIGZpbGw9InJnYig3LDUxLDQ4KSIvPjx1c2UgaHJlZj0iI3ciIHg9IjE3LjAiIHk9IjE3LjAiIGZpbGw9InJnYig3LDU0LDUxKSIvPjx1c2UgaHJlZj0iI3ciIHg9IjE2LjAiIHk9IjE2LjAiIGZpbGw9InJnYig4LDU2LDUzKSIvPjx1c2UgaHJlZj0iI3ciIHg9IjE1LjAiIHk9IjE1LjAiIGZpbGw9InJnYig4LDU4LDU1KSIvPjx1c2UgaHJlZj0iI3ciIHg9IjE0LjAiIHk9IjE0LjAiIGZpbGw9InJnYig4LDYxLDU3KSIvPjx1c2UgaHJlZj0iI3ciIHg9IjEzLjAiIHk9IjEzLjAiIGZpbGw9InJnYig5LDYzLDYwKSIvPjx1c2UgaHJlZj0iI3ciIHg9IjEyLjAiIHk9IjEyLjAiIGZpbGw9InJnYig5LDY2LDYyKSIvPjx1c2UgaHJlZj0iI3ciIHg9IjExLjAiIHk9IjExLjAiIGZpbGw9InJnYigxMCw2OCw2NCkiLz48dXNlIGhyZWY9IiN3IiB4PSIxMC4wIiB5PSIxMC4wIiBmaWxsPSJyZ2IoMTAsNzAsNjYpIi8+PHVzZSBocmVmPSIjdyIgeD0iOS4wIiB5PSI5LjAiIGZpbGw9InJnYigxMCw3Myw2OCkiLz48dXNlIGhyZWY9IiN3IiB4PSI4LjAiIHk9IjguMCIgZmlsbD0icmdiKDExLDc1LDcxKSIvPjx1c2UgaHJlZj0iI3ciIHg9IjcuMCIgeT0iNy4wIiBmaWxsPSJyZ2IoMTEsNzgsNzMpIi8+PHVzZSBocmVmPSIjdyIgeD0iNi4wIiB5PSI2LjAiIGZpbGw9InJnYigxMSw4MCw3NSkiLz48dXNlIGhyZWY9IiN3IiB4PSI1LjAiIHk9IjUuMCIgZmlsbD0icmdiKDEyLDgyLDc3KSIvPjx1c2UgaHJlZj0iI3ciIHg9IjQuMCIgeT0iNC4wIiBmaWxsPSJyZ2IoMTIsODUsODApIi8+PHVzZSBocmVmPSIjdyIgeD0iMy4wIiB5PSIzLjAiIGZpbGw9InJnYigxMiw4Nyw4MikiLz48dXNlIGhyZWY9IiN3IiB4PSIyLjAiIHk9IjIuMCIgZmlsbD0icmdiKDEzLDkwLDg0KSIvPjx1c2UgaHJlZj0iI3ciIHg9IjEuMCIgeT0iMS4wIiBmaWxsPSJyZ2IoMTMsOTIsODYpIi8+CiAgPHVzZSBocmVmPSIjdyIgZmlsbD0idXJsKCNnZmFjZSkiLz4KICA8ZyBjbGlwLXBhdGg9InVybCgjZmFjZWNsaXApIj48cmVjdCB4PSIwIiB5PSI1MzAiIHdpZHRoPSIxMDAwIiBoZWlnaHQ9IjExMCIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjI4Ii8+PC9nPgogIDx1c2UgaHJlZj0iI3ciIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2U4ZmZmYiIgc3Ryb2tlLXdpZHRoPSIyLjIiIG9wYWNpdHk9Ii44Ii8+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTAzLjMsOTA1KSBzY2FsZSgwLjAzNDAsLTAuMDM0MCkiIGZpbGw9IiMwYjRmNGEiPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuMCwwKSIgZD0iTTYyMiAxOTFRNjIyIDEwMyA1NjAuNSA1MS41UTQ5OSAwIDM4OSAwSDYyVjcwMkgzNzhRNDg1IDcwMiA1NDUuNSA2NTMuMFE2MDYgNjA0IDYwNiA1MjBRNjA2IDQ1OCA1NzMuNSA0MTcuMFE1NDEgMzc2IDQ4NyAzNjBRNTQ4IDM0NyA1ODUuMCAyOTkuNVE2MjIgMjUyIDYyMiAxOTFaTTIzMyA0MThIMzQ1UTM4NyA0MTggNDA5LjUgNDM2LjVRNDMyIDQ1NSA0MzIgNDkxUTQzMiA1MjcgNDA5LjUgNTQ2LjBRMzg3IDU2NSAzNDUgNTY1SDIzM1pNNDQ5IDIxNFE0NDkgMjUxIDQyNC41IDI3Mi4wUTQwMCAyOTMgMzU3IDI5M0gyMzNWMTM4SDM1OVE0MDIgMTM4IDQyNS41IDE1Ny41UTQ0OSAxNzcgNDQ5IDIxNFoiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSg4MzUuNSwwKSIgZD0iTTMzIDM1M1EzMyA0NTYgODEuNSA1MzguMFExMzAgNjIwIDIxMi41IDY2Ni4wUTI5NSA3MTIgMzk0IDcxMlE0OTMgNzEyIDU3NS41IDY2Ni4wUTY1OCA2MjAgNzA1LjUgNTM4LjBRNzUzIDQ1NiA3NTMgMzUzUTc1MyAyNTAgNzA1LjAgMTY3LjVRNjU3IDg1IDU3NS4wIDM5LjBRNDkzIC03IDM5NCAtN1EyOTUgLTcgMjEyLjUgMzkuMFExMzAgODUgODEuNSAxNjcuNVEzMyAyNTAgMzMgMzUzWk01NzkgMzUzUTU3OSA0NDYgNTI4LjUgNTAxLjVRNDc4IDU1NyAzOTQgNTU3UTMwOSA1NTcgMjU4LjUgNTAyLjBRMjA4IDQ0NyAyMDggMzUzUTIwOCAyNjAgMjU4LjUgMjA0LjVRMzA5IDE0OSAzOTQgMTQ5UTQ3OCAxNDkgNTI4LjUgMjA1LjBRNTc5IDI2MSA1NzkgMzUzWiIvPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE3OTcuOSwwKSIgZD0iTTY5MyAzNTFRNjkzIDI0OCA2NDcuNSAxNjguMFE2MDIgODggNTE4LjUgNDQuMFE0MzUgMCAzMjUgMEg2MlY3MDJIMzI1UTQzNiA3MDIgNTE5LjAgNjU4LjBRNjAyIDYxNCA2NDcuNSA1MzQuNVE2OTMgNDU1IDY5MyAzNTFaTTUxOSAzNTFRNTE5IDQ0OCA0NjUuMCA1MDIuMFE0MTEgNTU2IDMxNCA1NTZIMjMzVjE0OEgzMTRRNDExIDE0OCA0NjUuMCAyMDEuMFE1MTkgMjU0IDUxOSAzNTFaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjcwMS40LDApIiBkPSJNNjY0IDcwMiA0MjEgMjMyVjBIMjUwVjIzMkw3IDcwMkgyMDFMMzM3IDQwOEw0NzIgNzAyWiIvPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDM1NDguOSwwKSIgZD0iIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzkzNy40LDApIiBkPSJNNjcwIDcwMlYwSDQ5OVYyODlIMjMzVjBINjJWNzAySDIzM1Y0MjdINDk5VjcwMloiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSg0ODQ0LjgsMCkiIGQ9Ik0yMzMgNTY1VjQyM0g0NjJWMjkxSDIzM1YxMzdINDkyVjBINjJWNzAySDQ5MlY1NjVaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNTU2Mi4zLDApIiBkPSJNNDk5IDEyNEgyMzdMMTk1IDBIMTZMMjcwIDcwMkg0NjhMNzIyIDBINTQxWk00NTUgMjU2IDM2OCA1MTMgMjgyIDI1NloiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSg2NDc1LjgsMCkiIGQ9Ik0yMzMgMTMySDQ1N1YwSDYyVjcwMkgyMzNaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNzEyOS4yLDApIiBkPSJNNTY3IDcwMlY1NjVIMzgxVjBIMjEwVjU2NUgyNFY3MDJaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNzg5Ni43LDApIiBkPSJNNjcwIDcwMlYwSDQ5OVYyODlIMjMzVjBINjJWNzAySDIzM1Y0MjdINDk5VjcwMloiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSg4ODA0LjIsMCkiIGQ9IiIvPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDkxOTIuNiwwKSIgZD0iTTIzMyA3MDJWMEg2MlY3MDJaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoOTY2NC4xLDApIiBkPSJNNjkwIDBINTE5TDIzMyA0MzNWMEg2MlY3MDJIMjMzTDUxOSAyNjdWNzAySDY5MFoiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMDU5Mi42LDApIiBkPSJNNTY3IDcwMlY1NjVIMzgxVjBIMjEwVjU2NUgyNFY3MDJaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTEzNjAuMSwwKSIgZD0iTTIzMyA1NjVWNDIzSDQ2MlYyOTFIMjMzVjEzN0g0OTJWMEg2MlY3MDJINDkyVjU2NVoiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMjA3Ny41LDApIiBkPSJNNTI4IDQ4MFE1MDkgNTE1IDQ3My41IDUzMy41UTQzOCA1NTIgMzkwIDU1MlEzMDcgNTUyIDI1Ny4wIDQ5Ny41UTIwNyA0NDMgMjA3IDM1MlEyMDcgMjU1IDI1OS41IDIwMC41UTMxMiAxNDYgNDA0IDE0NlE0NjcgMTQ2IDUxMC41IDE3OC4wUTU1NCAyMTAgNTc0IDI3MEgzNTdWMzk2SDcyOVYyMzdRNzEwIDE3MyA2NjQuNSAxMTguMFE2MTkgNjMgNTQ5LjAgMjkuMFE0NzkgLTUgMzkxIC01UTI4NyAtNSAyMDUuNSA0MC41UTEyNCA4NiA3OC41IDE2Ny4wUTMzIDI0OCAzMyAzNTJRMzMgNDU2IDc4LjUgNTM3LjVRMTI0IDYxOSAyMDUuMCA2NjQuNVEyODYgNzEwIDM5MCA3MTBRNTE2IDcxMCA2MDIuNSA2NDkuMFE2ODkgNTg4IDcxNyA0ODBaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTMwMTYuMCwwKSIgZD0iTTQyMCAwIDI3NCAyNjVIMjMzVjBINjJWNzAySDM0OVE0MzIgNzAyIDQ5MC41IDY3My4wUTU0OSA2NDQgNTc4LjAgNTkzLjVRNjA3IDU0MyA2MDcgNDgxUTYwNyA0MTEgNTY3LjUgMzU2LjBRNTI4IDMwMSA0NTEgMjc4TDYxMyAwWk0yMzMgMzg2SDMzOVEzODYgMzg2IDQwOS41IDQwOS4wUTQzMyA0MzIgNDMzIDQ3NFE0MzMgNTE0IDQwOS41IDUzNy4wUTM4NiA1NjAgMzM5IDU2MEgyMzNaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTM4NDQuNSwwKSIgZD0iTTQ5OSAxMjRIMjM3TDE5NSAwSDE2TDI3MCA3MDJINDY4TDcyMiAwSDU0MVpNNDU1IDI1NiAzNjggNTEzIDI4MiAyNTZaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTQ3NTcuOSwwKSIgZD0iTTU2NyA3MDJWNTY1SDM4MVYwSDIxMFY1NjVIMjRWNzAyWiIvPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE1NTI1LjQsMCkiIGQ9Ik0yMzMgNTY1VjQyM0g0NjJWMjkxSDIzM1YxMzdINDkyVjBINjJWNzAySDQ5MlY1NjVaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTYyNDIuOSwwKSIgZD0iTTY5MyAzNTFRNjkzIDI0OCA2NDcuNSAxNjguMFE2MDIgODggNTE4LjUgNDQuMFE0MzUgMCAzMjUgMEg2MlY3MDJIMzI1UTQzNiA3MDIgNTE5LjAgNjU4LjBRNjAyIDYxNCA2NDcuNSA1MzQuNVE2OTMgNDU1IDY5MyAzNTFaTTUxOSAzNTFRNTE5IDQ0OCA0NjUuMCA1MDIuMFE0MTEgNTU2IDMxNCA1NTZIMjMzVjE0OEgzMTRRNDExIDE0OCA0NjUuMCAyMDEuMFE1MTkgMjU0IDUxOSAzNTFaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTcxNDYuNCwwKSIgZD0iIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTc1MzQuOCwwKSIgZD0iTTQyIDIxMEgyMjRRMjI4IDE3MSAyNTEuMCAxNTAuNVEyNzQgMTMwIDMxMSAxMzBRMzQ5IDEzMCAzNzEuMCAxNDcuNVEzOTMgMTY1IDM5MyAxOTZRMzkzIDIyMiAzNzUuNSAyMzkuMFEzNTggMjU2IDMzMi41IDI2Ny4wUTMwNyAyNzggMjYwIDI5MlExOTIgMzEzIDE0OS4wIDMzNC4wUTEwNiAzNTUgNzUuMCAzOTYuMFE0NCA0MzcgNDQgNTAzUTQ0IDYwMSAxMTUuMCA2NTYuNVExODYgNzEyIDMwMCA3MTJRNDE2IDcxMiA0ODcuMCA2NTYuNVE1NTggNjAxIDU2MyA1MDJIMzc4UTM3NiA1MzYgMzUzLjAgNTU1LjVRMzMwIDU3NSAyOTQgNTc1UTI2MyA1NzUgMjQ0LjAgNTU4LjVRMjI1IDU0MiAyMjUgNTExUTIyNSA0NzcgMjU3LjAgNDU4LjBRMjg5IDQzOSAzNTcgNDE3UTQyNSAzOTQgNDY3LjUgMzczLjBRNTEwIDM1MiA1NDEuMCAzMTIuMFE1NzIgMjcyIDU3MiAyMDlRNTcyIDE0OSA1NDEuNSAxMDAuMFE1MTEgNTEgNDUzLjAgMjIuMFEzOTUgLTcgMzE2IC03UTIzOSAtNyAxNzguMCAxOC4wUTExNyA0MyA4MC41IDkyLjBRNDQgMTQxIDQyIDIxMFoiLz48cGF0aCB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxODMyNi4zLDApIiBkPSJNNjY0IDcwMiA0MjEgMjMyVjBIMjUwVjIzMkw3IDcwMkgyMDFMMzM3IDQwOEw0NzIgNzAyWiIvPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE5MTczLjgsMCkiIGQ9Ik00MiAyMTBIMjI0UTIyOCAxNzEgMjUxLjAgMTUwLjVRMjc0IDEzMCAzMTEgMTMwUTM0OSAxMzAgMzcxLjAgMTQ3LjVRMzkzIDE2NSAzOTMgMTk2UTM5MyAyMjIgMzc1LjUgMjM5LjBRMzU4IDI1NiAzMzIuNSAyNjcuMFEzMDcgMjc4IDI2MCAyOTJRMTkyIDMxMyAxNDkuMCAzMzQuMFExMDYgMzU1IDc1LjAgMzk2LjBRNDQgNDM3IDQ0IDUwM1E0NCA2MDEgMTE1LjAgNjU2LjVRMTg2IDcxMiAzMDAgNzEyUTQxNiA3MTIgNDg3LjAgNjU2LjVRNTU4IDYwMSA1NjMgNTAySDM3OFEzNzYgNTM2IDM1My4wIDU1NS41UTMzMCA1NzUgMjk0IDU3NVEyNjMgNTc1IDI0NC4wIDU1OC41UTIyNSA1NDIgMjI1IDUxMVEyMjUgNDc3IDI1Ny4wIDQ1OC4wUTI4OSA0MzkgMzU3IDQxN1E0MjUgMzk0IDQ2Ny41IDM3My4wUTUxMCAzNTIgNTQxLjAgMzEyLjBRNTcyIDI3MiA1NzIgMjA5UTU3MiAxNDkgNTQxLjUgMTAwLjBRNTExIDUxIDQ1My4wIDIyLjBRMzk1IC03IDMxNiAtN1EyMzkgLTcgMTc4LjAgMTguMFExMTcgNDMgODAuNSA5Mi4wUTQ0IDE0MSA0MiAyMTBaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTk5NjUuMiwwKSIgZD0iTTU2NyA3MDJWNTY1SDM4MVYwSDIxMFY1NjVIMjRWNzAyWiIvPjxwYXRoIHRyYW5zZm9ybT0idHJhbnNsYXRlKDIwNzMyLjcsMCkiIGQ9Ik0yMzMgNTY1VjQyM0g0NjJWMjkxSDIzM1YxMzdINDkyVjBINjJWNzAySDQ5MlY1NjVaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjE0NTAuMiwwKSIgZD0iTTg1NyA3MDJWMEg2ODZWNDIxTDUyOSAwSDM5MUwyMzMgNDIyVjBINjJWNzAySDI2NEw0NjEgMjE2TDY1NiA3MDJaIi8+PHBhdGggdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjI1NDQuNiwwKSIgZD0iTTQyIDIxMEgyMjRRMjI4IDE3MSAyNTEuMCAxNTAuNVEyNzQgMTMwIDMxMSAxMzBRMzQ5IDEzMCAzNzEuMCAxNDcuNVEzOTMgMTY1IDM5MyAxOTZRMzkzIDIyMiAzNzUuNSAyMzkuMFEzNTggMjU2IDMzMi41IDI2Ny4wUTMwNyAyNzggMjYwIDI5MlExOTIgMzEzIDE0OS4wIDMzNC4wUTEwNiAzNTUgNzUuMCAzOTYuMFE0NCA0MzcgNDQgNTAzUTQ0IDYwMSAxMTUuMCA2NTYuNVExODYgNzEyIDMwMCA3MTJRNDE2IDcxMiA0ODcuMCA2NTYuNVE1NTggNjAxIDU2MyA1MDJIMzc4UTM3NiA1MzYgMzUzLjAgNTU1LjVRMzMwIDU3NSAyOTQgNTc1UTI2MyA1NzUgMjQ0LjAgNTU4LjVRMjI1IDU0MiAyMjUgNTExUTIyNSA0NzcgMjU3LjAgNDU4LjBRMjg5IDQzOSAzNTcgNDE3UTQyNSAzOTQgNDY3LjUgMzczLjBRNTEwIDM1MiA1NDEuMCAzMTIuMFE1NzIgMjcyIDU3MiAyMDlRNTcyIDE0OSA1NDEuNSAxMDAuMFE1MTEgNTEgNDUzLjAgMjIuMFEzOTUgLTcgMzE2IC03UTIzOSAtNyAxNzguMCAxOC4wUTExNyA0MyA4MC41IDkyLjBRNDQgMTQxIDQyIDIxMFoiLz48L2c+CiAgPHJlY3QgeD0iMTAzLjMiIHk9IjkyNyIgd2lkdGg9Ijc5My40IiBoZWlnaHQ9IjQiIHJ4PSIyIiBmaWxsPSIjMTliM2EzIiBvcGFjaXR5PSIuNyIvPgo8L3N2Zz4=" alt="BHIS: Body Health Integrated Systems" style="display:block;width:150px;max-width:50%;margin:0 auto 6px"><h2 id="ackT" style="margin-top:0;text-align:center">Before you start</h2>
-  <p><b>LabLens is an educational guide, not a doctor.</b> It compares your numbers with typical adult ranges and common patterns, then suggests <i>possibilities</i> and which kind of specialist to ask for. It <b>cannot diagnose</b> you or replace a medical examination, your symptoms, or your doctor’s judgement.</p>
+  <p><b>LabLens is an educational guide, not a doctor.</b> It compares your numbers with typical adult and child ranges and common patterns, then suggests <i>possibilities</i> and which kind of specialist to ask for. It <b>cannot diagnose</b> you or replace a medical examination, your symptoms, or your doctor’s judgement.</p>
   <p>Always show your results to a qualified doctor before making decisions about treatment. Do not start, stop or change medicines because of this app.</p>
   <div class="emerg"><b>Emergency?</b> Chest pain, difficulty breathing, severe bleeding, fainting, confusion, seizures, or sudden weakness: go to an emergency department now (Nigeria: call 112).</div>
   <p style="color:var(--mute);font-size:14px">Works fully offline. Your entries are stored only on this device.</p>
@@ -447,13 +458,139 @@ N('cca', 'Albumin-corrected calcium (calculated)', 'mg/dL', [8.6, 10.2], { calc:
 N('ag', 'Anion gap (calculated)', 'mmol/L', [8, 16], { calc: true, dp: 0, hi: 'A high anion gap points to acids building up (ketones, lactate, kidney failure, toxins).', lo: 'A low anion gap can be a lab artefact or very low albumin.' });
 
 'use strict';
+/* ===== LabLens paediatric reference intervals =====
+   Age bands (the baby's / child's age decides which range is used):
+     n1 = newborn, 0–13 days     n2 = newborn, 14–27 days     i  = infant, 1–11 months
+     c1 = child, 1–5 years       c2 = child, 6–11 years       t  = teen, 12–17 years
+   'n' means n1 + n2 together; 'c' means c1 + c2 together.
+   t may be { m: [lo,hi], f: [lo,hi] }.  Same units as the adult catalogue (see data.js).
+   Values are typical published term-baby / child intervals compiled from standard paediatric references
+   (Nelson, Harriet Lane, CALIPER, AAP, WHO anaemia cut-offs). They are approximate: labs differ, preterm babies
+   differ, and a paediatrician must confirm them before the app is relied on commercially.
+   A test with no entry here falls back to the adult range and is labelled "adult range" in the results. */
+const PED = {
+  hb:    { n1: [13.5, 21.5], n2: [11, 19], i: [9.5, 13.5], c1: [11, 14], c2: [11.5, 15.5], t: { m: [12.5, 16.5], f: [12, 15.5] } },
+  pcv:   { n1: [42, 65], n2: [33, 55], i: [30, 42], c1: [33, 43], c2: [34, 45], t: { m: [37, 49], f: [36, 46] } },
+  rbc:   { n1: [3.9, 6.6], n2: [3.0, 5.4], i: [2.7, 5.0], c1: [3.9, 5.3], c2: [4.0, 5.2], t: { m: [4.3, 5.5], f: [4.0, 5.1] } },
+  mcv:   { n1: [94, 125], n2: [84, 120], i: [70, 105], c1: [72, 89], c2: [76, 95], t: [78, 98] },
+  mch:   { n1: [31, 37], n2: [28, 36], i: [23, 34], c1: [24, 30], c2: [25, 33], t: [26, 34] },
+  mchc:  { n1: [30, 37], n2: [29, 37], i: [30, 36], c1: [31, 37], c2: [32, 37] },
+  rdw:   { n: [14, 19], i: [11.5, 16], c1: [11.5, 15.5] },
+  wbc:   { n1: [9, 30], n2: [5, 20], i: [6, 17.5], c1: [5, 15.5], c2: [4.5, 13.5], t: [4.5, 13] },
+  neutp: { n1: [30, 70], n2: [10, 45], i: [10, 45], c1: [25, 60], c2: [35, 65], t: [40, 70] },
+  lymp:  { n1: [20, 50], n2: [35, 75], i: [45, 80], c1: [35, 65], c2: [25, 55], t: [25, 50] },
+  monp:  { n: [3, 15], i: [2, 12] },
+  eosp:  { c: [0, 8], i: [0, 8], n: [0, 8], t: [0, 8] },
+  neuta: { n1: [2.5, 20], n2: [1.0, 8], i: [1.0, 8.5], c1: [1.5, 8.5], c2: [1.8, 8.0] },
+  lyma:  { n1: [2, 11], n2: [2.5, 15], i: [3.0, 13.5], c1: [2.0, 8.0], c2: [1.5, 6.5], t: [1.2, 5.0] },
+  eosa:  { n: [0, 1.0], i: [0, 0.8], c: [0, 0.8] },
+  plt:   { n: [150, 450], i: [150, 450], c: [150, 450], t: [150, 450] },
+  retic: { n1: [1.0, 7.0], n2: [0.2, 2.8] },
+  crp:   { n1: [0, 10] },
+  esr:   { i: [0, 10], c: [0, 10], t: { m: [0, 10], f: [0, 15] } },
+  pct:   { n1: [0, 20] },
+
+  alt:   { n: [5, 45], i: [5, 45], c: [5, 35], t: { m: [6, 40], f: [6, 35] } },
+  ast:   { n1: [15, 140], n2: [15, 100], i: [20, 80], c1: [15, 55], c2: [15, 45], t: [10, 45] },
+  alp:   { n: [120, 450], i: [120, 450], c1: [130, 420], c2: [130, 560], t: { m: [50, 560], f: [45, 450] } },
+  ggt:   { n: [10, 200], i: [5, 100], c: [5, 25], t: { m: [5, 45], f: [5, 35] } },
+  tbil:  { n1: [0.1, 12.0], n2: [0.1, 2.0], i: [0.1, 1.2] },
+  dbil:  { n: [0, 1.0], i: [0, 1.0] },
+  alb:   { n: [2.8, 4.4], i: [3.4, 4.8], c1: [3.4, 4.8] },
+  tp:    { n: [4.6, 7.0], i: [5.1, 7.3], c1: [5.6, 7.5] },
+
+  urea:  { n: [1.1, 5.0], i: [1.4, 6.0], c1: [1.8, 6.4], c2: [2.0, 6.5], t: [2.5, 7.0] },
+  cr:    { n1: [0.3, 1.0], n2: [0.2, 0.5], i: [0.1, 0.4], c1: [0.2, 0.5], c2: [0.3, 0.7], t: { m: [0.5, 1.0], f: [0.4, 0.9] } },
+  na:    { n: [133, 146], i: [133, 146] },
+  k:     { n: [3.7, 6.0], i: [3.7, 5.7], c1: [3.4, 5.1] },
+  chl:   { n: [96, 112], i: [96, 110] },
+  hco3:  { n: [17, 24], i: [20, 28], c: [20, 28] },
+  ca:    { n: [7.6, 10.4], i: [8.7, 11.2], c: [8.8, 10.8], t: [8.5, 10.3] },
+  po4:   { n: [4.8, 8.2], i: [4.5, 6.7], c1: [4.0, 6.5], c2: [3.6, 5.8], t: [2.6, 5.0] },
+  ua:    { n: [1.0, 6.0], i: [1.2, 6.0], c: [2.0, 5.5], t: { m: [3.0, 7.0], f: [2.4, 6.0] } },
+
+  fpg:   { n: [45, 100], i: [60, 100] },
+  rpg:   { n: [45, 140], i: [60, 140] },
+  hdl:   { c: [40, null], t: [40, null] },
+  tg:    { n: [null, 150], i: [null, 150], c: [null, 99], t: [null, 129] },
+
+  tsh:   { n1: [1.0, 20], n2: [1.7, 9.1], i: [0.8, 8.5], c: [0.7, 6.0], t: [0.5, 5.0] },
+  ft4:   { n1: [1.0, 5.0], n2: [0.8, 2.3], i: [0.8, 2.0] },
+  t4:    { n1: [7.5, 23], n2: [6.5, 16], i: [5.5, 15], c1: [5.5, 13.5], c2: [5, 12.5] },
+
+  ldh:   { n: [290, 2000], i: [180, 430] },
+  pt:    { n: [12, 21] },
+  inr:   { n: [0.8, 1.7] },
+  aptt:  { n: [30, 60], i: [30, 50] },
+  fib:   { n: [160, 420] },
+  ferritin: { n1: [25, 300], n2: [100, 600], i: [12, 300], c: [12, 140], t: { m: [14, 250], f: [12, 150] } },
+  iron:  { n: [100, 250], i: [40, 120], c: [40, 140], t: [50, 170] },
+  amy:   { n: [0, 110], i: [0, 110] },
+  lip:   { n: [0, 60], i: [0, 60] }
+};
+
+/* Tests that have no meaningful interpretation here for a given age. */
+const PED_ADULT_ONLY = ['sv', 'sc', 'stm', 'spm', 'smo', 'sva', 'sph', 'swbc', 'psa', 'afp', 'cea', 'ca125', 'ca199', 'ca153', 'fsh', 'lh', 'testo'];
+const PED_NOT_UNDER_1 = ['ntbnp', 'trop'];
+const PED_ADULT_WHY = 'Semen, tumour-marker and sex-hormone results depend on a child’s stage of puberty or need a specialist, so they are not interpreted here for under-18s.';
+const PED_INFANT_WHY = 'Heart-strain and heart-muscle markers have very different normal levels in babies, so they are not interpreted here for children under 1 year.';
+
+/* age (years, as a number) + unit  ->  profile fields */
+function ageProfile(value, unit) {
+  const v = parseFloat(String(value == null ? '' : value).replace(',', '.'));
+  if (isNaN(v) || v < 0) return { years: null, days: null, text: '', band: '', unit: unit || 'y' };
+  const u = unit === 'd' || unit === 'w' || unit === 'm' ? unit : 'y';
+  const days = u === 'd' ? v : u === 'w' ? v * 7 : u === 'm' ? v * 30.4375 : v * 365.25;
+  const years = days / 365.25;
+  const band = days < 14 ? 'n1' : days < 28 ? 'n2' : years < 1 ? 'i' : years < 6 ? 'c1' : years < 12 ? 'c2' : years < 18 ? 't' : 'a';
+  const n = String(+v.toFixed(1));
+  const text = u === 'd' ? n + (v === 1 ? ' day' : ' days') : u === 'w' ? n + (v === 1 ? ' week' : ' weeks') : u === 'm' ? n + (v === 1 ? ' month' : ' months') : n + (v === 1 ? ' year' : ' years');
+  return { years: years, days: days, text: text, band: band, unit: u };
+}
+const BAND_NAME = { n1: 'newborn (first 2 weeks)', n2: 'newborn (2–4 weeks)', i: 'infant (1–11 months)', c1: 'young child (1–5 years)', c2: 'child (6–11 years)', t: 'teenager (12–17 years)', a: 'adult' };
+
+/* paediatric range for a test, or null when the app has none (falls back to adult) */
+function pedRange(t, prof) {
+  const o = PED[t.id]; if (!o || !prof.child) return null;
+  if (t.id === 'tbil' && prof.ageDays < 1) return [0.1, 5.0];   // jaundice in the first 24 h is never normal
+  let r = o[prof.band];
+  if (r == null && prof.band[0] === 'n') r = o.n;
+  if (r == null && prof.band[0] === 'c') r = o.c;
+  if (r == null) return null;
+  if (Array.isArray(r)) return r;
+  return prof.sex === 'F' ? r.f : prof.sex === 'M' ? r.m : null;
+}
+/* null when the test is interpreted; otherwise the reason it is skipped for this age */
+function pedSkip(t, prof) {
+  if (!prof.child) return null;
+  if (PED_ADULT_ONLY.indexOf(t.id) >= 0) return PED_ADULT_WHY;
+  if (PED_NOT_UNDER_1.indexOf(t.id) >= 0 && prof.ageY < 1) return PED_INFANT_WHY;
+  return null;
+}
+
+/* Adult ranges that are also fine for children from age 1 year (so they are not labelled "adult range") */
+const PED_SAME = ['hba1c', 'ogtt2', 'tc', 'ldl', 'mg', 'ur_ph', 'ur_sg', 'ur_pus', 'ur_rbc', 'crp', 'fpg', 'rpg', 'tbil', 'dbil', 'na', 'chl', 'k', 'tpo',
+  'abg_ph', 'abg_pco2', 'abg_po2', 'abg_hco3', 'be', 'lact', 'ntbnp', 'trop', 'ckmb', 'hco3', 'alb', 'tp', 'po4', 'egfr', 'cca', 'ag'];
+function usesAdultRange(t, prof) {
+  if (!prof.child || prof.preg || pedRange(t, prof)) return false;
+  return !(PED_SAME.indexOf(t.id) >= 0 && prof.ageY >= 1);
+}
+/* critical-value overrides: a newborn's glucose of 50 mg/dL is not an emergency, but 30 is */
+const PED_CRIT = { fpg: { n: { cl: 36 }, i: { cl: 45 } }, rpg: { n: { cl: 36 }, i: { cl: 45 } } };
+function pedCrit(t, prof) {
+  const o = prof.child && PED_CRIT[t.id]; if (!o) return null;
+  return o[prof.band] || (prof.band[0] === 'n' ? o.n : null);
+}
+
+'use strict';
 /* ===== LabLens engine: evaluation, derived values, pattern rules ===== */
 
 /* ---- specialties ---- */
 const GP = 'Physician (Internal Medicine / GP)', HAEM = 'Haematologist', NEPH = 'Nephrologist', GI = 'Gastroenterologist / Hepatologist',
   ENDO = 'Endocrinologist', CARD = 'Cardiologist', URO = 'Urologist', OBG = 'Obstetrician / Gynaecologist', ID = 'Infectious Disease Specialist',
   ONC = 'Oncologist', RHEUM = 'Rheumatologist', PULM = 'Pulmonologist', NEURO = 'Neurologist', FERT = 'Fertility Specialist',
-  ALLG = 'Allergist / Immunologist', DIET = 'Dietitian / Nutritionist', GEN = 'Genetic Counsellor', ER = 'Emergency Department';
+  ALLG = 'Allergist / Immunologist', DIET = 'Dietitian / Nutritionist', GEN = 'Genetic Counsellor', ER = 'Emergency Department',
+  PAED = 'Paediatrician (children’s doctor)', NEO = 'Neonatologist / newborn specialist';
 const SPEC_INFO = {};
 SPEC_INFO[GP] = 'Your first stop for most adult health problems. Reviews you, orders more tests and refers you on if needed.';
 SPEC_INFO[HAEM] = 'Doctor for blood disorders: anaemia, clotting problems, sickle cell disease and blood cancers.';
@@ -473,6 +610,16 @@ SPEC_INFO[ALLG] = 'Allergies, asthma-related allergy and immune problems.';
 SPEC_INFO[DIET] = 'Practical eating plans for diabetes, cholesterol, weight and deficiencies.';
 SPEC_INFO[GEN] = 'Explains inherited conditions such as sickle cell and helps couples plan safely.';
 SPEC_INFO[ER] = 'Go straight to a hospital emergency unit; do not wait for an appointment.';
+SPEC_INFO[PAED] = 'Your child’s first stop. A doctor trained in children’s health who reviews your child, repeats tests with child-specific ranges and refers on if needed.';
+SPEC_INFO[NEO] = 'Specialist in the care of newborn babies, including jaundice, feeding, infections and breathing problems in the first weeks of life.';
+/* children are referred to the paediatric version of each specialty */
+const PED_SPEC = {};
+PED_SPEC[HAEM] = 'Paediatric Haematologist'; PED_SPEC[NEPH] = 'Paediatric Nephrologist'; PED_SPEC[GI] = 'Paediatric Gastroenterologist / Hepatologist';
+PED_SPEC[ENDO] = 'Paediatric Endocrinologist'; PED_SPEC[CARD] = 'Paediatric Cardiologist'; PED_SPEC[URO] = 'Paediatric Urologist';
+PED_SPEC[OBG] = 'Adolescent Gynaecologist'; PED_SPEC[ID] = 'Paediatric Infectious Disease Specialist'; PED_SPEC[ONC] = 'Paediatric Oncologist';
+PED_SPEC[RHEUM] = 'Paediatric Rheumatologist'; PED_SPEC[PULM] = 'Paediatric Pulmonologist'; PED_SPEC[NEURO] = 'Paediatric Neurologist';
+PED_SPEC[DIET] = 'Paediatric Dietitian'; PED_SPEC[GP] = PAED;
+const PED_SPEC_TAIL = ' Ask for the children’s (paediatric) version of this specialist: children need doctors trained in child health.';
 
 const URGENCY = [
   { lvl: 0, label: 'No action needed beyond routine care', cls: 'u0', text: 'Nothing here looks urgent.' },
@@ -496,6 +643,8 @@ function shortName(t) {
 }
 function rangeFor(t, prof) {
   if (prof.preg && t.p) return t.p;
+  const pr = pedRange(t, prof);
+  if (pr) return pr;
   const r = t.range;
   if (!r) return null;
   if (Array.isArray(r)) return r;
@@ -525,14 +674,16 @@ function evalNum(t, e, prof) {
     if (r) {
       lo = r[0]; hi = r[1];
       flag = (lo != null && val < lo) ? 'L' : (hi != null && val > hi) ? 'H' : 'N';
-      if (t.cl != null && val < t.cl) crit = 'L';
-      if (t.ch != null && val > t.ch) crit = 'H';
+      const pc = pedCrit(t, prof), cl = pc && pc.cl != null ? pc.cl : t.cl, chh = pc && pc.ch != null ? pc.ch : t.ch;
+      if (cl != null && val < cl) crit = 'L';
+      if (chh != null && val > chh) crit = 'H';
     }
   }
   let sev = 0;
   if (flag === 'H' && hi) { const x = (custom ? raw : val) / hi; sev = x < 1.2 ? 1 : x < 2 ? 2 : 3; }
   if (flag === 'L' && lo) { const x = lo / ((custom ? raw : val) || 1e-9); sev = x < 1.2 ? 1 : x < 2 ? 2 : 3; }
-  return { id: t.id, t: t, type: 'n', rawStr: String(e.v).trim(), raw, val, lo, hi, flag, crit, sev, unit: unitLabel(t, u), custom: custom, derived: false };
+  const adultUsed = !custom && usesAdultRange(t, prof) && !!rangeFor(t, prof);
+  return { id: t.id, t: t, type: 'n', rawStr: String(e.v).trim(), raw, val, lo, hi, flag, crit, sev, unit: unitLabel(t, u), custom: custom, derived: false, adultUsed: adultUsed };
 }
 function evalQ(t, e) {
   if (!e.s) return null;
@@ -565,6 +716,10 @@ function derive(res, prof) {
     const e = 142 * Math.pow(Math.min(s / k, 1), a) * Math.pow(Math.max(s / k, 1), -1.2) * Math.pow(0.9938, prof.age) * (prof.sex === 'F' ? 1.012 : 1);
     res.egfr = pseudo('egfr', e, prof);
   }
+  if (prof.child && prof.ageY >= 1 && prof.height > 30 && prof.height < 220 && v('cr') != null && v('cr') > 0) {
+    res.egfr = pseudo('egfr', 0.413 * prof.height / v('cr'), prof);   // bedside Schwartz (children 1–17 y)
+    res.egfr.peds = true;
+  }
   if (v('ca') != null && v('alb') != null && v('alb') < 4) res.cca = pseudo('cca', v('ca') + 0.8 * (4 - v('alb')), prof);
   if (v('na') != null && v('chl') != null && v('hco3') != null) res.ag = pseudo('ag', v('na') - v('chl') - v('hco3'), prof);
   if (!res.tsat && v('iron') != null && v('tibc') != null && v('tibc') > 0) res.tsat = pseudo('tsat', v('iron') / v('tibc') * 100, prof);
@@ -572,7 +727,7 @@ function derive(res, prof) {
 
 function makeCtx(res, prof) {
   const c = {
-    prof: prof, res: res, age: prof.age, sex: prof.sex, preg: prof.preg,
+    prof: prof, res: res, age: prof.age, sex: prof.sex, preg: prof.preg, child: prof.child, neo: prof.neo, infant: prof.ageY < 1, ageDays: prof.ageDays, hasHeight: prof.height > 0,
     has: function (id) { return !!res[id]; },
     v: function (id) { return res[id] ? res[id].val : undefined; },
     hi: function (id) { return !!res[id] && res[id].flag === 'H'; },
@@ -837,7 +992,7 @@ R('indirectbili', 'Raised indirect bilirubin (Gilbert syndrome or red-cell break
   'Mildly raised bilirubin with normal liver enzymes is often Gilbert syndrome, a harmless inherited trait that flares with fasting or illness. It can also reflect red-cell breakdown.',
   'Reticulocyte count and blood film to exclude haemolysis. No treatment is needed for Gilbert syndrome.',
   function (c) {
-    if (!c.hi('tbil') || c.hi('dbil') || c.hi('alt') || c.hi('ast') || c.hi('alp')) return null;
+    if (c.neo || !c.hi('tbil') || c.hi('dbil') || c.hi('alt') || c.hi('ast') || c.hi('alp')) return null;
     const e = [c.d('tbil')]; if (c.has('dbil')) e.push(c.d('dbil')); if (c.has('alt')) e.push(c.d('alt'));
     return { ev: e, conf: c.has('dbil') ? 2 : 1 };
   });
@@ -961,7 +1116,8 @@ R('diabetes', 'Diabetes range blood sugar', [ENDO, GP, DIET], 2,
     if (!s) return null;
     if (c.has('ur_glu') && c.lvl('ur_glu') >= 2) e.push(c.d('ur_glu'));
     const g = c.max('fpg', 'rpg');
-    return { ev: e, conf: s >= 2 ? 3 : 2, urg: (g != null && g >= 300) ? 3 : 2 };
+    const kid = c.child && c.lvl('ur_ket') >= 2;
+    return { ev: e, conf: s >= 2 ? 3 : 2, urg: (g != null && g >= 300) || kid ? 3 : 2 };
   });
 R('prediabetes', 'Prediabetes range blood sugar', [GP, ENDO, DIET], 1,
   'Blood sugar is higher than normal but below the diabetes range. This is a warning stage, and it can often be reversed with weight loss, regular exercise and diet changes.',
@@ -978,8 +1134,9 @@ R('hypoglyc', 'Low blood sugar', [GP, ENDO], 2,
   'Low blood sugar can cause sweating, shaking, confusion and fainting. Causes include skipped meals, diabetes medicines, alcohol, and hormone or liver problems.',
   'If symptoms are present take fast-acting sugar and seek care. Repeated lows need investigation (insulin, cortisol, liver and kidney tests).',
   function (c) {
-    const g = c.min('fpg', 'rpg'); if (g == null || g >= 70) return null;
-    return { ev: [c.d(c.v('fpg') != null && c.v('fpg') < 70 ? 'fpg' : 'rpg')], conf: 3, urg: g < 54 ? 3 : 2 };
+    const th = c.neo ? 45 : c.infant ? 60 : 70;
+    const g = c.min('fpg', 'rpg'); if (g == null || g >= th) return null;
+    return { ev: [c.d(c.v('fpg') != null && c.v('fpg') < th ? 'fpg' : 'rpg')], conf: 3, urg: (c.neo || g < 54) ? 3 : 2 };
   });
 R('dka', 'Possible diabetic ketoacidosis (DKA)', [ER, ENDO], 3,
   'High blood sugar with ketones in the urine can mean the body is producing dangerous acids. Symptoms: heavy thirst, vomiting, abdominal pain, fast deep breathing, drowsiness.',
@@ -1100,7 +1257,7 @@ R('uti', 'Possible urinary tract infection (UTI)', [GP, URO], 2,
     if (c.lvl('ur_bact') >= 2) { e.push(c.d('ur_bact')); s += 1; }
     if (c.sel('ur_cult') === 'Significant growth') { e.push(c.d('ur_cult')); s += 3; }
     if (!e.length) return null;
-    return { ev: e, conf: s >= 3 ? 3 : s >= 2 ? 2 : 1, note: c.lvl('ur_epi') >= 1 ? 'Skin cells are present in the sample, so contamination is possible; a clean repeat may be needed.' : '' };
+    return { ev: e, conf: s >= 3 ? 3 : s >= 2 ? 2 : 1, urg: c.age < 0.25 ? 3 : 2, note: c.lvl('ur_epi') >= 1 ? 'Skin cells are present in the sample, so contamination is possible; a clean repeat may be needed.' : '' };
   });
 R('haematuria', 'Blood in the urine', [URO, NEPH, GP], 2,
   'Blood in the urine has many causes: infection, stones, bilharzia (schistosomiasis), kidney conditions, enlarged prostate, and occasionally tumours. Menstrual blood can contaminate samples.',
@@ -1273,10 +1430,74 @@ R('mildpanc', 'Mildly raised pancreas enzymes', [GI, GP], 1,
     return e.length ? { ev: e, conf: 1 } : null;
   });
 
+/* ======== PAEDIATRIC PATTERNS ======== */
+R('neojaundice', 'Newborn jaundice (raised bilirubin in a baby under 4 weeks)', [NEO, PAED], 2,
+  'Many newborns turn yellow in the first week and it settles on its own, but a high bilirubin can pass into the brain and cause lasting harm. Whether treatment (light therapy, called phototherapy) is needed depends on the baby’s age in hours, birth weight, gestation, feeding and the cause, which a doctor reads off a chart. Jaundice in the first 24 hours, or lasting beyond 2 weeks, is never treated as normal.',
+  'The baby should be seen by a paediatrician or newborn doctor the same day. Usual tests: split (direct and indirect) bilirubin, blood group of mother and baby, full blood count, G6PD test and a feeding review. Keep feeding the baby often and place the baby near a bright window until seen, but do not rely on sunlight alone.',
+  function (c) {
+    if (!c.neo || !c.has('tbil')) return null;
+    const b = c.v('tbil'), d = c.ageDays;
+    const veryEarly = d < 1 && b > 5, severe = b >= 15, prolonged = d >= 14 && b > 2;
+    if (!c.hi('tbil') && !veryEarly) return null;
+    const e = [c.d('tbil')]; if (c.has('dbil')) e.push(c.d('dbil'));
+    const note = veryEarly ? 'Jaundice in the first day of life is always urgent.' : severe ? 'A bilirubin this high in a newborn needs treatment the same day.' : prolonged ? 'Jaundice lasting more than 2 weeks needs a check for liver and thyroid causes.' : '';
+    return { ev: e, conf: severe || veryEarly ? 3 : 2, urg: severe || veryEarly ? 3 : 2, note: note };
+  });
+R('neocholestasis', 'Conjugated (direct) bilirubin raised in a baby (bile-flow problem)', [PAED, GI], 3,
+  'In a baby under 1 year, a raised direct (conjugated) bilirubin means bile is not flowing properly. Causes include biliary atresia (blocked bile ducts), infection and some metabolic or genetic conditions. Biliary atresia must be found early: the operation works best when done in the first two months of life.',
+  'See a paediatrician or paediatric liver specialist urgently, within a day. Pale (clay-coloured) stools or dark urine make it more urgent. Usual tests: liver ultrasound, liver tests, clotting tests and sometimes a liver biopsy.',
+  function (c) {
+    if (!c.infant || !c.has('dbil')) return null;
+    const d = c.v('dbil'), t = c.v('tbil');
+    if (!(c.hi('dbil') || (t != null && d > 0.5 && d / t > 0.2))) return null;
+    const e = [c.d('dbil')]; if (c.has('tbil')) e.push(c.d('tbil'));
+    return { ev: e, conf: 3 };
+  });
+R('congenitalhypo', 'Possible underactive thyroid from birth (congenital hypothyroidism)', [ENDO, PAED], 2,
+  'In babies, a raised TSH can mean the thyroid is underactive from birth. Thyroid hormone is essential for brain growth, so untreated babies can have permanent learning difficulties. It is easily treated with a daily thyroid tablet, and starting in the first weeks gives normal development.',
+  'See a paediatrician within a day or two. Usual tests: repeat TSH with free T4, and sometimes a thyroid scan. Do not wait for symptoms: babies often look normal at first.',
+  function (c) {
+    if (!c.infant || !c.hi('tsh')) return null;
+    const e = [c.d('tsh')]; let u = 2;
+    if (c.lo('ft4')) { e.push(c.d('ft4')); u = 3; } else if (c.lo('t4')) { e.push(c.d('t4')); u = 3; }
+    if (c.v('tsh') > 20) u = 3;
+    return { ev: e, conf: u === 3 ? 3 : 2, urg: u };
+  });
+R('pedlipid', 'Very high LDL cholesterol in a child (possible inherited cholesterol disorder)', [PAED, ENDO, GEN], 2,
+  'An LDL cholesterol of 190 mg/dL (4.9 mmol/L) or more in a child or teenager is often caused by an inherited condition (familial hypercholesterolaemia) rather than diet alone. It raises the risk of early heart disease in the family.',
+  'Review by a paediatric or lipid specialist, a repeat fasting test, and testing of parents and siblings. Treatment is guided by a specialist, not by adult targets.',
+  function (c) { return c.child && c.v('ldl') >= 190 ? { ev: [c.d('ldl')], conf: 3 } : null; });
+
+/* adult-only patterns that must not fire for young children */
+const PED_OFF = { pregnant: 10, preeclampsia: 10, pcos: 8, menopause: 18, hypogonad: 18, psa: 18, azoo: 18, semen: 18, tumour: 18, metsyn: 10 };
+/* extra child-specific advice added to a pattern */
+const PED_NOTE = {
+  malaria: 'Young children can become seriously ill within hours. Go to hospital immediately if there are seizures, drowsiness, fast or laboured breathing, repeated vomiting, or the child cannot drink or feed. Treatment doses are by weight, so never use an adult’s medicine.',
+  iron: 'In babies and young children iron deficiency can affect brain development, so it should not be left untreated. The commonest causes are diets low in iron, worm infestation and malaria. Iron and deworming doses are by weight: never give adult doses.',
+  sickle: 'Children with sickle cell disease need folic acid, penicillin prophylaxis in early childhood, up-to-date vaccines, and a check-up from a paediatric haematologist (including stroke-risk screening with transcranial Doppler from age 2). Any fever in a child with sickle cell disease is an emergency.',
+  trait: 'A child with sickle or other trait usually stays well, but parents should know the result so they can plan future pregnancies with a genetic counsellor.',
+  uti: 'In babies and young children a urine infection may show only as fever, poor feeding, vomiting or irritability. Under 2 years, or with fever, the child should be seen the same day or the next. Repeat infections need a kidney ultrasound.',
+  hiv: 'In a baby under 18 months an antibody test can be positive only because of the mother’s antibodies. A DNA (PCR) test confirms it. If confirmed, treatment started early works very well: see a paediatric HIV clinic quickly.',
+  hbv: 'Babies of mothers with hepatitis B should receive the hepatitis B vaccine (and, where available, immunoglobulin) within 24 hours of birth. Household members should be tested and vaccinated.',
+  eos: 'Worm infection is very common in children. Regular deworming and hand washing prevent re-infection; doses are by weight.',
+  prerenal: 'Children dry out faster than adults. Give oral rehydration solution (and zinc for diarrhoea) and go to a clinic quickly if the child is drowsy, has sunken eyes, no tears, cannot drink, or has passed no urine for 8 hours.',
+  proteinuria: 'In children, protein in the urine with puffy eyes or face, or after a throat or skin infection, can mean nephrotic syndrome or a kidney inflammation. See a paediatrician promptly.',
+  lipids: 'In children, high cholesterol is usually related to diet and weight, but can be inherited. Children are not given adult cholesterol targets or tablets without a specialist’s decision.',
+  hypoglyc: function (c) { return c.neo ? 'In a newborn, low sugar can cause fits and brain injury. Feed the baby and see a doctor immediately.' : 'In a child, low sugar with drowsiness, shakiness, sweating or fits needs sugar and urgent medical care.'; },
+  diabetes: 'In children and teenagers, high sugar with thirst, passing a lot of urine and weight loss is usually type 1 diabetes, which needs insulin and urgent specialist care. Vomiting, fast breathing or drowsiness is an emergency.',
+  ckd: function (c) { return c.hasHeight ? 'Kidney function was estimated with the children’s (bedside Schwartz) formula.' : 'Add the child’s height on the first screen so kidney function (eGFR) can be estimated for a child.'; },
+  hypothyroid: 'In a child, an underactive thyroid can slow growth and learning. A paediatric endocrinologist will check growth and bone age.'
+};
+
 /* ---- main entry ---- */
 function normProfile(p) {
-  const age = num(p && p.age);
-  return { age: age == null ? 0 : age, sex: p && (p.sex === 'F' || p.sex === 'M') ? p.sex : '', preg: !!(p && p.sex === 'F' && p.preg === 'Yes') };
+  const a = ageProfile(p && p.age, p && p.unit);
+  const years = a.years == null ? 0 : a.years;
+  const sex = p && (p.sex === 'F' || p.sex === 'M') ? p.sex : '';
+  const child = a.years != null && a.years < 18;
+  const h = num(p && p.height);
+  return { age: years, ageY: years, ageDays: a.days == null ? 0 : a.days, ageText: a.text, unit: a.unit, band: a.band, child: child, neo: a.days != null && a.days < 28,
+    sex: sex, preg: !!(p && sex === 'F' && p.preg === 'Yes' && years >= 10), height: h != null && child ? h : null };
 }
 function refText(t, prof, e) {
   if (t.type === 'q') return 'Normal: ' + t.normal.join(' / ');
@@ -1289,7 +1510,8 @@ function refText(t, prof, e) {
   if (e && e.u) { const a = t.alts[e.u - 1]; const f = function (x) { return x == null ? null : a.from ? a.from(x) : x * a.f; }; lo = f(lo); hi = f(hi); }
   const dp = t.dp != null ? (e && e.u ? undefined : t.dp) : undefined;
   const s = lo != null && hi != null ? fmt(lo, dp) + '–' + fmt(hi, dp) : lo != null ? '≥ ' + fmt(lo, dp) : '≤ ' + fmt(hi, dp);
-  return 'Normal: ' + s + ' ' + u;
+  const adult = usesAdultRange(t, prof);
+  return (adult ? 'Adult range: ' : 'Normal: ') + s + ' ' + u;
 }
 function meaning(r) {
   const t = r.t;
@@ -1301,10 +1523,12 @@ function meaning(r) {
 
 function interpret(state) {
   const prof = normProfile(state.profile);
-  const res = {};
+  const res = {}, skipped = [];
   Object.keys(state.vals || {}).forEach(function (id) {
     const t = TESTS[id]; if (!t || t.calc) return;
     const e = state.vals[id];
+    const why = pedSkip(t, prof);
+    if (why) { if ((t.type === 'n' && num(e.v) != null) || (t.type === 'q' && e.s)) skipped.push({ t: t, why: why }); return; }
     const r = t.type === 'n' ? evalNum(t, e, prof) : evalQ(t, e);
     if (r) res[id] = r;
   });
@@ -1315,9 +1539,14 @@ function interpret(state) {
   RULES.forEach(function (rule) {
     let o = null;
     c._used = {};
+    if (prof.child && PED_OFF[rule.id] && prof.ageY < PED_OFF[rule.id]) return;
     try { o = rule.t(c); } catch (err) { o = null; }
     if (o && o.ev && o.ev.length) Object.keys(c._used).forEach(function (k) { explained[k] = 1; });
-    if (o && o.ev && o.ev.length) fired.push({ id: rule.id, name: rule.name, spec: rule.spec, what: rule.what, next: rule.next, ev: o.ev, conf: o.conf || 1, urg: o.urg != null ? o.urg : rule.urg, note: o.note || '' });
+    if (o && o.ev && o.ev.length) {
+      let note = o.note || '';
+      if (prof.child && PED_NOTE[rule.id]) { const pn = typeof PED_NOTE[rule.id] === 'function' ? PED_NOTE[rule.id](c) : PED_NOTE[rule.id]; if (pn) note = note ? note + ' ' + pn : pn; }
+      fired.push({ id: rule.id, name: rule.name, spec: rule.spec, what: rule.what, next: rule.next, ev: o.ev, conf: o.conf || 1, urg: o.urg != null ? o.urg : rule.urg, note: note });
+    }
   });
   fired.sort(function (a, b) { return b.urg - a.urg || b.conf - a.conf; });
 
@@ -1330,21 +1559,24 @@ function interpret(state) {
 
   // specialties
   const score = {}, why = {};
+  const FIRST = prof.child ? PAED : GP;
   fired.forEach(function (f) {
     if (f.urg === 0 && f.conf === 1) return;
-    f.spec.forEach(function (s) {
-      score[s] = (score[s] || 0) + f.conf * (1 + f.urg * 0.5) + (f.spec[0] === s ? 0.5 : 0);
+    f.spec.forEach(function (s0) {
+      const s = prof.child && PED_SPEC[s0] ? PED_SPEC[s0] : s0;
+      if (s !== s0 && !SPEC_INFO[s]) SPEC_INFO[s] = (SPEC_INFO[s0] || '') + PED_SPEC_TAIL;
+      score[s] = (score[s] || 0) + f.conf * (1 + f.urg * 0.5) + (f.spec[0] === s0 ? 0.5 : 0);
       (why[s] = why[s] || []).push(f.name);
     });
   });
   const anyAbn = Object.keys(res).some(function (id) { return res[id].flag !== 'N'; });
   const specs = Object.keys(score).sort(function (a, b) { return score[b] - score[a]; }).map(function (s) { return { name: s, info: SPEC_INFO[s] || '', why: why[s].filter(function (x, i, a) { return a.indexOf(x) === i; }) }; });
-  if (anyAbn && !specs.some(function (s) { return s.name === GP; })) specs.unshift({ name: GP, info: SPEC_INFO[GP], why: ['Review of your abnormal results'] });
+  if (anyAbn && !specs.some(function (s) { return s.name === FIRST; })) specs.unshift({ name: FIRST, info: SPEC_INFO[FIRST], why: [prof.child ? 'Review of your child’s abnormal results' : 'Review of your abnormal results'] });
   if (urgency >= 3) {
     let er = specs.filter(function (s) { return s.name === ER; })[0];
     if (!er) er = { name: ER, info: SPEC_INFO[ER], why: ['One or more urgent findings'] };
-    const rest = specs.filter(function (s) { return s.name !== ER && s.name !== GP; });
-    const gp = specs.filter(function (s) { return s.name === GP; });
+    const rest = specs.filter(function (s) { return s.name !== ER && s.name !== FIRST; });
+    const gp = specs.filter(function (s) { return s.name === FIRST; });
     specs.length = 0; [er].concat(rest, gp).forEach(function (s) { specs.push(s); });
   }
 
@@ -1363,21 +1595,28 @@ function interpret(state) {
 
   const other = Object.keys(res).filter(function (id) { return res[id].flag !== 'N' && !explained[id]; }).map(function (id) { const r = res[id]; return { r: r, value: r.type === 'q' ? r.sel : (r.derived ? fmt(r.val, r.t.dp) : r.rawStr) + (r.unit ? ' ' + r.unit : ''), meaning: meaning(r) }; });
   const warnings = [];
-  if (prof.age && prof.age < 18) warnings.push('Reference ranges in this app are for adults (18+). Results for children and teenagers use different ranges, so flags here may be wrong. A paediatrician should interpret them.');
+  if (prof.child) {
+    warnings.push('Child profile: ' + prof.ageText + ' old, ' + BAND_NAME[prof.band] + '. Age-specific ranges are used where the app has them. These are typical term-baby and child ranges, so premature babies and sick children can differ. A paediatrician should interpret every result.');
+    const adultTests = Object.keys(res).filter(function (id) { return res[id].adultUsed && !res[id].derived; }).map(function (id) { return shortName(res[id].t); });
+    if (adultTests.length) warnings.push('No child range is built in for: ' + adultTests.join(', ') + '. Adult ranges were used for these, so their flags may be wrong for a child.');
+    if (prof.neo) warnings.push('Newborn results change hour by hour. The right interpretation also depends on how many hours old the baby is, gestational age (born early?), birth weight and feeding. Show the report to the baby’s doctor or paediatrician.');
+    skipped.forEach(function (x, i) { if (!i || skipped[i - 1].why !== x.why) warnings.push(x.why + ' Not interpreted: ' + skipped.filter(function (y) { return y.why === x.why; }).map(function (y) { return shortName(y.t); }).join(', ') + '.'); });
+    if (prof.ageY >= 1 && !prof.height && res.cr) warnings.push('Tip: add your child’s height under “About you” and LabLens will estimate kidney function (eGFR) for children.');
+  }
   if (prof.preg) warnings.push('You indicated pregnancy. Pregnancy changes many normal ranges (this app adjusts only haemoglobin, PCV, white cells and creatinine). Review all results with your antenatal doctor.');
   if (prof.age >= 65) warnings.push('Several normal ranges shift with older age (for example kidney function, PSA and some blood counts). Your doctor will interpret them in that context.');
 
-  return { prof, res, fired, critical, urgency, specs, rows, calc, other, normalPanels, abnormalPanels, count, abnormalCount, warnings };
+  return { prof, res, fired, critical, urgency, specs, rows, calc, other, normalPanels, abnormalPanels, count, abnormalCount, warnings, skipped };
 }
 
-if (typeof module !== 'undefined') module.exports = { PANELS, TESTS, RULES, interpret, refText, fmt, num, URGENCY, CONF, SPEC_INFO, normProfile, rangeFor, toDef, unitLabel };
+if (typeof module !== 'undefined') module.exports = { PANELS, TESTS, RULES, PED, ageProfile, pedRange, interpret, refText, fmt, num, URGENCY, CONF, SPEC_INFO, normProfile, rangeFor, toDef, unitLabel };
 
 </script>
 <script>
 (function () {
 'use strict';
 var KEY = 'lablens_state_v1', SAVED = 'lablens_saved_v1', ACK = 'lablens_ack_v1';
-var state = { profile: { age: '', sex: '', preg: '' }, vals: {} };
+var state = { profile: { age: '', unit: 'y', height: '', sex: '', preg: '' }, vals: {} };
 var lastResult = null;
 var deferredInstall = null;
 var LOGO_SRC = document.querySelector('#ack img').getAttribute('src');
@@ -1419,6 +1658,8 @@ function buildPanels() {
 }
 function applyStateToForm() {
   $('#age').value = state.profile.age || '';
+  $('#ageUnit').value = state.profile.unit || 'y';
+  $('#height').value = state.profile.height || '';
   $$('input[name=sex]').forEach(function (r) { r.checked = r.value === state.profile.sex; });
   $$('input[name=preg]').forEach(function (r) { r.checked = r.value === (state.profile.preg || 'No') && state.profile.sex === 'F'; });
   $$('.row').forEach(function (row) {
@@ -1433,7 +1674,16 @@ function applyStateToForm() {
   });
   syncPreg(); refreshAll();
 }
-function syncPreg() { $('#pregBox').hidden = state.profile.sex !== 'F'; }
+function syncPreg() {
+  var p = normProfile(state.profile);
+  $('#pregBox').hidden = !(state.profile.sex === 'F' && p.ageY >= 10);
+  $('#heightBox').hidden = !(p.child && p.ageY >= 1);
+  $$('.row, details.panel').forEach(function (el) {
+    var id = el.getAttribute('data-id'), pn = el.getAttribute('data-panel');
+    if (id) el.classList.toggle('hideAdult', !!pedSkip(TESTS[id], p));
+    else if (pn) { var P0 = PANELS.filter(function (x) { return x.name === pn; })[0]; el.classList.toggle('hideAdult', p.child && P0.ids.every(function (i) { return !!pedSkip(TESTS[i], p); })); }
+  });
+}
 function persist() { store.set(KEY, state); }
 
 /* ---------- live row refresh ---------- */
@@ -1448,6 +1698,7 @@ function refreshRow(id) {
 }
 function filled(id) {
   var t = TESTS[id], e = state.vals[id]; if (!e) return false;
+  if (pedSkip(t, normProfile(state.profile))) return false;
   return t.type === 'q' ? !!e.s : num(e.v) != null;
 }
 function refreshAll() {
@@ -1476,7 +1727,9 @@ function onField(ev) {
     refreshRow(id); refreshAll(); persist();
     return;
   }
-  if (t.id === 'age') { state.profile.age = t.value; }
+  if (t.id === 'age') { state.profile.age = t.value; syncPreg(); }
+  else if (t.id === 'ageUnit') { state.profile.unit = t.value; syncPreg(); }
+  else if (t.id === 'height') { state.profile.height = t.value; }
   else if (t.name === 'sex') { state.profile.sex = t.value; if (t.value !== 'F') state.profile.preg = ''; else if (!state.profile.preg) state.profile.preg = 'No'; syncPreg(); applyPregRadios(); }
   else if (t.name === 'preg') { state.profile.preg = t.value; }
   else return;
@@ -1512,7 +1765,7 @@ function renderResult(R) {
   var U = URGENCY[R.urgency], h = [];
   var today = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
   h.push('<button class="back noprint" data-act="edit">← Back to results entry</button>');
-  h.push('<div class="printhead"><img src="' + LOGO_SRC + '" alt="BHIS" style="height:70px"><h2>LabLens report by BHIS</h2>' + (bizName() ? '<div><b>Prepared by ' + esc(bizName()) + '</b></div>' : '') + '<div>' + esc(today) + ' · Age ' + esc(R.prof.age) + ' · ' + (R.prof.sex === 'F' ? 'Female' : 'Male') + (R.prof.preg ? ' (pregnant)' : '') + '</div></div>');
+  h.push('<div class="printhead"><img src="' + LOGO_SRC + '" alt="BHIS" style="height:70px"><h2>LabLens report by BHIS</h2>' + (bizName() ? '<div><b>Prepared by ' + esc(bizName()) + '</b></div>' : '') + '<div>' + esc(today) + ' · Age ' + esc(R.prof.ageText) + ' · ' + (R.prof.sex === 'F' ? 'Female' : 'Male') + (R.prof.preg ? ' (pregnant)' : '') + '</div></div>');
   h.push('<div class="urg ' + U.cls + '" role="alert"><p class="uh">' + esc(U.label) + '</p><p>' + esc(U.text) + '</p></div>');
   if (R.critical.length) {
     h.push('<div class="alert"><b>⚠ Possibly dangerous value' + (R.critical.length > 1 ? 's' : '') + '</b><ul>' + R.critical.map(function (r) {
@@ -1542,7 +1795,7 @@ function renderResult(R) {
   if (R.specs.length) {
     h.push('<h2>Which doctor to see</h2><div class="drs">' + R.specs.slice(0, 6).map(function (s, i) {
       return '<div class="card"><h3>' + (i === 0 ? '★ ' : '') + esc(s.name) + '</h3><p>' + esc(s.info) + '</p><small>For: ' + esc(s.why.slice(0, 3).join('; ')) + '</small></div>'; }).join('') +
-      '</div><p class="lead">In most cases start with a general doctor, who can examine you, repeat tests and refer you to the right specialist.</p>');
+      '</div><p class="lead">' + (R.prof.child ? 'For a child, start with a paediatrician (children’s doctor), who can examine your child, repeat tests with child ranges and refer to the right specialist.' : 'In most cases start with a general doctor, who can examine you, repeat tests and refer you to the right specialist.') + '</p>');
   }
 
   /* details */
@@ -1572,7 +1825,7 @@ function renderResult(R) {
 function summaryText(R) {
   var L = [], U = URGENCY[R.urgency];
   L.push('LabLens summary (' + new Date().toLocaleDateString() + ')'); if (bizName()) L.push('Prepared by ' + bizName());
-  L.push('Age ' + R.prof.age + ', ' + (R.prof.sex === 'F' ? 'female' : 'male') + (R.prof.preg ? ', pregnant' : ''));
+  L.push('Age ' + R.prof.ageText + ', ' + (R.prof.sex === 'F' ? 'female' : 'male') + (R.prof.preg ? ', pregnant' : ''));
   L.push('Urgency: ' + U.label);
   if (R.critical.length) L.push('Possibly dangerous: ' + R.critical.map(function (r) { return shortName(r.t) + ' ' + (r.type === 'q' ? r.sel : r.rawStr + ' ' + r.unit); }).join('; '));
   L.push('');
@@ -1671,8 +1924,9 @@ function loadLicence() {
 /* ---------- run ---------- */
 function run() {
   var p = normProfile(state.profile), err = $('#profErr');
-  if (!(p.age > 0 && p.age < 121)) { err.textContent = 'Please enter your age (1–120) to continue.'; err.hidden = false; $('#age').focus(); $('#age').scrollIntoView({ block: 'center' }); return; }
-  if (!p.sex) { err.textContent = 'Please choose your sex: normal ranges differ for men and women.'; err.hidden = false; $('#age').scrollIntoView({ block: 'center' }); return; }
+  var ageOk = state.profile.age !== '' && state.profile.age != null && String(state.profile.age).trim() !== '' && !isNaN(parseFloat(String(state.profile.age).replace(',', '.'))) && p.ageDays >= 0 && p.ageY < 121 && (p.ageDays > 0 || state.profile.unit === 'd');
+  if (!ageOk) { err.textContent = 'Please enter the age (for a baby, choose days, weeks or months) to continue.'; err.hidden = false; $('#age').focus(); $('#age').scrollIntoView({ block: 'center' }); return; }
+  if (!p.sex) { err.textContent = 'Please choose sex: normal ranges can differ between males and females.'; err.hidden = false; $('#age').scrollIntoView({ block: 'center' }); return; }
   err.hidden = true;
   gate(function () {
     lastResult = interpret(state);
@@ -1694,10 +1948,10 @@ function renderSaved() {
 function renderAbout() {
   $('#view-about').innerHTML = '<button class="back" data-act="edit">← Back</button><img class="aboutlogo" src="' + LOGO_SRC + '" alt="BHIS: Body Health Integrated Systems"><h2 style="margin-top:6px">About LabLens</h2><div class="card"><h3>Created by BHIS</h3><p>LabLens is created and owned by <b>BHIS \u2013 Body Health Integrated Systems</b>. \u00A9 2026 BHIS. All rights reserved.</p></div>' +
     (LIC.on ? '<div class="card"><h3>Your licence</h3><p>' + esc(licStatusText()) + '</p>' + (LIC.info.status === 'licensed' ? '' : '<button class="btn p" data-act="lic" style="width:100%">Enter access code</button>') + '</div>' : '') + '<div class="card"><h3>What it does</h3><p>You type results from a lab report. LabLens flags values outside typical adult ranges, explains them in plain language, looks for <b>patterns</b> across tests (for example low haemoglobin with small red cells and low ferritin), suggests what <i>might</i> explain them, how urgent it is, and which type of specialist to ask for.</p></div>' +
-    '<div class="card"><h3>What it cannot do</h3><ul><li>It cannot diagnose. Only a doctor who examines you can.</li><li>It does not know your symptoms, medicines, history, or sample quality.</li><li>Ranges are typical adult values; labs and populations differ. Use “⋯” to enter your lab’s own range.</li><li>Children, pregnancy and older age change normal values. Only some pregnancy adjustments are built in.</li><li>Photos and PDFs are not read: entering numbers is safer than automatic scanning.</li></ul></div>' +
+    '<div class="card"><h3>What it cannot do</h3><ul><li>It cannot diagnose. Only a doctor who examines you can.</li><li>It does not know your symptoms, medicines, history, or sample quality.</li><li>Ranges are typical adult and child values; labs and populations differ. Use “⋯” to enter your lab’s own range.</li><li>Child ranges follow age bands from newborn to 17 years and suit term babies; premature babies and unwell children can differ. Pregnancy and older age also change normal values, and only some pregnancy adjustments are built in.</li><li>Photos and PDFs are not read: entering numbers is safer than automatic scanning.</li></ul></div>' +
     '<div class="card"><h3>Privacy</h3><p>Everything runs on your device. No internet connection, accounts, ads or tracking. Entries are saved in this browser’s local storage only. “Clear” erases the current entries.</p></div>' +
     '<div class="card"><h3>Install on your phone</h3><p><b>Android (Chrome):</b> open the app link once while online, then menu ⋮ → “Install app” or “Add to Home screen”.<br><b>iPhone (Safari):</b> Share → “Add to Home Screen”.<br><b>Computer (Chrome/Edge):</b> click the install icon in the address bar. After the first visit it opens offline.</p></div>' +
-    '<div class="card"><h3>Reference sources</h3><p>Typical adult reference intervals from standard clinical laboratory references; CKD-EPI 2021 equation for eGFR (no race term); ADA criteria for glucose/HbA1c; WHO 2021 semen reference limits; WHO anaemia and pregnancy haemoglobin cut-offs. Version 1.2.</p></div>';
+    '<div class="card"><h3>Reference sources</h3><p>Typical adult reference intervals from standard clinical laboratory references; typical paediatric intervals by age band (newborn to 17 years) compiled from standard paediatric references, with the bedside Schwartz equation for children’s eGFR; CKD-EPI 2021 equation for eGFR (no race term); ADA criteria for glucose/HbA1c; WHO 2021 semen reference limits; WHO anaemia and pregnancy haemoglobin cut-offs. Version 1.3.</p></div>';
 }
 
 /* ---------- click router ---------- */
@@ -1744,7 +1998,7 @@ function init() {
   $('#btnGo').addEventListener('click', run);
   $('#btnClear').addEventListener('click', function () {
     if (!confirm('Clear all entered results and your age/sex?')) return;
-    state = { profile: { age: '', sex: '', preg: '' }, vals: {} }; store.del(KEY); applyStateToForm(); toast('Cleared');
+    state = { profile: { age: '', unit: 'y', height: '', sex: '', preg: '' }, vals: {} }; store.del(KEY); applyStateToForm(); toast('Cleared');
   });
   $('#btnSaved').addEventListener('click', function () { renderSaved(); show('saved'); });
   $('#btnAbout').addEventListener('click', function () { renderAbout(); show('about'); });
